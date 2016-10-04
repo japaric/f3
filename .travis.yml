@@ -1,0 +1,25 @@
+cache: cargo
+dist: trusty
+language: rust
+services: docker
+sudo: required
+rust: nightly
+
+matrix:
+  include:
+    - env: TARGET=thumbv7em-none-eabihf
+env: TARGET=x86_64-unknown-linux-gnu
+
+script:
+  - cargo generate-lockfile
+  - sh ci/run-docker.sh $TARGET;
+  # Travis can't cache files that are not readable by "others"
+  - chmod -R a+r $HOME/.cargo
+
+branches:
+  only:
+    - master
+
+notifications:
+  email:
+    on_success: never
