@@ -2,6 +2,7 @@
 //! Examples
 
 pub mod exception;
+pub mod fpu;
 pub mod itm;
 pub mod led_roulette;
 pub mod minimal;
