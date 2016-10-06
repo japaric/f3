@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Initialize the FPU before main
+
 ## [v0.1.0] - 2016-10-04
 
 ### Added

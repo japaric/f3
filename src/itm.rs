@@ -23,6 +23,11 @@ impl Write for Port {
 }
 
 /// Initializes the ITM port
+///
+/// # Safety
+///
+/// - Must be called once
+/// - Must be called in an interrupt-free environment
 pub unsafe fn init() {
     let dbgmcu = peripheral::dbgmcu_mut();
     let dcb = cortex_m::peripheral::dcb_mut();
