@@ -20,6 +20,7 @@ macro_rules! iprintln {
     };
 }
 
+/// Macro for sending `print!`-formatted messages over the Serial Port
 #[macro_export]
 macro_rules! uprint {
     ($s:expr) => {
@@ -30,6 +31,7 @@ macro_rules! uprint {
     };
 }
 
+/// Macro for sending `print!`-formatted messages over the Serial Port, with a newline
 #[macro_export]
 macro_rules! uprintln {
     ($fmt:expr) => {

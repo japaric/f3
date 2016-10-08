@@ -1,4 +1,4 @@
-//! "Serial Port" communication
+//! Serial Port communication
 //!
 //! - Baud rate: `115200`
 //! - "Transmit" (`TX`) pin - `PA9`
@@ -34,6 +34,12 @@ impl Write for Port {
     }
 }
 
+/// Initializes the necessary stuff to be able to use the Serial Port
+///
+/// # Safety
+///
+/// - Must be called once
+/// - Must be called in an interrupt-free environment
 pub unsafe fn init() {
     let gpioa = peripheral::gpioa_mut();
     let rcc = peripheral::rcc_mut();

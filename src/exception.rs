@@ -1,7 +1,7 @@
 //! Exceptions
 //!
-//! All the exceptions prefixed with an underscore (`_`) can overridden by the top crate. Check out
-//! [this example](../examples/override_exception/index.html).
+//! All the exceptions prefixed with an underscore (`_`) can be overridden by the top crate. Check
+//! out [this example](../examples/override_exception/index.html).
 
 use cortex_m::{self, Handler, StackFrame};
 use r0;
@@ -130,7 +130,6 @@ pub unsafe extern "C" fn reset() -> ! {
         static _sidata: u32;
         static mut _sbss: u32;
         static mut _sdata: u32;
-
     }
 
     r0::zero_bss(&mut _sbss, &_ebss);

@@ -143,6 +143,7 @@ pub mod delay;
 pub mod examples;
 pub mod exception;
 pub mod fpu;
+pub mod interrupt;
 pub mod itm;
 pub mod led;
 pub mod peripheral;
