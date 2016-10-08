@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initialize the FPU before main
 - Support for sending `print!` formatted messages over "Serial Port".
+- Overridable interrupts
+
+### Changed
+
+- The `delay` module now uses an interrupt instead of busy polling.
 
 ## [v0.1.0] - 2016-10-04
 
