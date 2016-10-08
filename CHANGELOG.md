@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Initialize the FPU before main
+- Support for sending `print!` formatted messages over "Serial Port".
 
 ## [v0.1.0] - 2016-10-04
 
