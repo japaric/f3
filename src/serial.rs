@@ -46,19 +46,8 @@ pub unsafe fn init() {
     let usart1 = peripheral::usart1_mut();
 
     // RCC: Enable USART1 and GPIOC
-    let apb2enr = rcc.apb2enr.read();
-    rcc.apb2enr.write({
-        const USART1EN: u32 = 1 << 14;
-
-        apb2enr | USART1EN
-    });
-
-    let ahbenr = rcc.ahbenr.read();
-    rcc.ahbenr.write({
-        const IOPAEN: u32 = 1 << 17;
-
-        ahbenr | IOPAEN
-    });
+    rcc.apb2enr.modify(|r| r.usart1en(true));
+    rcc.ahbenr.modify(|r| r.iopaen(true));
 
     // GPIO: configure PA9 as TX and PA10 as RX
     let afrh = gpioa.afrh.read();

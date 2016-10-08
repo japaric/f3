@@ -39,12 +39,7 @@ pub unsafe fn init() {
     let rcc = peripheral::rcc_mut();
 
     // RCC: Enable GPIOE
-    let ahbenr = rcc.ahbenr.read();
-    rcc.ahbenr.write({
-        const IOPEEN: u32 = 1 << 21;
-
-        ahbenr | IOPEEN
-    });
+    rcc.ahbenr.modify(|r| r.iopeen(true));
 
     // GPIOE: Configure pins 8-15 as outputs
     let moder = gpioe.moder.read();

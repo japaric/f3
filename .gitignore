@@ -1,3 +1,4 @@
 *.rs.bk
+*.svd
 Cargo.lock
 target

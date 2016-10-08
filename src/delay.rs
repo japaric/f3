@@ -49,12 +49,7 @@ pub unsafe fn init() {
     let tim7 = peripheral::tim7_mut();
 
     // RCC: Enable TIM7
-    let apb1enr = rcc.apb1enr.read();
-    rcc.apb1enr.write({
-        const TIM7EN: u32 = 1 << 5;
-
-        apb1enr | TIM7EN
-    });
+    rcc.apb1enr.modify(|r| r.tim7en(true));
 
     let cr1 = tim7.cr1.read();
     tim7.cr1.write({

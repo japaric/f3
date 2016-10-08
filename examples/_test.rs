@@ -37,7 +37,7 @@ fn main() {
     offset!(gpio.afrh, 0x24);
     offset!(gpio.brr, 0x28);
 
-    let rcc = unsafe { &*(0x0 as *const peripheral::rcc::Registers) };
+    let rcc = unsafe { &*(0x0 as *const peripheral::rcc::Rcc) };
 
     offset!(rcc.cr, 0x0);
     offset!(rcc.cfgr, 0x4);
