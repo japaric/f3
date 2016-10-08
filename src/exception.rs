@@ -1,40 +1,7 @@
 //! Exceptions
 //!
-//! All the exceptions prefixed with an underscore (`_`) can overridden by the top crate:
-//!
-//! ```
-//! //! Override the hard fault exception
-//!
-//! #![feature(asm)]
-//! #![no_main]
-//! #![no_std]
-//!
-//! #[macro_use]
-//! extern crate cortex_m;
-//! extern crate f3;
-//!
-//! use core::ptr;
-//!
-//! #[export_name = "main"]
-//! pub fn main() -> ! {
-//!     unsafe {
-//!         // Trigger a `hard_fault` exception (using UNSAFE code, of course!) and ...
-//!         ptr::write_volatile(0x0000_0000 as *mut u32, 0xdead_beef);
-//!     }
-//!
-//!     loop {}
-//! }
-//!
-//! #[export_name = "_hard_fault"]  // <-- Important! Note the underscore.
-//! pub extern "C" fn my_hard_fault_handler() {
-//!     unsafe {
-//!         // .. you should reach THIS breakpoint!
-//!         bkpt!();
-//!     }
-//!
-//!     loop {}
-//! }
-//! ```
+//! All the exceptions prefixed with an underscore (`_`) can overridden by the top crate. Check out
+//! [this example](../examples/override_exception/index.html).
 
 use cortex_m::{self, Handler, StackFrame};
 use r0;
