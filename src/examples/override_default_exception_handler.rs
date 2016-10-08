@@ -21,7 +21,7 @@
 //! #[export_name = "_default_exception_handler"]  // <-- Important! Note the underscore.
 //! pub extern "C" fn my_exception_handler() {
 //!     unsafe {
-//!         // .. you should reach this breakpoint!
+//!         // .. you'll reach THIS breakpoint!
 //!         bkpt!();
 //!     }
 //!

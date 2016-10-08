@@ -21,9 +21,9 @@
 //! }
 //!
 //! #[export_name = "_hard_fault"]  // <-- Important! Note the underscore.
-//! pub extern "C" fn my_hard_fault_handler() {
+//! pub extern "C" fn my_hard_fault_exception_handler() {
 //!     unsafe {
-//!         // .. you should reach THIS breakpoint!
+//!         // .. you'll reach THIS breakpoint!
 //!         bkpt!();
 //!     }
 //!
