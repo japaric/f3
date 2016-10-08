@@ -16,7 +16,8 @@ script:
   # check if `src/examples` has not been re-generated
   - if [ $TARGET = x86_64-unknown-linux-gnu ]; then
       ./gen-examples.sh;
-      test "$(git status --porcelain)" = "" || false;
+      stdout=$(git status --porcelain);
+      test "$stdout" = "" || ( echo "Outdated examples:" && echo "$stdout" && false );
     fi
   # Travis can't cache files that are not readable by "others"
   - chmod -R a+r $HOME/.cargo
