@@ -10,6 +10,8 @@
 
 ## [Documentation](https://docs.rs/f3)
 
+## [Change log](CHANGELOG.md)
+
 ## License
 
 Licensed under either of
