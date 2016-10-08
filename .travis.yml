@@ -12,7 +12,12 @@ env: TARGET=x86_64-unknown-linux-gnu
 
 script:
   - cargo generate-lockfile
-  - sh ci/run-docker.sh $TARGET;
+  - sh ci/run-docker.sh $TARGET
+  # check if `src/examples` has not been re-generated
+  - if [ $TARGET = x86_64-unknown-linux-gnu ]; then
+      ./gen-examples.sh;
+      test "$(git status --porcelain)" = "" || false;
+    fi
   # Travis can't cache files that are not readable by "others"
   - chmod -R a+r $HOME/.cargo
 
