@@ -15,7 +15,11 @@
 //!     let y = black_box(3_f32);
 //!     let z = black_box(x * y);
 //!
-//!     iprintln!("{} * {} = {}", x, y, z);
+//!     // FIXME(japaric/rustc-builtins#79) there is a problem with the
+//!     // rustc-builtins (compiler-builtins-snapshot) crate and LTO. Avoid the
+//!     // issue by printing these values as integers because integer formatting
+//!     // doesn't need any intrinsic.
+//!     iprintln!("{} * {} = {}", x as u32, y as u32, z as u32);
 //!
 //!     loop {}
 //! }

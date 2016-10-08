@@ -11,3 +11,4 @@ pub mod override_exception;
 pub mod override_init;
 pub mod override_panic_fmt;
 pub mod panic;
+pub mod serial;

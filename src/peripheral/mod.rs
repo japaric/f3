@@ -19,6 +19,7 @@ pub mod dbgmcu;
 pub mod gpio;
 pub mod rcc;
 pub mod tim;
+pub mod usart;
 
 // AHB2
 const GPIOA: usize = 0x48000000;
@@ -31,12 +32,16 @@ const GPIOF: usize = 0x48001400;
 // AHB1
 const RCC: usize = 0x40021000;
 
+// APB2
+const USART1: usize = 0x40013800;
+
 // APB1
 const TIM6: usize = 0x40001000;
 const TIM7: usize = 0x40001400;
 
 // PPB
 const DBGMCU: usize = 0xe0042000;
+
 
 pub fn dbgmcu() -> &'static dbgmcu::Registers {
     unsafe { deref(DBGMCU) }
@@ -116,6 +121,14 @@ pub fn tim7() -> &'static tim::Registers {
 
 pub unsafe fn tim7_mut() -> &'static mut tim::Registers {
     deref_mut(TIM7)
+}
+
+pub fn usart1() -> &'static usart::Registers {
+    unsafe { deref(USART1) }
+}
+
+pub unsafe fn usart1_mut() -> &'static mut usart::Registers {
+    deref_mut(USART1)
 }
 
 unsafe fn deref<T>(address: usize) -> &'static T {

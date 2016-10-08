@@ -19,3 +19,23 @@ macro_rules! iprintln {
         iprint!(concat!($fmt, "\n"), $($arg)*)
     };
 }
+
+#[macro_export]
+macro_rules! uprint {
+    ($s:expr) => {
+        $crate::serial::write_str($s)
+    };
+    ($($arg:tt)*) => {
+        $crate::serial::write_fmt(format_args!($($arg)*))
+    };
+}
+
+#[macro_export]
+macro_rules! uprintln {
+    ($fmt:expr) => {
+        uprint!(concat!($fmt, "\n"))
+    };
+    ($fmt:expr, $($arg:tt)*) => {
+        uprint!(concat!($fmt, "\n"), $($arg)*)
+    };
+}

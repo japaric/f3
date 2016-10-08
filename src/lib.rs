@@ -146,6 +146,7 @@ pub mod fpu;
 pub mod itm;
 pub mod led;
 pub mod peripheral;
+pub mod serial;
 
 // Default initialization routine
 #[doc(hidden)]
@@ -156,6 +157,7 @@ pub unsafe extern "C" fn init() {
     fpu::init();
     itm::init();
     led::init();
+    serial::init();
 }
 
 extern "C" {
@@ -164,3 +166,6 @@ extern "C" {
     // let's err on the side of caution and install a safety net (see below).
     fn main();
 }
+
+// Hz
+const APB2_CLOCK: u32 = 8_000_000;
