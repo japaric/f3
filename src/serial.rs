@@ -18,19 +18,17 @@ struct Port {}
 
 impl Write for Port {
     fn write_str(&mut self, s: &str) -> fmt::Result {
-        // Transmit data register empty
-        // 0: data is not transferred to the shift register
-        // 1: data is transferred to the shift register
-        const TXE: u32 = 1 << 7;
+        unsafe {
+            let usart1 = peripheral::usart1_mut();
 
-        let usart1 = peripheral::usart1();
+            for byte in s.as_bytes().iter().cloned() {
+                while !usart1.isr.read().txe() {}
+                use peripheral::usart::TdrW;
+                usart1.tdr.write(*TdrW::reset_value().tdr(byte as u16));
+            }
 
-        for byte in s.as_bytes().iter().cloned() {
-            while usart1.isr.read() & TXE == 0 {}
-            usart1.tdr.write_u8(byte);
+            Ok(())
         }
-
-        Ok(())
     }
 }
 
@@ -74,43 +72,32 @@ pub unsafe fn init() {
     });
 
     // USART1: 115200 - 8N1
-    usart1.cr2.write({
-        // 1 stop bit
-        const STOP: u32 = 00 << 12;
+    use peripheral::usart::Cr2W;
+    usart1.cr2.write(*Cr2W::reset_value().stop(0b00));
 
-        STOP
-    });
-
-    usart1.cr3.write({
-        // Enable DMA for the transmitter
-        // const DMAT: u32 = 1 << 7;
-        // Disable hardware flow control
-        const RTSE: u32 = 0 << 8;
-        // Disable hardware flow control
-        const CTSE: u32 = 0 << 9;
-
-        RTSE | CTSE
-    });
+    // Disable hardware flow control
+    use peripheral::usart::Cr3W;
+    usart1.cr3.write(*Cr3W::reset_value().rtse(false).ctse(false));
 
     const BAUD_RATE: u32 = 115200;
-    usart1.brr.write((::APB2_CLOCK / BAUD_RATE) as u16);
+    use peripheral::usart::BrrW;
+    let brr = (::APB2_CLOCK / BAUD_RATE) as u16;
+    usart1.brr.write(*BrrW::reset_value()
+        .div_fraction((brr & 0b1111) as u8)
+        .div_mantissa(brr >> 4));
 
-    usart1.cr1.write({
-        // Enable USART
-        const UE: u32 = 1 << 0;
-        // Enable the receiver
-        const RE: u32 = 1 << 2;
-        // Enable the transmitter
-        const TE: u32 = 1 << 3;
-        // No parity check
-        const PCE: u32 = 0 << 10;
-        // Oversampling by 16 -- to set the baud rate
-        const OVER8: u32 = 0 << 15;
-        // Start bit, 8 data bits, n stop bits
-        const M: u32 = 0 << 16 | 0 << 28;
-
-        UE | RE | TE | PCE | OVER8 | M
-    });
+    // UE: Enable USART
+    // RE: Enable the receiver
+    // TE: Enable the transmitter
+    // PCE: No parity
+    // OVER8: Oversampling by 16 -- to set the baud rate
+    use peripheral::usart::Cr1W;
+    usart1.cr1.write(*Cr1W::reset_value()
+        .ue(true)
+        .re(true)
+        .te(true)
+        .pce(false)
+        .over8(false));
 }
 
 #[doc(hidden)]
