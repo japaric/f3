@@ -34,16 +34,8 @@ pub unsafe fn init() {
     let itm = cortex_m::peripheral::itm_mut();
 
     // DBGMCU: enable asynchronous tracing
-    let cr = dbgmcu.cr.read();
-    dbgmcu.cr.write({
-        // Enable tracing
-        const TRACE_IOEN: u32 = 1 << 5;
-        // Asynchronous mode - for use with SWO
-        const TRACE_MODE: u32 = 0b00 << 6;
-        const TRACE_MODE_MASK: u32 = 0b11 << 6;
-
-        ((cr | TRACE_IOEN) & !TRACE_MODE_MASK) | TRACE_MODE
-    });
+    // NOTE(0b00) asynchronous mode
+    dbgmcu.cr.modify(|r| r.trace_ioen(true).trace_mode(0b00));
 
     // DCB: enable the ITM
     let demcr = dcb.demcr.read();

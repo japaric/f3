@@ -21,6 +21,7 @@ pub mod rcc;
 pub mod tim;
 pub mod usart;
 
+use self::dbgmcu::Dbgmcu;
 use self::rcc::Rcc;
 
 const GPIOA: usize = 0x48000000;
@@ -78,11 +79,11 @@ const DBGMCU: usize = 0xe0042000;
 // const SYSCFG: usize = 0x40010000;
 // const OPAMP: usize = 0x40010038;
 
-pub fn dbgmcu() -> &'static dbgmcu::Registers {
+pub fn dbgmcu() -> &'static Dbgmcu {
     unsafe { deref(DBGMCU) }
 }
 
-pub unsafe fn dbgmcu_mut() -> &'static mut dbgmcu::Registers {
+pub unsafe fn dbgmcu_mut() -> &'static mut Dbgmcu {
     deref_mut(DBGMCU)
 }
 
