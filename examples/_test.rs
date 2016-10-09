@@ -23,7 +23,7 @@ fn main() {
     offset!(dbgmcu.apb1fz, 0x8);
     offset!(dbgmcu.apb2fz, 0xc);
 
-    let gpio = unsafe { &*(0x0 as *const peripheral::gpio::Registers) };
+    let gpio = unsafe { &*(0x0 as *const peripheral::gpio::Gpio) };
 
     offset!(gpio.moder, 0x0);
     offset!(gpio.otyper, 0x4);
@@ -64,7 +64,7 @@ fn main() {
     offset!(tim.psc, 0x28);
     offset!(tim.arr, 0x2c);
 
-    let usart = unsafe { &*(0x0 as *const peripheral::usart::Registers) };
+    let usart = unsafe { &*(0x0 as *const peripheral::usart::Usart) };
 
     offset!(usart.cr1, 0x0);
     offset!(usart.cr2, 0x4);
