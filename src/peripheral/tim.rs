@@ -1,23 +1,23 @@
 #[repr(C)]
 /// Basic timers
 pub struct Tim {
-    /// control register 1
+    /// 0x00 - control register 1
     pub cr1: Cr1,
-    /// control register 2
+    /// 0x04 - control register 2
     pub cr2: Cr2,
     reserved0: [u8; 4usize],
-    /// DMA/Interrupt enable register
+    /// 0x0c - DMA/Interrupt enable register
     pub dier: Dier,
-    /// status register
+    /// 0x10 - status register
     pub sr: Sr,
-    /// event generation register
+    /// 0x14 - event generation register
     pub egr: Egr,
     reserved1: [u8; 12usize],
-    /// counter
+    /// 0x24 - counter
     pub cnt: Cnt,
-    /// prescaler
+    /// 0x28 - prescaler
     pub psc: Psc,
-    /// auto-reload register
+    /// 0x2c - auto-reload register
     pub arr: Arr,
 }
 
@@ -47,32 +47,32 @@ pub struct Cr1R {
 }
 
 impl Cr1R {
-    /// Counter enable
+    /// Bit 0 - Counter enable
     pub fn cen(&self) -> bool {
         const OFFSET: u8 = 0;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Update disable
+    /// Bit 1 - Update disable
     pub fn udis(&self) -> bool {
         const OFFSET: u8 = 1;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Update request source
+    /// Bit 2 - Update request source
     pub fn urs(&self) -> bool {
         const OFFSET: u8 = 2;
         self.bits & (1 << OFFSET) != 0
     }
-    /// One-pulse mode
+    /// Bit 3 - One-pulse mode
     pub fn opm(&self) -> bool {
         const OFFSET: u8 = 3;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Auto-reload preload enable
+    /// Bit 7 - Auto-reload preload enable
     pub fn arpe(&self) -> bool {
         const OFFSET: u8 = 7;
         self.bits & (1 << OFFSET) != 0
     }
-    /// UIF status bit remapping
+    /// Bit 11 - UIF status bit remapping
     pub fn uifremap(&self) -> bool {
         const OFFSET: u8 = 11;
         self.bits & (1 << OFFSET) != 0
@@ -89,7 +89,7 @@ impl Cr1W {
     pub fn reset_value() -> Self {
         Cr1W { bits: 0 }
     }
-    /// Counter enable
+    /// Bit 0 - Counter enable
     pub fn cen(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 0;
         if value {
@@ -99,7 +99,7 @@ impl Cr1W {
         }
         self
     }
-    /// Update disable
+    /// Bit 1 - Update disable
     pub fn udis(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 1;
         if value {
@@ -109,7 +109,7 @@ impl Cr1W {
         }
         self
     }
-    /// Update request source
+    /// Bit 2 - Update request source
     pub fn urs(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 2;
         if value {
@@ -119,7 +119,7 @@ impl Cr1W {
         }
         self
     }
-    /// One-pulse mode
+    /// Bit 3 - One-pulse mode
     pub fn opm(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 3;
         if value {
@@ -129,7 +129,7 @@ impl Cr1W {
         }
         self
     }
-    /// Auto-reload preload enable
+    /// Bit 7 - Auto-reload preload enable
     pub fn arpe(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 7;
         if value {
@@ -139,7 +139,7 @@ impl Cr1W {
         }
         self
     }
-    /// UIF status bit remapping
+    /// Bit 11 - UIF status bit remapping
     pub fn uifremap(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 11;
         if value {
@@ -177,7 +177,7 @@ pub struct Cr2R {
 }
 
 impl Cr2R {
-    /// Master mode selection
+    /// Bits 4:6 - Master mode selection
     pub fn mms(&self) -> u8 {
         const MASK: u32 = 7;
         const OFFSET: u8 = 4;
@@ -195,7 +195,7 @@ impl Cr2W {
     pub fn reset_value() -> Self {
         Cr2W { bits: 0 }
     }
-    /// Master mode selection
+    /// Bits 4:6 - Master mode selection
     pub fn mms(&mut self, value: u8) -> &mut Self {
         const OFFSET: u8 = 4;
         const MASK: u8 = 7;
@@ -231,12 +231,12 @@ pub struct DierR {
 }
 
 impl DierR {
-    /// Update DMA request enable
+    /// Bit 8 - Update DMA request enable
     pub fn ude(&self) -> bool {
         const OFFSET: u8 = 8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Update interrupt enable
+    /// Bit 0 - Update interrupt enable
     pub fn uie(&self) -> bool {
         const OFFSET: u8 = 0;
         self.bits & (1 << OFFSET) != 0
@@ -253,7 +253,7 @@ impl DierW {
     pub fn reset_value() -> Self {
         DierW { bits: 0 }
     }
-    /// Update DMA request enable
+    /// Bit 8 - Update DMA request enable
     pub fn ude(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 8;
         if value {
@@ -263,7 +263,7 @@ impl DierW {
         }
         self
     }
-    /// Update interrupt enable
+    /// Bit 0 - Update interrupt enable
     pub fn uie(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 0;
         if value {
@@ -301,7 +301,7 @@ pub struct SrR {
 }
 
 impl SrR {
-    /// Update interrupt flag
+    /// Bit 0 - Update interrupt flag
     pub fn uif(&self) -> bool {
         const OFFSET: u8 = 0;
         self.bits & (1 << OFFSET) != 0
@@ -318,7 +318,7 @@ impl SrW {
     pub fn reset_value() -> Self {
         SrW { bits: 0 }
     }
-    /// Update interrupt flag
+    /// Bit 0 - Update interrupt flag
     pub fn uif(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 0;
         if value {
@@ -346,7 +346,7 @@ pub struct EgrR {
 }
 
 impl EgrR {
-    /// Update generation
+    /// Bit 0 - Update generation
     pub fn ug(&self) -> bool {
         const OFFSET: u8 = 0;
         self.bits & (1 << OFFSET) != 0
@@ -363,7 +363,7 @@ impl EgrW {
     pub fn reset_value() -> Self {
         EgrW { bits: 0 }
     }
-    /// Update generation
+    /// Bit 0 - Update generation
     pub fn ug(&mut self, value: bool) -> &mut Self {
         const OFFSET: u8 = 0;
         if value {
@@ -401,13 +401,13 @@ pub struct CntR {
 }
 
 impl CntR {
-    /// Low counter value
+    /// Bits 0:15 - Low counter value
     pub fn cnt(&self) -> u16 {
         const MASK: u32 = 65535;
         const OFFSET: u8 = 0;
         ((self.bits >> OFFSET) & MASK) as u16
     }
-    /// UIF Copy
+    /// Bit 31 - UIF Copy
     pub fn uifcpy(&self) -> bool {
         const OFFSET: u8 = 31;
         self.bits & (1 << OFFSET) != 0
@@ -424,7 +424,7 @@ impl CntW {
     pub fn reset_value() -> Self {
         CntW { bits: 0 }
     }
-    /// Low counter value
+    /// Bits 0:15 - Low counter value
     pub fn cnt(&mut self, value: u16) -> &mut Self {
         const OFFSET: u8 = 0;
         const MASK: u16 = 65535;
@@ -460,7 +460,7 @@ pub struct PscR {
 }
 
 impl PscR {
-    /// Prescaler value
+    /// Bits 0:15 - Prescaler value
     pub fn psc(&self) -> u16 {
         const MASK: u32 = 65535;
         const OFFSET: u8 = 0;
@@ -478,7 +478,7 @@ impl PscW {
     pub fn reset_value() -> Self {
         PscW { bits: 0 }
     }
-    /// Prescaler value
+    /// Bits 0:15 - Prescaler value
     pub fn psc(&mut self, value: u16) -> &mut Self {
         const OFFSET: u8 = 0;
         const MASK: u16 = 65535;
@@ -514,7 +514,7 @@ pub struct ArrR {
 }
 
 impl ArrR {
-    /// Low Auto-reload value
+    /// Bits 0:15 - Low Auto-reload value
     pub fn arr(&self) -> u16 {
         const MASK: u32 = 65535;
         const OFFSET: u8 = 0;
@@ -532,7 +532,7 @@ impl ArrW {
     pub fn reset_value() -> Self {
         ArrW { bits: 0 }
     }
-    /// Low Auto-reload value
+    /// Bits 0:15 - Low Auto-reload value
     pub fn arr(&mut self, value: u16) -> &mut Self {
         const OFFSET: u8 = 0;
         const MASK: u16 = 65535;
