@@ -35,7 +35,7 @@ pub unsafe fn init() {
 
     // DBGMCU: enable asynchronous tracing
     // NOTE(0b00) asynchronous mode
-    dbgmcu.cr.modify(|r| r.trace_ioen(true).trace_mode(0b00));
+    dbgmcu.cr.modify(|_, w| w.trace_ioen(true).trace_mode(0b00));
 
     // DCB: enable the ITM
     let demcr = dcb.demcr.read();

@@ -23,8 +23,7 @@ impl Write for Port {
 
             for byte in s.as_bytes().iter().cloned() {
                 while !usart1.isr.read().txe() {}
-                use peripheral::usart::TdrW;
-                usart1.tdr.write(*TdrW::reset_value().tdr(byte as u16));
+                usart1.tdr.write(|w| w.tdr(byte as u16));
             }
 
             Ok(())
@@ -44,44 +43,42 @@ pub unsafe fn init() {
     let usart1 = peripheral::usart1_mut();
 
     // RCC: Enable USART1 and GPIOC
-    rcc.apb2enr.modify(|r| r.usart1en(true));
-    rcc.ahbenr.modify(|r| r.iopaen(true));
+    rcc.apb2enr.modify(|_, w| w.usart1en(true));
+    rcc.ahbenr.modify(|_, w| w.iopaen(true));
 
     // GPIO: configure PA9 as TX and PA10 as RX
     // AFRH9: USART1_TX
     // AFRH10: USART1_RX
-    gpioa.afrh.modify(|r| r.afrh9(7).afrh10(7));
+    gpioa.afrh.modify(|_, w| w.afrh9(7).afrh10(7));
     // MODER9: Alternate mode
     // MODER10: Alternate mode
-    gpioa.moder.modify(|r| r.moder9(0b10).moder10(0b10));
+    gpioa.moder.modify(|_, w| w.moder9(0b10).moder10(0b10));
 
     // USART1: 115200 - 8N1
-    use peripheral::usart::Cr2W;
-    usart1.cr2.write(*Cr2W::reset_value().stop(0b00));
+    usart1.cr2.write(|w| w.stop(0b00));
 
     // Disable hardware flow control
-    use peripheral::usart::Cr3W;
-    usart1.cr3.write(*Cr3W::reset_value().rtse(false).ctse(false));
+    usart1.cr3.write(|w| w.rtse(false).ctse(false));
 
     const BAUD_RATE: u32 = 115200;
-    use peripheral::usart::BrrW;
     let brr = (::APB2_CLOCK / BAUD_RATE) as u16;
-    usart1.brr.write(*BrrW::reset_value()
-        .div_fraction((brr & 0b1111) as u8)
-        .div_mantissa(brr >> 4));
+    usart1.brr.write(|w| {
+        w.div_fraction((brr & 0b1111) as u8)
+            .div_mantissa(brr >> 4)
+    });
 
     // UE: Enable USART
     // RE: Enable the receiver
     // TE: Enable the transmitter
     // PCE: No parity
     // OVER8: Oversampling by 16 -- to set the baud rate
-    use peripheral::usart::Cr1W;
-    usart1.cr1.write(*Cr1W::reset_value()
-        .ue(true)
-        .re(true)
-        .te(true)
-        .pce(false)
-        .over8(false));
+    usart1.cr1.write(|w| {
+        w.ue(true)
+            .re(true)
+            .te(true)
+            .pce(false)
+            .over8(false)
+    });
 }
 
 #[doc(hidden)]

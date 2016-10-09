@@ -27,17 +27,23 @@ pub struct Cr1 {
 
 impl Cr1 {
     pub fn modify<F>(&mut self, f: F)
-        where F: FnOnce(&mut Cr1W) -> &mut Cr1W
+        where for<'w> F: FnOnce(&Cr1R, &'w mut Cr1W) -> &'w mut Cr1W
     {
-        let mut rw = Cr1W { bits: self.register.read() };
-        f(&mut rw);
-        self.register.write(rw.bits);
+        let bits = self.register.read();
+        let r = Cr1R { bits: bits };
+        let mut w = Cr1W { bits: bits };
+        f(&r, &mut w);
+        self.register.write(w.bits);
     }
     pub fn read(&self) -> Cr1R {
         Cr1R { bits: self.register.read() }
     }
-    pub fn write(&mut self, value: Cr1W) {
-        self.register.write(value.bits)
+    pub fn write<F>(&mut self, f: F)
+        where F: FnOnce(&mut Cr1W) -> &mut Cr1W
+    {
+        let mut w = Cr1W::reset_value();
+        f(&mut w);
+        self.register.write(w.bits);
     }
 }
 
@@ -157,17 +163,23 @@ pub struct Cr2 {
 
 impl Cr2 {
     pub fn modify<F>(&mut self, f: F)
-        where F: FnOnce(&mut Cr2W) -> &mut Cr2W
+        where for<'w> F: FnOnce(&Cr2R, &'w mut Cr2W) -> &'w mut Cr2W
     {
-        let mut rw = Cr2W { bits: self.register.read() };
-        f(&mut rw);
-        self.register.write(rw.bits);
+        let bits = self.register.read();
+        let r = Cr2R { bits: bits };
+        let mut w = Cr2W { bits: bits };
+        f(&r, &mut w);
+        self.register.write(w.bits);
     }
     pub fn read(&self) -> Cr2R {
         Cr2R { bits: self.register.read() }
     }
-    pub fn write(&mut self, value: Cr2W) {
-        self.register.write(value.bits)
+    pub fn write<F>(&mut self, f: F)
+        where F: FnOnce(&mut Cr2W) -> &mut Cr2W
+    {
+        let mut w = Cr2W::reset_value();
+        f(&mut w);
+        self.register.write(w.bits);
     }
 }
 
@@ -211,17 +223,23 @@ pub struct Dier {
 
 impl Dier {
     pub fn modify<F>(&mut self, f: F)
-        where F: FnOnce(&mut DierW) -> &mut DierW
+        where for<'w> F: FnOnce(&DierR, &'w mut DierW) -> &'w mut DierW
     {
-        let mut rw = DierW { bits: self.register.read() };
-        f(&mut rw);
-        self.register.write(rw.bits);
+        let bits = self.register.read();
+        let r = DierR { bits: bits };
+        let mut w = DierW { bits: bits };
+        f(&r, &mut w);
+        self.register.write(w.bits);
     }
     pub fn read(&self) -> DierR {
         DierR { bits: self.register.read() }
     }
-    pub fn write(&mut self, value: DierW) {
-        self.register.write(value.bits)
+    pub fn write<F>(&mut self, f: F)
+        where F: FnOnce(&mut DierW) -> &mut DierW
+    {
+        let mut w = DierW::reset_value();
+        f(&mut w);
+        self.register.write(w.bits);
     }
 }
 
@@ -281,17 +299,23 @@ pub struct Sr {
 
 impl Sr {
     pub fn modify<F>(&mut self, f: F)
-        where F: FnOnce(&mut SrW) -> &mut SrW
+        where for<'w> F: FnOnce(&SrR, &'w mut SrW) -> &'w mut SrW
     {
-        let mut rw = SrW { bits: self.register.read() };
-        f(&mut rw);
-        self.register.write(rw.bits);
+        let bits = self.register.read();
+        let r = SrR { bits: bits };
+        let mut w = SrW { bits: bits };
+        f(&r, &mut w);
+        self.register.write(w.bits);
     }
     pub fn read(&self) -> SrR {
         SrR { bits: self.register.read() }
     }
-    pub fn write(&mut self, value: SrW) {
-        self.register.write(value.bits)
+    pub fn write<F>(&mut self, f: F)
+        where F: FnOnce(&mut SrW) -> &mut SrW
+    {
+        let mut w = SrW::reset_value();
+        f(&mut w);
+        self.register.write(w.bits);
     }
 }
 
@@ -335,8 +359,12 @@ pub struct Egr {
 }
 
 impl Egr {
-    pub fn write(&self, value: EgrW) {
-        self.register.write(value.bits);
+    pub fn write<F>(&self, f: F)
+        where F: FnOnce(&mut EgrW) -> &mut EgrW
+    {
+        let mut w = EgrW::reset_value();
+        f(&mut w);
+        self.register.write(w.bits);
     }
 }
 
@@ -381,17 +409,23 @@ pub struct Cnt {
 
 impl Cnt {
     pub fn modify<F>(&mut self, f: F)
-        where F: FnOnce(&mut CntW) -> &mut CntW
+        where for<'w> F: FnOnce(&CntR, &'w mut CntW) -> &'w mut CntW
     {
-        let mut rw = CntW { bits: self.register.read() };
-        f(&mut rw);
-        self.register.write(rw.bits);
+        let bits = self.register.read();
+        let r = CntR { bits: bits };
+        let mut w = CntW { bits: bits };
+        f(&r, &mut w);
+        self.register.write(w.bits);
     }
     pub fn read(&self) -> CntR {
         CntR { bits: self.register.read() }
     }
-    pub fn write(&mut self, value: CntW) {
-        self.register.write(value.bits)
+    pub fn write<F>(&mut self, f: F)
+        where F: FnOnce(&mut CntW) -> &mut CntW
+    {
+        let mut w = CntW::reset_value();
+        f(&mut w);
+        self.register.write(w.bits);
     }
 }
 
@@ -440,17 +474,23 @@ pub struct Psc {
 
 impl Psc {
     pub fn modify<F>(&mut self, f: F)
-        where F: FnOnce(&mut PscW) -> &mut PscW
+        where for<'w> F: FnOnce(&PscR, &'w mut PscW) -> &'w mut PscW
     {
-        let mut rw = PscW { bits: self.register.read() };
-        f(&mut rw);
-        self.register.write(rw.bits);
+        let bits = self.register.read();
+        let r = PscR { bits: bits };
+        let mut w = PscW { bits: bits };
+        f(&r, &mut w);
+        self.register.write(w.bits);
     }
     pub fn read(&self) -> PscR {
         PscR { bits: self.register.read() }
     }
-    pub fn write(&mut self, value: PscW) {
-        self.register.write(value.bits)
+    pub fn write<F>(&mut self, f: F)
+        where F: FnOnce(&mut PscW) -> &mut PscW
+    {
+        let mut w = PscW::reset_value();
+        f(&mut w);
+        self.register.write(w.bits);
     }
 }
 
@@ -494,17 +534,23 @@ pub struct Arr {
 
 impl Arr {
     pub fn modify<F>(&mut self, f: F)
-        where F: FnOnce(&mut ArrW) -> &mut ArrW
+        where for<'w> F: FnOnce(&ArrR, &'w mut ArrW) -> &'w mut ArrW
     {
-        let mut rw = ArrW { bits: self.register.read() };
-        f(&mut rw);
-        self.register.write(rw.bits);
+        let bits = self.register.read();
+        let r = ArrR { bits: bits };
+        let mut w = ArrW { bits: bits };
+        f(&r, &mut w);
+        self.register.write(w.bits);
     }
     pub fn read(&self) -> ArrR {
         ArrR { bits: self.register.read() }
     }
-    pub fn write(&mut self, value: ArrW) {
-        self.register.write(value.bits)
+    pub fn write<F>(&mut self, f: F)
+        where F: FnOnce(&mut ArrW) -> &mut ArrW
+    {
+        let mut w = ArrW::reset_value();
+        f(&mut w);
+        self.register.write(w.bits);
     }
 }
 

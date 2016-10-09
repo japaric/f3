@@ -19,34 +19,32 @@ pub struct Led {
 impl Led {
     /// Turns the LED off
     pub fn off(&self) {
-        use peripheral::gpio::BsrrW;
         let bsrr = &peripheral::gpioe().bsrr;
         match self.i {
-            8 => bsrr.write(*BsrrW::reset_value().br8(true)),
-            9 => bsrr.write(*BsrrW::reset_value().br9(true)),
-            10 => bsrr.write(*BsrrW::reset_value().br10(true)),
-            11 => bsrr.write(*BsrrW::reset_value().br11(true)),
-            12 => bsrr.write(*BsrrW::reset_value().br12(true)),
-            13 => bsrr.write(*BsrrW::reset_value().br13(true)),
-            14 => bsrr.write(*BsrrW::reset_value().br14(true)),
-            15 => bsrr.write(*BsrrW::reset_value().br15(true)),
+            8 => bsrr.write(|w| w.br8(true)),
+            9 => bsrr.write(|w| w.br9(true)),
+            10 => bsrr.write(|w| w.br10(true)),
+            11 => bsrr.write(|w| w.br11(true)),
+            12 => bsrr.write(|w| w.br12(true)),
+            13 => bsrr.write(|w| w.br13(true)),
+            14 => bsrr.write(|w| w.br14(true)),
+            15 => bsrr.write(|w| w.br15(true)),
             _ => {}
         }
     }
 
     /// Turns the LED on
     pub fn on(&self) {
-        use peripheral::gpio::BsrrW;
         let bsrr = &peripheral::gpioe().bsrr;
         match self.i {
-            8 => bsrr.write(*BsrrW::reset_value().bs8(true)),
-            9 => bsrr.write(*BsrrW::reset_value().bs9(true)),
-            10 => bsrr.write(*BsrrW::reset_value().bs10(true)),
-            11 => bsrr.write(*BsrrW::reset_value().bs11(true)),
-            12 => bsrr.write(*BsrrW::reset_value().bs12(true)),
-            13 => bsrr.write(*BsrrW::reset_value().bs13(true)),
-            14 => bsrr.write(*BsrrW::reset_value().bs14(true)),
-            15 => bsrr.write(*BsrrW::reset_value().bs15(true)),
+            8 => bsrr.write(|w| w.bs8(true)),
+            9 => bsrr.write(|w| w.bs9(true)),
+            10 => bsrr.write(|w| w.bs10(true)),
+            11 => bsrr.write(|w| w.bs11(true)),
+            12 => bsrr.write(|w| w.bs12(true)),
+            13 => bsrr.write(|w| w.bs13(true)),
+            14 => bsrr.write(|w| w.bs14(true)),
+            15 => bsrr.write(|w| w.bs15(true)),
             _ => {}
         }
     }
@@ -63,11 +61,11 @@ pub unsafe fn init() {
     let rcc = peripheral::rcc_mut();
 
     // RCC: Enable GPIOE
-    rcc.ahbenr.modify(|r| r.iopeen(true));
+    rcc.ahbenr.modify(|_, w| w.iopeen(true));
 
     // GPIOE: Configure pins 8-15 as outputs
-    gpioe.moder.modify(|r| {
-        r.moder8(0b01)
+    gpioe.moder.modify(|_, w| {
+        w.moder8(0b01)
             .moder9(0b01)
             .moder10(0b01)
             .moder11(0b01)
