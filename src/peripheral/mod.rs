@@ -22,6 +22,7 @@ pub mod tim;
 pub mod usart;
 
 use self::dbgmcu::Dbgmcu;
+use self::gpio::Gpio;
 use self::rcc::Rcc;
 use self::tim::Tim;
 use self::usart::Usart;
@@ -89,51 +90,51 @@ pub unsafe fn dbgmcu_mut() -> &'static mut Dbgmcu {
     deref_mut(DBGMCU)
 }
 
-pub fn gpioa() -> &'static gpio::Registers {
+pub fn gpioa() -> &'static Gpio {
     unsafe { deref(GPIOA) }
 }
 
-pub unsafe fn gpioa_mut() -> &'static mut gpio::Registers {
+pub unsafe fn gpioa_mut() -> &'static mut Gpio {
     deref_mut(GPIOA)
 }
 
-pub fn gpiob() -> &'static gpio::Registers {
+pub fn gpiob() -> &'static Gpio {
     unsafe { deref(GPIOB) }
 }
 
-pub unsafe fn gpiob_mut() -> &'static mut gpio::Registers {
+pub unsafe fn gpiob_mut() -> &'static mut Gpio {
     deref_mut(GPIOB)
 }
 
-pub fn gpioc() -> &'static gpio::Registers {
+pub fn gpioc() -> &'static Gpio {
     unsafe { deref(GPIOC) }
 }
 
-pub unsafe fn gpioc_mut() -> &'static mut gpio::Registers {
+pub unsafe fn gpioc_mut() -> &'static mut Gpio {
     deref_mut(GPIOC)
 }
 
-pub fn gpiod() -> &'static gpio::Registers {
+pub fn gpiod() -> &'static Gpio {
     unsafe { deref(GPIOD) }
 }
 
-pub unsafe fn gpiod_mut() -> &'static mut gpio::Registers {
+pub unsafe fn gpiod_mut() -> &'static mut Gpio {
     deref_mut(GPIOD)
 }
 
-pub fn gpioe() -> &'static gpio::Registers {
+pub fn gpioe() -> &'static Gpio {
     unsafe { deref(GPIOE) }
 }
 
-pub unsafe fn gpioe_mut() -> &'static mut gpio::Registers {
+pub unsafe fn gpioe_mut() -> &'static mut Gpio {
     deref_mut(GPIOE)
 }
 
-pub fn gpiof() -> &'static gpio::Registers {
+pub fn gpiof() -> &'static Gpio {
     unsafe { deref(GPIOF) }
 }
 
-pub unsafe fn gpiof_mut() -> &'static mut gpio::Registers {
+pub unsafe fn gpiof_mut() -> &'static mut Gpio {
     deref_mut(GPIOF)
 }
 

@@ -48,28 +48,12 @@ pub unsafe fn init() {
     rcc.ahbenr.modify(|r| r.iopaen(true));
 
     // GPIO: configure PA9 as TX and PA10 as RX
-    let afrh = gpioa.afrh.read();
-    gpioa.afrh.write({
-        // AF7 = USART1_TX
-        const AFR9: u32 = 7 << 4;
-        const AFR9_MASK: u32 = 0b1111 << 4;
-        // AF7 = USART1_RX
-        const AFR10: u32 = 7 << 8;
-        const AFR10_MASK: u32 = 0b1111 << 8;
-
-        (((afrh & !AFR9_MASK) | AFR9) & !AFR10_MASK) | AFR10
-    });
-    let moder = gpioa.moder.read();
-    gpioa.moder.write({
-        // PA9 = Alternate mode
-        const MODER9: u32 = 0b10 << 18;
-        const MODER9_MASK: u32 = 0b11 << 18;
-        // PA10 = Alternate mode
-        const MODER10: u32 = 0b10 << 20;
-        const MODER10_MASK: u32 = 0b10 << 20;
-
-        (((moder & !MODER9_MASK) | MODER9) & !MODER10_MASK) | MODER10
-    });
+    // AFRH9: USART1_TX
+    // AFRH10: USART1_RX
+    gpioa.afrh.modify(|r| r.afrh9(7).afrh10(7));
+    // MODER9: Alternate mode
+    // MODER10: Alternate mode
+    gpioa.moder.modify(|r| r.moder9(0b10).moder10(0b10));
 
     // USART1: 115200 - 8N1
     use peripheral::usart::Cr2W;

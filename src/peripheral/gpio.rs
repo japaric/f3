@@ -1,45 +1,3027 @@
-//! General Purpose I/O
-//!
-//! # References
-//!
-//! - RM0316: STM32F303xC [Reference Manual] - Section 11.4 GPIO Registers
-//!
-//! [Reference Manual]: http://www.st.com/resource/en/reference_manual/dm00043574.pdf
-
-use volatile_register::{RO, RW, WO};
-
 #[repr(C)]
-pub struct Registers {
+/// General-purpose I/Os
+pub struct Gpio {
     /// GPIO port mode register
-    pub moder: RW<u32>,
-
+    pub moder: Moder,
     /// GPIO port output type register
-    pub otyper: RW<u32>,
-
+    pub otyper: Otyper,
     /// GPIO port output speed register
-    pub ospeedr: RW<u32>,
-
+    pub ospeedr: Ospeedr,
     /// GPIO port pull-up/pull-down register
-    pub pupdr: RW<u32>,
-
+    pub pupdr: Pupdr,
     /// GPIO port input data register
-    pub idr: RO<u32>,
-
+    pub idr: Idr,
     /// GPIO port output data register
-    pub odr: RW<u32>,
-
+    pub odr: Odr,
     /// GPIO port bit set/reset register
-    pub bsrr: WO<u32>,
-
+    pub bsrr: Bsrr,
     /// GPIO port configuration lock register
-    pub lckr: RW<u32>,
-
+    pub lckr: Lckr,
     /// GPIO alternate function low register
-    pub afrl: RW<u32>,
-
+    pub afrl: Afrl,
     /// GPIO alternate function high register
-    pub afrh: RW<u32>,
-
+    pub afrh: Afrh,
     /// Port bit reset register
-    pub brr: WO<u32>,
+    pub brr: Brr,
+}
+
+pub struct Moder {
+    register: ::volatile_register::RW<u32>,
+}
+
+impl Moder {
+    pub fn modify<F>(&mut self, f: F)
+        where F: FnOnce(&mut ModerW) -> &mut ModerW
+    {
+        let mut rw = ModerW { bits: self.register.read() };
+        f(&mut rw);
+        self.register.write(rw.bits);
+    }
+    pub fn read(&self) -> ModerR {
+        ModerR { bits: self.register.read() }
+    }
+    pub fn write(&mut self, value: ModerW) {
+        self.register.write(value.bits)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct ModerR {
+    bits: u32,
+}
+
+impl ModerR {
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder15(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 30;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder14(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 28;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder13(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 26;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder12(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 24;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder11(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 22;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder10(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 20;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder9(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 18;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder8(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 16;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder7(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 14;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder6(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 12;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder5(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 10;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder4(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 8;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder3(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 6;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder2(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 4;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder1(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 2;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder0(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 0;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct ModerW {
+    bits: u32,
+}
+
+impl ModerW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        ModerW { bits: 671088640 }
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder15(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 30;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder14(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 28;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder13(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 26;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder12(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 24;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder11(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 22;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder10(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 20;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder9(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 18;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder8(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 16;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder7(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 14;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder6(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 12;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder5(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 10;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder4(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 8;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder3(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 6;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder2(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 4;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder1(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 2;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn moder0(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 0;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+}
+
+pub struct Otyper {
+    register: ::volatile_register::RW<u32>,
+}
+
+impl Otyper {
+    pub fn modify<F>(&mut self, f: F)
+        where F: FnOnce(&mut OtyperW) -> &mut OtyperW
+    {
+        let mut rw = OtyperW { bits: self.register.read() };
+        f(&mut rw);
+        self.register.write(rw.bits);
+    }
+    pub fn read(&self) -> OtyperR {
+        OtyperR { bits: self.register.read() }
+    }
+    pub fn write(&mut self, value: OtyperW) {
+        self.register.write(value.bits)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct OtyperR {
+    bits: u32,
+}
+
+impl OtyperR {
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot15(&self) -> bool {
+        const OFFSET: u8 = 15;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot14(&self) -> bool {
+        const OFFSET: u8 = 14;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot13(&self) -> bool {
+        const OFFSET: u8 = 13;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot12(&self) -> bool {
+        const OFFSET: u8 = 12;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot11(&self) -> bool {
+        const OFFSET: u8 = 11;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot10(&self) -> bool {
+        const OFFSET: u8 = 10;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot9(&self) -> bool {
+        const OFFSET: u8 = 9;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot8(&self) -> bool {
+        const OFFSET: u8 = 8;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot7(&self) -> bool {
+        const OFFSET: u8 = 7;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot6(&self) -> bool {
+        const OFFSET: u8 = 6;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot5(&self) -> bool {
+        const OFFSET: u8 = 5;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot4(&self) -> bool {
+        const OFFSET: u8 = 4;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot3(&self) -> bool {
+        const OFFSET: u8 = 3;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot2(&self) -> bool {
+        const OFFSET: u8 = 2;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot1(&self) -> bool {
+        const OFFSET: u8 = 1;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot0(&self) -> bool {
+        const OFFSET: u8 = 0;
+        self.bits & (1 << OFFSET) != 0
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct OtyperW {
+    bits: u32,
+}
+
+impl OtyperW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        OtyperW { bits: 0 }
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot15(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 15;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot14(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 14;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot13(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 13;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot12(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 12;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot11(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 11;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot10(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 10;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot9(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 9;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot8(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 8;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot7(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 7;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot6(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 6;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot5(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 5;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot4(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 4;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot3(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 3;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot2(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 2;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot1(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 1;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ot0(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 0;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+}
+
+pub struct Ospeedr {
+    register: ::volatile_register::RW<u32>,
+}
+
+impl Ospeedr {
+    pub fn modify<F>(&mut self, f: F)
+        where F: FnOnce(&mut OspeedrW) -> &mut OspeedrW
+    {
+        let mut rw = OspeedrW { bits: self.register.read() };
+        f(&mut rw);
+        self.register.write(rw.bits);
+    }
+    pub fn read(&self) -> OspeedrR {
+        OspeedrR { bits: self.register.read() }
+    }
+    pub fn write(&mut self, value: OspeedrW) {
+        self.register.write(value.bits)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct OspeedrR {
+    bits: u32,
+}
+
+impl OspeedrR {
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr15(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 30;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr14(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 28;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr13(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 26;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr12(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 24;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr11(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 22;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr10(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 20;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr9(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 18;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr8(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 16;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr7(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 14;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr6(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 12;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr5(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 10;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr4(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 8;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr3(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 6;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr2(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 4;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr1(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 2;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr0(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 0;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct OspeedrW {
+    bits: u32,
+}
+
+impl OspeedrW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        OspeedrW { bits: 0 }
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr15(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 30;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr14(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 28;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr13(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 26;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr12(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 24;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr11(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 22;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr10(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 20;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr9(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 18;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr8(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 16;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr7(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 14;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr6(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 12;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr5(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 10;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr4(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 8;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr3(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 6;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr2(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 4;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr1(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 2;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn ospeedr0(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 0;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+}
+
+pub struct Pupdr {
+    register: ::volatile_register::RW<u32>,
+}
+
+impl Pupdr {
+    pub fn modify<F>(&mut self, f: F)
+        where F: FnOnce(&mut PupdrW) -> &mut PupdrW
+    {
+        let mut rw = PupdrW { bits: self.register.read() };
+        f(&mut rw);
+        self.register.write(rw.bits);
+    }
+    pub fn read(&self) -> PupdrR {
+        PupdrR { bits: self.register.read() }
+    }
+    pub fn write(&mut self, value: PupdrW) {
+        self.register.write(value.bits)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct PupdrR {
+    bits: u32,
+}
+
+impl PupdrR {
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr15(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 30;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr14(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 28;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr13(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 26;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr12(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 24;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr11(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 22;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr10(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 20;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr9(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 18;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr8(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 16;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr7(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 14;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr6(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 12;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr5(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 10;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr4(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 8;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr3(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 6;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr2(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 4;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr1(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 2;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr0(&self) -> u8 {
+        const MASK: u32 = 3;
+        const OFFSET: u8 = 0;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct PupdrW {
+    bits: u32,
+}
+
+impl PupdrW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        PupdrW { bits: 603979776 }
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr15(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 30;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr14(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 28;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr13(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 26;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr12(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 24;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr11(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 22;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr10(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 20;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr9(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 18;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr8(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 16;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr7(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 14;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr6(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 12;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr5(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 10;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr4(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 8;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr3(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 6;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr2(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 4;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr1(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 2;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Port x configuration bits (y = 0..15)
+    pub fn pupdr0(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 0;
+        const MASK: u8 = 3;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+}
+
+pub struct Idr {
+    register: ::volatile_register::RO<u32>,
+}
+
+impl Idr {
+    pub fn read(&self) -> IdrR {
+        IdrR { bits: self.register.read() }
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct IdrR {
+    bits: u32,
+}
+
+impl IdrR {
+    /// Port input data (y = 0..15)
+    pub fn idr15(&self) -> bool {
+        const OFFSET: u8 = 15;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr14(&self) -> bool {
+        const OFFSET: u8 = 14;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr13(&self) -> bool {
+        const OFFSET: u8 = 13;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr12(&self) -> bool {
+        const OFFSET: u8 = 12;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr11(&self) -> bool {
+        const OFFSET: u8 = 11;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr10(&self) -> bool {
+        const OFFSET: u8 = 10;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr9(&self) -> bool {
+        const OFFSET: u8 = 9;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr8(&self) -> bool {
+        const OFFSET: u8 = 8;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr7(&self) -> bool {
+        const OFFSET: u8 = 7;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr6(&self) -> bool {
+        const OFFSET: u8 = 6;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr5(&self) -> bool {
+        const OFFSET: u8 = 5;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr4(&self) -> bool {
+        const OFFSET: u8 = 4;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr3(&self) -> bool {
+        const OFFSET: u8 = 3;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr2(&self) -> bool {
+        const OFFSET: u8 = 2;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr1(&self) -> bool {
+        const OFFSET: u8 = 1;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr0(&self) -> bool {
+        const OFFSET: u8 = 0;
+        self.bits & (1 << OFFSET) != 0
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct IdrW {
+    bits: u32,
+}
+
+impl IdrW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        IdrW { bits: 0 }
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr15(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 15;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr14(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 14;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr13(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 13;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr12(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 12;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr11(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 11;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr10(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 10;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr9(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 9;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr8(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 8;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr7(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 7;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr6(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 6;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr5(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 5;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr4(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 4;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr3(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 3;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr2(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 2;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr1(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 1;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port input data (y = 0..15)
+    pub fn idr0(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 0;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+}
+
+pub struct Odr {
+    register: ::volatile_register::RW<u32>,
+}
+
+impl Odr {
+    pub fn modify<F>(&mut self, f: F)
+        where F: FnOnce(&mut OdrW) -> &mut OdrW
+    {
+        let mut rw = OdrW { bits: self.register.read() };
+        f(&mut rw);
+        self.register.write(rw.bits);
+    }
+    pub fn read(&self) -> OdrR {
+        OdrR { bits: self.register.read() }
+    }
+    pub fn write(&mut self, value: OdrW) {
+        self.register.write(value.bits)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct OdrR {
+    bits: u32,
+}
+
+impl OdrR {
+    /// Port output data (y = 0..15)
+    pub fn odr15(&self) -> bool {
+        const OFFSET: u8 = 15;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr14(&self) -> bool {
+        const OFFSET: u8 = 14;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr13(&self) -> bool {
+        const OFFSET: u8 = 13;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr12(&self) -> bool {
+        const OFFSET: u8 = 12;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr11(&self) -> bool {
+        const OFFSET: u8 = 11;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr10(&self) -> bool {
+        const OFFSET: u8 = 10;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr9(&self) -> bool {
+        const OFFSET: u8 = 9;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr8(&self) -> bool {
+        const OFFSET: u8 = 8;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr7(&self) -> bool {
+        const OFFSET: u8 = 7;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr6(&self) -> bool {
+        const OFFSET: u8 = 6;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr5(&self) -> bool {
+        const OFFSET: u8 = 5;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr4(&self) -> bool {
+        const OFFSET: u8 = 4;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr3(&self) -> bool {
+        const OFFSET: u8 = 3;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr2(&self) -> bool {
+        const OFFSET: u8 = 2;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr1(&self) -> bool {
+        const OFFSET: u8 = 1;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr0(&self) -> bool {
+        const OFFSET: u8 = 0;
+        self.bits & (1 << OFFSET) != 0
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct OdrW {
+    bits: u32,
+}
+
+impl OdrW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        OdrW { bits: 0 }
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr15(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 15;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr14(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 14;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr13(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 13;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr12(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 12;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr11(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 11;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr10(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 10;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr9(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 9;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr8(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 8;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr7(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 7;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr6(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 6;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr5(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 5;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr4(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 4;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr3(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 3;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr2(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 2;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr1(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 1;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port output data (y = 0..15)
+    pub fn odr0(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 0;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+}
+
+pub struct Bsrr {
+    register: ::volatile_register::WO<u32>,
+}
+
+impl Bsrr {
+    pub fn write(&self, value: BsrrW) {
+        self.register.write(value.bits);
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct BsrrR {
+    bits: u32,
+}
+
+impl BsrrR {
+    /// Port x reset bit y (y = 0..15)
+    pub fn br15(&self) -> bool {
+        const OFFSET: u8 = 31;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br14(&self) -> bool {
+        const OFFSET: u8 = 30;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br13(&self) -> bool {
+        const OFFSET: u8 = 29;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br12(&self) -> bool {
+        const OFFSET: u8 = 28;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br11(&self) -> bool {
+        const OFFSET: u8 = 27;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br10(&self) -> bool {
+        const OFFSET: u8 = 26;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br9(&self) -> bool {
+        const OFFSET: u8 = 25;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br8(&self) -> bool {
+        const OFFSET: u8 = 24;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br7(&self) -> bool {
+        const OFFSET: u8 = 23;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br6(&self) -> bool {
+        const OFFSET: u8 = 22;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br5(&self) -> bool {
+        const OFFSET: u8 = 21;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br4(&self) -> bool {
+        const OFFSET: u8 = 20;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br3(&self) -> bool {
+        const OFFSET: u8 = 19;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br2(&self) -> bool {
+        const OFFSET: u8 = 18;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br1(&self) -> bool {
+        const OFFSET: u8 = 17;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn br0(&self) -> bool {
+        const OFFSET: u8 = 16;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs15(&self) -> bool {
+        const OFFSET: u8 = 15;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs14(&self) -> bool {
+        const OFFSET: u8 = 14;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs13(&self) -> bool {
+        const OFFSET: u8 = 13;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs12(&self) -> bool {
+        const OFFSET: u8 = 12;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs11(&self) -> bool {
+        const OFFSET: u8 = 11;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs10(&self) -> bool {
+        const OFFSET: u8 = 10;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs9(&self) -> bool {
+        const OFFSET: u8 = 9;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs8(&self) -> bool {
+        const OFFSET: u8 = 8;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs7(&self) -> bool {
+        const OFFSET: u8 = 7;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs6(&self) -> bool {
+        const OFFSET: u8 = 6;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs5(&self) -> bool {
+        const OFFSET: u8 = 5;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs4(&self) -> bool {
+        const OFFSET: u8 = 4;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs3(&self) -> bool {
+        const OFFSET: u8 = 3;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs2(&self) -> bool {
+        const OFFSET: u8 = 2;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs1(&self) -> bool {
+        const OFFSET: u8 = 1;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs0(&self) -> bool {
+        const OFFSET: u8 = 0;
+        self.bits & (1 << OFFSET) != 0
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct BsrrW {
+    bits: u32,
+}
+
+impl BsrrW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        BsrrW { bits: 0 }
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br15(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 31;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br14(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 30;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br13(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 29;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br12(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 28;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br11(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 27;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br10(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 26;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br9(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 25;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br8(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 24;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br7(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 23;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br6(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 22;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br5(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 21;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br4(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 20;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br3(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 19;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br2(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 18;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x reset bit y (y = 0..15)
+    pub fn br1(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 17;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn br0(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 16;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs15(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 15;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs14(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 14;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs13(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 13;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs12(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 12;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs11(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 11;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs10(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 10;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs9(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 9;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs8(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 8;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs7(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 7;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs6(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 6;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs5(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 5;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs4(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 4;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs3(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 3;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs2(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 2;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs1(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 1;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x set bit y (y= 0..15)
+    pub fn bs0(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 0;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+}
+
+pub struct Lckr {
+    register: ::volatile_register::RW<u32>,
+}
+
+impl Lckr {
+    pub fn modify<F>(&mut self, f: F)
+        where F: FnOnce(&mut LckrW) -> &mut LckrW
+    {
+        let mut rw = LckrW { bits: self.register.read() };
+        f(&mut rw);
+        self.register.write(rw.bits);
+    }
+    pub fn read(&self) -> LckrR {
+        LckrR { bits: self.register.read() }
+    }
+    pub fn write(&mut self, value: LckrW) {
+        self.register.write(value.bits)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct LckrR {
+    bits: u32,
+}
+
+impl LckrR {
+    /// Lok Key
+    pub fn lckk(&self) -> bool {
+        const OFFSET: u8 = 16;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck15(&self) -> bool {
+        const OFFSET: u8 = 15;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck14(&self) -> bool {
+        const OFFSET: u8 = 14;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck13(&self) -> bool {
+        const OFFSET: u8 = 13;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck12(&self) -> bool {
+        const OFFSET: u8 = 12;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck11(&self) -> bool {
+        const OFFSET: u8 = 11;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck10(&self) -> bool {
+        const OFFSET: u8 = 10;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck9(&self) -> bool {
+        const OFFSET: u8 = 9;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck8(&self) -> bool {
+        const OFFSET: u8 = 8;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck7(&self) -> bool {
+        const OFFSET: u8 = 7;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck6(&self) -> bool {
+        const OFFSET: u8 = 6;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck5(&self) -> bool {
+        const OFFSET: u8 = 5;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck4(&self) -> bool {
+        const OFFSET: u8 = 4;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck3(&self) -> bool {
+        const OFFSET: u8 = 3;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck2(&self) -> bool {
+        const OFFSET: u8 = 2;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck1(&self) -> bool {
+        const OFFSET: u8 = 1;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck0(&self) -> bool {
+        const OFFSET: u8 = 0;
+        self.bits & (1 << OFFSET) != 0
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct LckrW {
+    bits: u32,
+}
+
+impl LckrW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        LckrW { bits: 0 }
+    }
+    /// Lok Key
+    pub fn lckk(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 16;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck15(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 15;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck14(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 14;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck13(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 13;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck12(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 12;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck11(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 11;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck10(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 10;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck9(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 9;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck8(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 8;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck7(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 7;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck6(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 6;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck5(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 5;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck4(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 4;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck3(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 3;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck2(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 2;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck1(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 1;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x lock bit y (y= 0..15)
+    pub fn lck0(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 0;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+}
+
+pub struct Afrl {
+    register: ::volatile_register::RW<u32>,
+}
+
+impl Afrl {
+    pub fn modify<F>(&mut self, f: F)
+        where F: FnOnce(&mut AfrlW) -> &mut AfrlW
+    {
+        let mut rw = AfrlW { bits: self.register.read() };
+        f(&mut rw);
+        self.register.write(rw.bits);
+    }
+    pub fn read(&self) -> AfrlR {
+        AfrlR { bits: self.register.read() }
+    }
+    pub fn write(&mut self, value: AfrlW) {
+        self.register.write(value.bits)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct AfrlR {
+    bits: u32,
+}
+
+impl AfrlR {
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl7(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 28;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl6(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 24;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl5(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 20;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl4(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 16;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl3(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 12;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl2(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 8;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl1(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 4;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl0(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 0;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct AfrlW {
+    bits: u32,
+}
+
+impl AfrlW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        AfrlW { bits: 0 }
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl7(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 28;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl6(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 24;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl5(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 20;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl4(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 16;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl3(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 12;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl2(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 8;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl1(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 4;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 0..7)
+    pub fn afrl0(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 0;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+}
+
+pub struct Afrh {
+    register: ::volatile_register::RW<u32>,
+}
+
+impl Afrh {
+    pub fn modify<F>(&mut self, f: F)
+        where F: FnOnce(&mut AfrhW) -> &mut AfrhW
+    {
+        let mut rw = AfrhW { bits: self.register.read() };
+        f(&mut rw);
+        self.register.write(rw.bits);
+    }
+    pub fn read(&self) -> AfrhR {
+        AfrhR { bits: self.register.read() }
+    }
+    pub fn write(&mut self, value: AfrhW) {
+        self.register.write(value.bits)
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct AfrhR {
+    bits: u32,
+}
+
+impl AfrhR {
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh15(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 28;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh14(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 24;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh13(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 20;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh12(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 16;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh11(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 12;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh10(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 8;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh9(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 4;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh8(&self) -> u8 {
+        const MASK: u32 = 15;
+        const OFFSET: u8 = 0;
+        ((self.bits >> OFFSET) & MASK) as u8
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct AfrhW {
+    bits: u32,
+}
+
+impl AfrhW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        AfrhW { bits: 0 }
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh15(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 28;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh14(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 24;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh13(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 20;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh12(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 16;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh11(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 12;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh10(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 8;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh9(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 4;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+    /// Alternate function selection for port x bit y (y = 8..15)
+    pub fn afrh8(&mut self, value: u8) -> &mut Self {
+        const OFFSET: u8 = 0;
+        const MASK: u8 = 15;
+        self.bits &= !((MASK as u32) << OFFSET);
+        self.bits |= ((value & MASK) as u32) << OFFSET;
+        self
+    }
+}
+
+pub struct Brr {
+    register: ::volatile_register::WO<u32>,
+}
+
+impl Brr {
+    pub fn write(&self, value: BrrW) {
+        self.register.write(value.bits);
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct BrrR {
+    bits: u32,
+}
+
+impl BrrR {
+    /// Port x Reset bit y
+    pub fn br0(&self) -> bool {
+        const OFFSET: u8 = 0;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br1(&self) -> bool {
+        const OFFSET: u8 = 1;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br2(&self) -> bool {
+        const OFFSET: u8 = 2;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br3(&self) -> bool {
+        const OFFSET: u8 = 3;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br4(&self) -> bool {
+        const OFFSET: u8 = 4;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br5(&self) -> bool {
+        const OFFSET: u8 = 5;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br6(&self) -> bool {
+        const OFFSET: u8 = 6;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br7(&self) -> bool {
+        const OFFSET: u8 = 7;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br8(&self) -> bool {
+        const OFFSET: u8 = 8;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br9(&self) -> bool {
+        const OFFSET: u8 = 9;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br10(&self) -> bool {
+        const OFFSET: u8 = 10;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br11(&self) -> bool {
+        const OFFSET: u8 = 11;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br12(&self) -> bool {
+        const OFFSET: u8 = 12;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br13(&self) -> bool {
+        const OFFSET: u8 = 13;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br14(&self) -> bool {
+        const OFFSET: u8 = 14;
+        self.bits & (1 << OFFSET) != 0
+    }
+    /// Port x Reset bit y
+    pub fn br15(&self) -> bool {
+        const OFFSET: u8 = 15;
+        self.bits & (1 << OFFSET) != 0
+    }
+}
+
+#[derive(Clone, Copy)]
+pub struct BrrW {
+    bits: u32,
+}
+
+impl BrrW {
+    /// Reset value
+    pub fn reset_value() -> Self {
+        BrrW { bits: 0 }
+    }
+    /// Port x Reset bit y
+    pub fn br0(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 0;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br1(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 1;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br2(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 2;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br3(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 3;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br4(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 4;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br5(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 5;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br6(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 6;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br7(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 7;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br8(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 8;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br9(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 9;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br10(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 10;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br11(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 11;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br12(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 12;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br13(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 13;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br14(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 14;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
+    /// Port x Reset bit y
+    pub fn br15(&mut self, value: bool) -> &mut Self {
+        const OFFSET: u8 = 15;
+        if value {
+            self.bits |= 1 << OFFSET;
+        } else {
+            self.bits &= !(1 << OFFSET);
+        }
+        self
+    }
 }
