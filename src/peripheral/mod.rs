@@ -2,13 +2,6 @@
 //!
 //! > **WARNING** This might void your warranty!
 //!
-//! This API does a good job (I think) at limiting read/write access to (memory mapped) registers
-//! and at marking potential sources of data races (mutably aliasing registers) as `unsafe`. **But**
-//! it does nothing to validate the contents that will be written to a register so you might end up
-//! modifying the "reserved" parts of a register. However, where possible, the documentation
-//! indicates what parts of a register can be modified (i.e. are not reserved) and the read/write
-//! permissions of the parts of a register.
-//!
 //! # Notes
 //!
 //! - Although the `*_mut()` functions always return a valid/live reference, the API doesn't prevent

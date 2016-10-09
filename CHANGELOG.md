@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - The `delay` module now uses an interrupt instead of busy polling.
+- The whole `peripheral` module has been revamped to provide type safe access to the *contents* of
+  the registers.
 
 ## [v0.1.0] - 2016-10-04
 
