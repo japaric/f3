@@ -37,6 +37,20 @@ fn main() {
     offset!(gpio.afrh, 0x24);
     offset!(gpio.brr, 0x28);
 
+    let i2c = unsafe { &*(0x0 as *const peripheral::i2c::I2C) };
+
+    offset!(i2c.cr1, 0x0);
+    offset!(i2c.cr2, 0x4);
+    offset!(i2c.oar1, 0x8);
+    offset!(i2c.oar2, 0xc);
+    offset!(i2c.timingr, 0x10);
+    offset!(i2c.timeoutr, 0x14);
+    offset!(i2c.isr, 0x18);
+    offset!(i2c.icr, 0x1c);
+    offset!(i2c.pecr, 0x20);
+    offset!(i2c.rxdr, 0x24);
+    offset!(i2c.txdr, 0x28);
+
     let rcc = unsafe { &*(0x0 as *const peripheral::rcc::Rcc) };
 
     offset!(rcc.cr, 0x0);

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initialize the FPU before main
 - Support for sending `print!` formatted messages over "Serial Port".
 - Overridable interrupts
+- low level access to I2C
 
 ### Changed
 

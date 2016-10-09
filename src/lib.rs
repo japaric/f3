@@ -143,6 +143,7 @@ pub mod delay;
 pub mod examples;
 pub mod exception;
 pub mod fpu;
+pub mod i2c;
 pub mod interrupt;
 pub mod itm;
 pub mod led;
@@ -156,6 +157,7 @@ pub mod serial;
 pub unsafe extern "C" fn init() {
     delay::init();
     fpu::init();
+    i2c::init();
     itm::init();
     led::init();
     serial::init();

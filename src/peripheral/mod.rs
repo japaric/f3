@@ -10,12 +10,14 @@
 
 pub mod dbgmcu;
 pub mod gpio;
+pub mod i2c;
 pub mod rcc;
 pub mod tim;
 pub mod usart;
 
 use self::dbgmcu::Dbgmcu;
 use self::gpio::Gpio;
+use self::i2c::I2c;
 use self::rcc::Rcc;
 use self::tim::Tim;
 use self::usart::Usart;
@@ -53,7 +55,7 @@ const USART1: usize = 0x40013800;
 // const PWR: usize = 0x40007000;
 // const CAN: usize = 0x40006400;
 // const USB_FS: usize = 0x40005c00;
-// const I2C1: usize = 0x40005400;
+const I2C1: usize = 0x40005400;
 // const I2C2: usize = 0x40005800;
 // const IWDG: usize = 0x40003000;
 // const WWDG: usize = 0x40002c00;
@@ -129,6 +131,14 @@ pub fn gpiof() -> &'static Gpio {
 
 pub unsafe fn gpiof_mut() -> &'static mut Gpio {
     deref_mut(GPIOF)
+}
+
+pub fn i2c1() -> &'static I2c {
+    unsafe { deref(I2C1) }
+}
+
+pub unsafe fn i2c1_mut() -> &'static mut I2c {
+    deref_mut(I2C1)
 }
 
 pub fn rcc() -> &'static Rcc {

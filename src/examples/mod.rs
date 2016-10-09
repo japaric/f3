@@ -3,6 +3,8 @@
 
 pub mod exception;
 pub mod fpu;
+pub mod i2c_read_multi;
+pub mod i2c_read_single;
 pub mod interrupt;
 pub mod itm;
 pub mod led_roulette;
