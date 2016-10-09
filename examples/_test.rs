@@ -37,7 +37,7 @@ fn main() {
     offset!(gpio.afrh, 0x24);
     offset!(gpio.brr, 0x28);
 
-    let i2c = unsafe { &*(0x0 as *const peripheral::i2c::I2C) };
+    let i2c = unsafe { &*(0x0 as *const peripheral::i2c::I2c) };
 
     offset!(i2c.cr1, 0x0);
     offset!(i2c.cr2, 0x4);
