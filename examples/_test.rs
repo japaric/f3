@@ -16,7 +16,7 @@ macro_rules! offset {
 }
 
 fn main() {
-    let dbgmcu = unsafe { &*(0x0 as *const peripheral::dbgmcu::Registers) };
+    let dbgmcu = unsafe { &*(0x0 as *const peripheral::dbgmcu::Dbgmcu) };
 
     offset!(dbgmcu.idcode, 0x0);
     offset!(dbgmcu.cr, 0x4);
@@ -53,7 +53,7 @@ fn main() {
     offset!(rcc.cfgr2, 0x2c);
     offset!(rcc.cfgr3, 0x30);
 
-    let tim = unsafe { &*(0x0 as *const peripheral::tim::Registers) };
+    let tim = unsafe { &*(0x0 as *const peripheral::tim::Tim) };
 
     offset!(tim.cr1, 0x0);
     offset!(tim.cr2, 0x4);

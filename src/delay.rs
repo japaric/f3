@@ -14,8 +14,8 @@ pub fn ms(n: u16) {
     #[linkage = "weak"]
     pub unsafe extern "C" fn interrupt_handler() {
         // Clear the update flag
-        let tim7 = peripheral::tim7_mut();
-        tim7.sr.write(0);
+        use peripheral::tim::SrW;
+        peripheral::tim7_mut().sr.write(*SrW::reset_value().uif(false));
     }
 
     unsafe {
@@ -23,14 +23,14 @@ pub fn ms(n: u16) {
 
         // The alarm (the "update event") will set off in `n` "ticks".
         // One tick = 1 ms (see `init`)
-        tim7.arr.write(n);
-        let cr1 = tim7.cr1.read();
-        tim7.cr1.write({
-            // Counter ENanbled
-            const CEN: u16 = 1 << 0;
+        use peripheral::tim::ArrW;
+        tim7.arr.write(*ArrW::reset_value().arr(n));
 
-            cr1 | CEN
-        });
+        use peripheral::tim::EgrW;
+        tim7.egr.write(*EgrW::reset_value().ug(true));
+
+        // CEN: Enable the counter
+        tim7.cr1.modify(|r| r.cen(true));
 
         // XXX this assumes that `_tim7` is the only interrupt that can occur.
         asm::wfi();
@@ -51,26 +51,19 @@ pub unsafe fn init() {
     // RCC: Enable TIM7
     rcc.apb1enr.modify(|r| r.tim7en(true));
 
-    let cr1 = tim7.cr1.read();
-    tim7.cr1.write({
-        // Disable the clock
-        const CEN: u16 = 1 << 0;
-        // One Pulse Mode. Stop the counter after the next update event.
-        const OPM: u16 = 1 << 3;
+    // CEN: Disable the clock
+    // OPM. Enable One Pulse Mode. Stop the counter after the next update event.
+    use peripheral::tim::Cr1W;
+    tim7.cr1.write(*Cr1W::reset_value().cen(false).opm(true));
 
-        (cr1 | OPM) & !CEN
-    });
-
-    // TIM7: Enable "update" interrupts
-    tim7.dier.write({
-        const UIE: u16 = 1 << 0;
-
-        UIE
-    });
+    // Enable "update" interrupts
+    use peripheral::tim::DierW;
+    tim7.dier.write(*DierW::reset_value().uie(true));
 
     // NVIC: Unmask the interrupt (N = 55)
     nvic.iser[1].write(1 << (55 - 32));
 
-    // TIM7: Set pre-scaler to 8_000 -> Frequency = 1 KHz
-    tim7.psc.write(7_999);
+    // Set pre-scaler to 8_000 -> Frequency = 1 KHz
+    use peripheral::tim::PscW;
+    tim7.psc.write(*PscW::reset_value().psc(7_999));
 }

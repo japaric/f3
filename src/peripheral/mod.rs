@@ -23,6 +23,7 @@ pub mod usart;
 
 use self::dbgmcu::Dbgmcu;
 use self::rcc::Rcc;
+use self::tim::Tim;
 
 const GPIOA: usize = 0x48000000;
 const GPIOB: usize = 0x48000400;
@@ -143,19 +144,19 @@ pub unsafe fn rcc_mut() -> &'static mut Rcc {
     deref_mut(RCC)
 }
 
-pub fn tim6() -> &'static tim::Registers {
+pub fn tim6() -> &'static Tim {
     unsafe { deref(TIM6) }
 }
 
-pub unsafe fn tim6_mut() -> &'static mut tim::Registers {
+pub unsafe fn tim6_mut() -> &'static mut Tim {
     deref_mut(TIM6)
 }
 
-pub fn tim7() -> &'static tim::Registers {
+pub fn tim7() -> &'static Tim {
     unsafe { deref(TIM7) }
 }
 
-pub unsafe fn tim7_mut() -> &'static mut tim::Registers {
+pub unsafe fn tim7_mut() -> &'static mut Tim {
     deref_mut(TIM7)
 }
 
