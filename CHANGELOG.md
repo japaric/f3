@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initialize the FPU before main
 - Support for sending `print!` formatted messages over "Serial Port".
 - Overridable interrupts
-- low level access to I2C
+- the low level API over peripherals is now aware of the bit fields/flags of each register
+- low level access to I2C and SPI
+- high level API over the LSM303DLHC
 
 ### Changed
 
