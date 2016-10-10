@@ -21,6 +21,7 @@ pub struct Tim {
     pub arr: Arr,
 }
 
+#[repr(C)]
 pub struct Cr1 {
     register: ::volatile_register::RW<u32>,
 }
@@ -48,6 +49,7 @@ impl Cr1 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr1R {
     bits: u32,
 }
@@ -86,6 +88,7 @@ impl Cr1R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr1W {
     bits: u32,
 }
@@ -157,6 +160,7 @@ impl Cr1W {
     }
 }
 
+#[repr(C)]
 pub struct Cr2 {
     register: ::volatile_register::RW<u32>,
 }
@@ -184,6 +188,7 @@ impl Cr2 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr2R {
     bits: u32,
 }
@@ -198,6 +203,7 @@ impl Cr2R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr2W {
     bits: u32,
 }
@@ -217,6 +223,7 @@ impl Cr2W {
     }
 }
 
+#[repr(C)]
 pub struct Dier {
     register: ::volatile_register::RW<u32>,
 }
@@ -244,6 +251,7 @@ impl Dier {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct DierR {
     bits: u32,
 }
@@ -262,6 +270,7 @@ impl DierR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct DierW {
     bits: u32,
 }
@@ -293,6 +302,7 @@ impl DierW {
     }
 }
 
+#[repr(C)]
 pub struct Sr {
     register: ::volatile_register::RW<u32>,
 }
@@ -320,6 +330,7 @@ impl Sr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct SrR {
     bits: u32,
 }
@@ -333,6 +344,7 @@ impl SrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct SrW {
     bits: u32,
 }
@@ -354,6 +366,7 @@ impl SrW {
     }
 }
 
+#[repr(C)]
 pub struct Egr {
     register: ::volatile_register::WO<u32>,
 }
@@ -369,6 +382,7 @@ impl Egr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct EgrR {
     bits: u32,
 }
@@ -382,6 +396,7 @@ impl EgrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct EgrW {
     bits: u32,
 }
@@ -403,6 +418,7 @@ impl EgrW {
     }
 }
 
+#[repr(C)]
 pub struct Cnt {
     register: ::volatile_register::RW<u32>,
 }
@@ -430,6 +446,7 @@ impl Cnt {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct CntR {
     bits: u32,
 }
@@ -449,6 +466,7 @@ impl CntR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct CntW {
     bits: u32,
 }
@@ -468,6 +486,7 @@ impl CntW {
     }
 }
 
+#[repr(C)]
 pub struct Psc {
     register: ::volatile_register::RW<u32>,
 }
@@ -495,6 +514,7 @@ impl Psc {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct PscR {
     bits: u32,
 }
@@ -509,6 +529,7 @@ impl PscR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct PscW {
     bits: u32,
 }
@@ -528,6 +549,7 @@ impl PscW {
     }
 }
 
+#[repr(C)]
 pub struct Arr {
     register: ::volatile_register::RW<u32>,
 }
@@ -555,6 +577,7 @@ impl Arr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct ArrR {
     bits: u32,
 }
@@ -569,6 +592,7 @@ impl ArrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct ArrW {
     bits: u32,
 }

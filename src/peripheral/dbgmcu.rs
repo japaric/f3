@@ -11,6 +11,7 @@ pub struct Dbgmcu {
     pub apb2fz: Apb2fz,
 }
 
+#[repr(C)]
 pub struct Idcode {
     register: ::volatile_register::RO<u32>,
 }
@@ -22,6 +23,7 @@ impl Idcode {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IdcodeR {
     bits: u32,
 }
@@ -42,6 +44,7 @@ impl IdcodeR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IdcodeW {
     bits: u32,
 }
@@ -69,6 +72,7 @@ impl IdcodeW {
     }
 }
 
+#[repr(C)]
 pub struct Cr {
     register: ::volatile_register::RW<u32>,
 }
@@ -96,6 +100,7 @@ impl Cr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct CrR {
     bits: u32,
 }
@@ -130,6 +135,7 @@ impl CrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct CrW {
     bits: u32,
 }
@@ -189,6 +195,7 @@ impl CrW {
     }
 }
 
+#[repr(C)]
 pub struct Apb1fz {
     register: ::volatile_register::RW<u32>,
 }
@@ -216,6 +223,7 @@ impl Apb1fz {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Apb1fzR {
     bits: u32,
 }
@@ -304,6 +312,7 @@ impl Apb1fzR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Apb1fzW {
     bits: u32,
 }
@@ -475,6 +484,7 @@ impl Apb1fzW {
     }
 }
 
+#[repr(C)]
 pub struct Apb2fz {
     register: ::volatile_register::RW<u32>,
 }
@@ -502,6 +512,7 @@ impl Apb2fz {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Apb2fzR {
     bits: u32,
 }
@@ -530,6 +541,7 @@ impl Apb2fzR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Apb2fzW {
     bits: u32,
 }

@@ -25,6 +25,7 @@ pub struct I2c {
     pub txdr: Txdr,
 }
 
+#[repr(C)]
 pub struct Cr1 {
     register: ::volatile_register::RW<u32>,
 }
@@ -52,6 +53,7 @@ impl Cr1 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr1R {
     bits: u32,
 }
@@ -161,6 +163,7 @@ impl Cr1R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr1W {
     bits: u32,
 }
@@ -380,6 +383,7 @@ impl Cr1W {
     }
 }
 
+#[repr(C)]
 pub struct Cr2 {
     register: ::volatile_register::RW<u32>,
 }
@@ -407,6 +411,7 @@ impl Cr2 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr2R {
     bits: u32,
 }
@@ -483,6 +488,7 @@ impl Cr2R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr2W {
     bits: u32,
 }
@@ -618,6 +624,7 @@ impl Cr2W {
     }
 }
 
+#[repr(C)]
 pub struct Oar1 {
     register: ::volatile_register::RW<u32>,
 }
@@ -645,6 +652,7 @@ impl Oar1 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Oar1R {
     bits: u32,
 }
@@ -680,6 +688,7 @@ impl Oar1R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Oar1W {
     bits: u32,
 }
@@ -737,6 +746,7 @@ impl Oar1W {
     }
 }
 
+#[repr(C)]
 pub struct Oar2 {
     register: ::volatile_register::RW<u32>,
 }
@@ -764,6 +774,7 @@ impl Oar2 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Oar2R {
     bits: u32,
 }
@@ -789,6 +800,7 @@ impl Oar2R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Oar2W {
     bits: u32,
 }
@@ -826,6 +838,7 @@ impl Oar2W {
     }
 }
 
+#[repr(C)]
 pub struct Timingr {
     register: ::volatile_register::RW<u32>,
 }
@@ -853,6 +866,7 @@ impl Timingr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TimingrR {
     bits: u32,
 }
@@ -891,6 +905,7 @@ impl TimingrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TimingrW {
     bits: u32,
 }
@@ -942,6 +957,7 @@ impl TimingrW {
     }
 }
 
+#[repr(C)]
 pub struct Timeoutr {
     register: ::volatile_register::RW<u32>,
 }
@@ -970,6 +986,7 @@ impl Timeoutr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TimeoutrR {
     bits: u32,
 }
@@ -1005,6 +1022,7 @@ impl TimeoutrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TimeoutrW {
     bits: u32,
 }
@@ -1062,6 +1080,7 @@ impl TimeoutrW {
     }
 }
 
+#[repr(C)]
 pub struct Isr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1089,6 +1108,7 @@ impl Isr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IsrR {
     bits: u32,
 }
@@ -1183,6 +1203,7 @@ impl IsrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IsrW {
     bits: u32,
 }
@@ -1214,6 +1235,7 @@ impl IsrW {
     }
 }
 
+#[repr(C)]
 pub struct Icr {
     register: ::volatile_register::WO<u32>,
 }
@@ -1229,6 +1251,7 @@ impl Icr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IcrR {
     bits: u32,
 }
@@ -1282,6 +1305,7 @@ impl IcrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IcrW {
     bits: u32,
 }
@@ -1383,6 +1407,7 @@ impl IcrW {
     }
 }
 
+#[repr(C)]
 pub struct Pecr {
     register: ::volatile_register::RO<u32>,
 }
@@ -1394,6 +1419,7 @@ impl Pecr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct PecrR {
     bits: u32,
 }
@@ -1408,6 +1434,7 @@ impl PecrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct PecrW {
     bits: u32,
 }
@@ -1427,6 +1454,7 @@ impl PecrW {
     }
 }
 
+#[repr(C)]
 pub struct Rxdr {
     register: ::volatile_register::RO<u32>,
 }
@@ -1438,6 +1466,7 @@ impl Rxdr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RxdrR {
     bits: u32,
 }
@@ -1452,6 +1481,7 @@ impl RxdrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RxdrW {
     bits: u32,
 }
@@ -1471,6 +1501,7 @@ impl RxdrW {
     }
 }
 
+#[repr(C)]
 pub struct Txdr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1498,6 +1529,7 @@ impl Txdr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TxdrR {
     bits: u32,
 }
@@ -1512,6 +1544,7 @@ impl TxdrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TxdrW {
     bits: u32,
 }

@@ -21,6 +21,7 @@ pub struct Spi {
     pub i2spr: I2spr,
 }
 
+#[repr(C)]
 pub struct Cr1 {
     register: ::volatile_register::RW<u32>,
 }
@@ -48,6 +49,7 @@ impl Cr1 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr1R {
     bits: u32,
 }
@@ -127,6 +129,7 @@ impl Cr1R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr1W {
     bits: u32,
 }
@@ -276,6 +279,7 @@ impl Cr1W {
     }
 }
 
+#[repr(C)]
 pub struct Cr2 {
     register: ::volatile_register::RW<u32>,
 }
@@ -303,6 +307,7 @@ impl Cr2 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr2R {
     bits: u32,
 }
@@ -372,6 +377,7 @@ impl Cr2R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr2W {
     bits: u32,
 }
@@ -501,6 +507,7 @@ impl Cr2W {
     }
 }
 
+#[repr(C)]
 pub struct Sr {
     register: ::volatile_register::RW<u32>,
 }
@@ -528,6 +535,7 @@ impl Sr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct SrR {
     bits: u32,
 }
@@ -593,6 +601,7 @@ impl SrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct SrW {
     bits: u32,
 }
@@ -614,6 +623,7 @@ impl SrW {
     }
 }
 
+#[repr(C)]
 pub struct Dr {
     register: ::volatile_register::RW<u32>,
 }
@@ -641,6 +651,7 @@ impl Dr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct DrR {
     bits: u32,
 }
@@ -655,6 +666,7 @@ impl DrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct DrW {
     bits: u32,
 }
@@ -674,6 +686,7 @@ impl DrW {
     }
 }
 
+#[repr(C)]
 pub struct Crcpr {
     register: ::volatile_register::RW<u32>,
 }
@@ -701,6 +714,7 @@ impl Crcpr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct CrcprR {
     bits: u32,
 }
@@ -715,6 +729,7 @@ impl CrcprR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct CrcprW {
     bits: u32,
 }
@@ -734,6 +749,7 @@ impl CrcprW {
     }
 }
 
+#[repr(C)]
 pub struct Rxcrcr {
     register: ::volatile_register::RO<u32>,
 }
@@ -745,6 +761,7 @@ impl Rxcrcr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RxcrcrR {
     bits: u32,
 }
@@ -759,6 +776,7 @@ impl RxcrcrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RxcrcrW {
     bits: u32,
 }
@@ -778,6 +796,7 @@ impl RxcrcrW {
     }
 }
 
+#[repr(C)]
 pub struct Txcrcr {
     register: ::volatile_register::RO<u32>,
 }
@@ -789,6 +808,7 @@ impl Txcrcr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TxcrcrR {
     bits: u32,
 }
@@ -803,6 +823,7 @@ impl TxcrcrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TxcrcrW {
     bits: u32,
 }
@@ -822,6 +843,7 @@ impl TxcrcrW {
     }
 }
 
+#[repr(C)]
 pub struct I2scfgr {
     register: ::volatile_register::RW<u32>,
 }
@@ -849,6 +871,7 @@ impl I2scfgr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct I2scfgrR {
     bits: u32,
 }
@@ -900,6 +923,7 @@ impl I2scfgrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct I2scfgrW {
     bits: u32,
 }
@@ -985,6 +1009,7 @@ impl I2scfgrW {
     }
 }
 
+#[repr(C)]
 pub struct I2spr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1012,6 +1037,7 @@ impl I2spr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct I2sprR {
     bits: u32,
 }
@@ -1036,6 +1062,7 @@ impl I2sprR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct I2sprW {
     bits: u32,
 }

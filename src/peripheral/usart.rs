@@ -25,6 +25,7 @@ pub struct Usart {
     pub tdr: Tdr,
 }
 
+#[repr(C)]
 pub struct Cr1 {
     register: ::volatile_register::RW<u32>,
 }
@@ -52,6 +53,7 @@ impl Cr1 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr1R {
     bits: u32,
 }
@@ -162,6 +164,7 @@ impl Cr1R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr1W {
     bits: u32,
 }
@@ -369,6 +372,7 @@ impl Cr1W {
     }
 }
 
+#[repr(C)]
 pub struct Cr2 {
     register: ::volatile_register::RW<u32>,
 }
@@ -396,6 +400,7 @@ impl Cr2 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr2R {
     bits: u32,
 }
@@ -503,6 +508,7 @@ impl Cr2R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr2W {
     bits: u32,
 }
@@ -696,6 +702,7 @@ impl Cr2W {
     }
 }
 
+#[repr(C)]
 pub struct Cr3 {
     register: ::volatile_register::RW<u32>,
 }
@@ -723,6 +730,7 @@ impl Cr3 {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr3R {
     bits: u32,
 }
@@ -828,6 +836,7 @@ impl Cr3R {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct Cr3W {
     bits: u32,
 }
@@ -1025,6 +1034,7 @@ impl Cr3W {
     }
 }
 
+#[repr(C)]
 pub struct Brr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1052,6 +1062,7 @@ impl Brr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct BrrR {
     bits: u32,
 }
@@ -1072,6 +1083,7 @@ impl BrrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct BrrW {
     bits: u32,
 }
@@ -1099,6 +1111,7 @@ impl BrrW {
     }
 }
 
+#[repr(C)]
 pub struct Gtpr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1126,6 +1139,7 @@ impl Gtpr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct GtprR {
     bits: u32,
 }
@@ -1146,6 +1160,7 @@ impl GtprR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct GtprW {
     bits: u32,
 }
@@ -1173,6 +1188,7 @@ impl GtprW {
     }
 }
 
+#[repr(C)]
 pub struct Rtor {
     register: ::volatile_register::RW<u32>,
 }
@@ -1200,6 +1216,7 @@ impl Rtor {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RtorR {
     bits: u32,
 }
@@ -1220,6 +1237,7 @@ impl RtorR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RtorW {
     bits: u32,
 }
@@ -1247,6 +1265,7 @@ impl RtorW {
     }
 }
 
+#[repr(C)]
 pub struct Rqr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1274,6 +1293,7 @@ impl Rqr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RqrR {
     bits: u32,
 }
@@ -1307,6 +1327,7 @@ impl RqrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RqrW {
     bits: u32,
 }
@@ -1368,6 +1389,7 @@ impl RqrW {
     }
 }
 
+#[repr(C)]
 pub struct Isr {
     register: ::volatile_register::RO<u32>,
 }
@@ -1379,6 +1401,7 @@ impl Isr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IsrR {
     bits: u32,
 }
@@ -1497,6 +1520,7 @@ impl IsrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IsrW {
     bits: u32,
 }
@@ -1728,6 +1752,7 @@ impl IsrW {
     }
 }
 
+#[repr(C)]
 pub struct Icr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1755,6 +1780,7 @@ impl Icr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IcrR {
     bits: u32,
 }
@@ -1823,6 +1849,7 @@ impl IcrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct IcrW {
     bits: u32,
 }
@@ -1954,6 +1981,7 @@ impl IcrW {
     }
 }
 
+#[repr(C)]
 pub struct Rdr {
     register: ::volatile_register::RO<u32>,
 }
@@ -1965,6 +1993,7 @@ impl Rdr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RdrR {
     bits: u32,
 }
@@ -1979,6 +2008,7 @@ impl RdrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct RdrW {
     bits: u32,
 }
@@ -1998,6 +2028,7 @@ impl RdrW {
     }
 }
 
+#[repr(C)]
 pub struct Tdr {
     register: ::volatile_register::RW<u32>,
 }
@@ -2025,6 +2056,7 @@ impl Tdr {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TdrR {
     bits: u32,
 }
@@ -2039,6 +2071,7 @@ impl TdrR {
 }
 
 #[derive(Clone, Copy)]
+#[repr(C)]
 pub struct TdrW {
     bits: u32,
 }
