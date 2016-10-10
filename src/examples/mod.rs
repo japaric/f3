@@ -16,3 +16,5 @@ pub mod override_interrupt;
 pub mod override_panic_fmt;
 pub mod panic;
 pub mod serial;
+pub mod spi_read_multi;
+pub mod spi_read_single;

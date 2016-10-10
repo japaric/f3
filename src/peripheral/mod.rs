@@ -12,6 +12,7 @@ pub mod dbgmcu;
 pub mod gpio;
 pub mod i2c;
 pub mod rcc;
+pub mod spi;
 pub mod tim;
 pub mod usart;
 
@@ -19,6 +20,7 @@ use self::dbgmcu::Dbgmcu;
 use self::gpio::Gpio;
 use self::i2c::I2c;
 use self::rcc::Rcc;
+use self::spi::Spi;
 use self::tim::Tim;
 use self::usart::Usart;
 
@@ -45,7 +47,7 @@ const USART1: usize = 0x40013800;
 // const USART3: usize = 0x40004800;
 // const UART4: usize = 0x40004c00;
 // const UART5: usize = 0x40005000;
-// const SPI1: usize = 0x40013000;
+const SPI1: usize = 0x40013000;
 // const SPI2: usize = 0x40003800;
 // const SPI3: usize = 0x40003c00;
 // const I2S2ext: usize = 0x40003400;
@@ -149,6 +151,14 @@ pub unsafe fn rcc_mut() -> &'static mut Rcc {
     deref_mut(RCC)
 }
 
+pub fn spi1() -> &'static Spi {
+    unsafe { deref(SPI1) }
+}
+
+pub unsafe fn spi1_mut() -> &'static mut Spi {
+    deref_mut(SPI1)
+}
+
 pub fn tim6() -> &'static Tim {
     unsafe { deref(TIM6) }
 }
@@ -179,4 +189,18 @@ unsafe fn deref<T>(address: usize) -> &'static T {
 
 unsafe fn deref_mut<T>(address: usize) -> &'static mut T {
     &mut *(address as *mut T)
+}
+
+// Here we extend the peripheral API -- AKA ~~svd2rust is~~ SVD files are great
+// but not perfect
+use core::ptr;
+
+impl self::spi::Dr {
+    pub fn read_u8(&self) -> u8 {
+        unsafe { ptr::read_volatile(self as *const _ as *const u8) }
+    }
+
+    pub fn write_u8(&mut self, value: u8) {
+        unsafe { ptr::write_volatile(self as *mut _ as *mut u8, value) }
+    }
 }

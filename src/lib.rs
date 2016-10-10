@@ -120,7 +120,7 @@
 //! See the [examples](examples/index.html) module.
 
 #![cfg_attr(target_arch = "arm", feature(core_intrinsics))]
-#![deny(warnings)]
+// #![deny(warnings)]
 #![feature(asm)]
 #![feature(lang_items)]
 #![feature(linkage)]
@@ -138,12 +138,13 @@ mod macros;
 
 #[cfg(target_arch = "arm")]
 mod lang_items;
+mod l3gd20;
+mod lsm303dlhc;
 
 pub mod delay;
 pub mod examples;
 pub mod exception;
 pub mod fpu;
-pub mod i2c;
 pub mod interrupt;
 pub mod itm;
 pub mod led;
@@ -157,9 +158,10 @@ pub mod serial;
 pub unsafe extern "C" fn init() {
     delay::init();
     fpu::init();
-    i2c::init();
     itm::init();
+    l3gd20::init();
     led::init();
+    lsm303dlhc::init();
     serial::init();
 }
 

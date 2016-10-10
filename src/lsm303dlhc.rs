@@ -1,10 +1,16 @@
-//! I2C
+//! LSM303DLHC - I2C
 //!
-//! SCL pin - `PB6`
-//! SDA pin - `PB7`
+//! - Clock (`SCL`) pin - `PB6`
+//! - Data (`SDA`) pin - `PB7`
 
 use peripheral;
 
+/// Initializes the I2C peripheral that's connected to the LSM303DLHC
+///
+/// # Safety
+///
+/// - Must be called once
+/// - Must be called in an interrupt-free environment
 pub unsafe fn init() {
     let gpiob = peripheral::gpiob_mut();
     let i2c1 = peripheral::i2c1_mut();
@@ -17,6 +23,7 @@ pub unsafe fn init() {
     // GPIOB: configure PB6 and PB7 for I2C use
     // AFRL6 = 4 (I2C1_SCL)
     // AFRL7 = 4 (I2C1_SDA)
+    // MODER* = 0b10 (Alternate function)
     gpiob.afrl.modify(|_, w| w.afrl6(4).afrl7(4));
     gpiob.moder.modify(|_, w| w.moder6(0b10).moder7(0b10));
 

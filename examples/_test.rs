@@ -67,6 +67,18 @@ fn main() {
     offset!(rcc.cfgr2, 0x2c);
     offset!(rcc.cfgr3, 0x30);
 
+    let spi = unsafe { &*(0x0 as *const peripheral::spi::Spi) };
+
+    offset!(spi.cr1, 0x00);
+    offset!(spi.cr2, 0x04);
+    offset!(spi.sr, 0x08);
+    offset!(spi.dr, 0x0C);
+    offset!(spi.crcpr, 0x10);
+    offset!(spi.rxcrcr, 0x14);
+    offset!(spi.txcrcr, 0x18);
+    offset!(spi.i2scfgr, 0x1C);
+    offset!(spi.i2spr, 0x20);
+
     let tim = unsafe { &*(0x0 as *const peripheral::tim::Tim) };
 
     offset!(tim.cr1, 0x0);
