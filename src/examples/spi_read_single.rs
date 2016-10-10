@@ -32,10 +32,11 @@
 //!         while !spi1.sr.read().rxne() {}
 //!         spi1.dr.read_u8();
 //!         while !spi1.sr.read().rxne() {}
-//!         let value = spi1.dr.read_u8();
 //!
 //!         // CS: high
 //!         gpioe.bsrr.write(|w| w.bs3(true));
+//!
+//!         spi1.dr.read_u8()
 //!     };
 //!
 //!     iprintln!("0x{:02x} - 0x{:02x}", REGISTER_ADDRESS, value);
