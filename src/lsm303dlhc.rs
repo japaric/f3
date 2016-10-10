@@ -17,8 +17,8 @@
 //! - Input range: `[-1.3G, +1.3G]`
 //! - Output range: 12 bits (`[-2048, +2047]`)
 
-use peripheral;
 use I16x3;
+use peripheral;
 
 // Slave addresses
 const ACCELEROMETER: u8 = 0b0011001;
@@ -74,10 +74,17 @@ pub fn acceleration() -> I16x3 {
         read(ACCELEROMETER, MULTI_READ | OUT_X_L_A, &mut bytes);
     }
 
+    let out_x_l_a = u16::from(bytes[0]);
+    let out_x_h_a = u16::from(bytes[1]);
+    let out_y_l_a = u16::from(bytes[2]);
+    let out_y_h_a = u16::from(bytes[3]);
+    let out_z_l_a = u16::from(bytes[4]);
+    let out_z_h_a = u16::from(bytes[5]);
+
     I16x3 {
-        x: ((u16::from(bytes[1]) << 8) + u16::from(bytes[0])) as i16,
-        y: ((u16::from(bytes[3]) << 8) + u16::from(bytes[2])) as i16,
-        z: ((u16::from(bytes[5]) << 8) + u16::from(bytes[4])) as i16,
+        x: ((out_x_h_a << 8) + out_x_l_a) as i16,
+        y: ((out_y_h_a << 8) + out_y_l_a) as i16,
+        z: ((out_z_h_a << 8) + out_z_l_a) as i16,
     }
 }
 
@@ -89,10 +96,17 @@ pub fn magnetic_field() -> I16x3 {
         read(MAGNETOMETER, OUT_X_H_M, &mut bytes);
     }
 
+    let out_x_h_m = u16::from(bytes[0]);
+    let out_x_l_m = u16::from(bytes[1]);
+    let out_z_h_m = u16::from(bytes[2]);
+    let out_z_l_m = u16::from(bytes[3]);
+    let out_y_h_m = u16::from(bytes[4]);
+    let out_y_l_m = u16::from(bytes[5]);
+
     I16x3 {
-        x: ((u16::from(bytes[0]) << 8) + u16::from(bytes[1])) as i16,
-        z: ((u16::from(bytes[2]) << 8) + u16::from(bytes[3])) as i16,
-        y: ((u16::from(bytes[4]) << 8) + u16::from(bytes[5])) as i16,
+        x: ((out_x_h_m << 8) + out_x_l_m) as i16,
+        y: ((out_y_h_m << 8) + out_y_l_m) as i16,
+        z: ((out_z_h_m << 8) + out_z_l_m) as i16,
     }
 }
 
