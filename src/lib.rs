@@ -139,7 +139,6 @@ mod macros;
 #[cfg(target_arch = "arm")]
 mod lang_items;
 mod l3gd20;
-mod lsm303dlhc;
 
 pub mod delay;
 pub mod examples;
@@ -148,8 +147,16 @@ pub mod fpu;
 pub mod interrupt;
 pub mod itm;
 pub mod led;
+pub mod lsm303dlhc;
 pub mod peripheral;
 pub mod serial;
+
+#[derive(Debug)]
+pub struct I16x3 {
+    pub x: i16,
+    pub y: i16,
+    pub z: i16,
+}
 
 // Default initialization routine
 #[doc(hidden)]

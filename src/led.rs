@@ -75,3 +75,37 @@ pub unsafe fn init() {
             .moder15(0b01)
     });
 }
+
+/// An enum over the LEDs, each LED has associated to it a direction
+pub enum Direction {
+    North,
+    NorthEast,
+    East,
+    SouthEast,
+    South,
+    SouthWest,
+    West,
+    NorthWest,
+}
+
+impl Direction {
+    pub fn on(&self) {
+        match *self {
+            Direction::North => LEDS[0].on(),
+            Direction::NorthEast => LEDS[1].on(),
+            Direction::East => LEDS[2].on(),
+            Direction::SouthEast => LEDS[3].on(),
+            Direction::South => LEDS[4].on(),
+            Direction::SouthWest => LEDS[5].on(),
+            Direction::West => LEDS[6].on(),
+            Direction::NorthWest => LEDS[7].on(),
+        }
+    }
+}
+
+/// Turns off all the LEDs
+pub fn all_off() {
+    for led in LEDS.iter() {
+        led.off();
+    }
+}

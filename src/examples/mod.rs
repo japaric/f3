@@ -7,6 +7,8 @@ pub mod i2c_read_multi;
 pub mod i2c_read_single;
 pub mod interrupt;
 pub mod itm;
+pub mod led_compass_1;
+pub mod led_compass_2;
 pub mod led_roulette;
 pub mod minimal;
 pub mod override_default_exception_handler;
