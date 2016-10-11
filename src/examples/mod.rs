@@ -1,6 +1,7 @@
 // Auto-generated. Do not modify!
 //! Examples
 
+pub mod angle_meter;
 pub mod exception;
 pub mod fpu;
 pub mod i2c_read_multi;

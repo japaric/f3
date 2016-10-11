@@ -9,7 +9,7 @@
 //! extern crate f3;
 //!
 //! use f3::I16x3;
-//! use f3::led::{Direction, LEDS};
+//! use f3::led::Direction;
 //! use f3::{delay, led, lsm303dlhc};
 //!
 //! #[export_name = "main"]

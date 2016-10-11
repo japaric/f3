@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Overridable interrupts
 - the low level API over peripherals is now aware of the bit fields/flags of each register
 - low level access to I2C and SPI
-- high level API over the LSM303DLHC
+- high level API for the LSM303DLHC and L3GD20
 
 ### Changed
 

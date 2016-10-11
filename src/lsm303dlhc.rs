@@ -9,12 +9,15 @@
 //!
 //! - Sample rate: `400 Hz`
 //! - Input range: `[-2g, +2g]`
+//! - Gain: `1 mg / LSB`
 //! - Output range: 16 bits (`i16`)
 //!
 //! # Magnetometer
 //!
 //! - Sample rate: `15 Hz`
 //! - Input range: `[-1.3G, +1.3G]`
+//! - Gain X, Y: `1100 LSB / Gauss`
+//! - Gain Z: `980 LSB / Gauss`
 //! - Output range: 12 bits (`[-2048, +2047]`)
 
 use I16x3;
