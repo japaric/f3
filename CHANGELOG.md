@@ -34,4 +34,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Default system initialization
 - Low level access to some peripherals: DBGMCU, GPIO, RCC and TIM
 
-[Unreleased]: https://github.com/japaric/rustc-cfg/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/japaric/f3/compare/v0.1.0...HEAD
