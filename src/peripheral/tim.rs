@@ -1,27 +1,27 @@
-#[repr(C)]
-/// Basic timers
+# [ doc = "Basic timers" ]
+# [ repr ( C ) ]
 pub struct Tim {
-    /// 0x00 - control register 1
+    # [ doc = "0x00 - control register 1" ]
     pub cr1: Cr1,
-    /// 0x04 - control register 2
+    # [ doc = "0x04 - control register 2" ]
     pub cr2: Cr2,
-    reserved0: [u8; 4usize],
-    /// 0x0c - DMA/Interrupt enable register
+    _reserved0: [u8; 4usize],
+    # [ doc = "0x0c - DMA/Interrupt enable register" ]
     pub dier: Dier,
-    /// 0x10 - status register
+    # [ doc = "0x10 - status register" ]
     pub sr: Sr,
-    /// 0x14 - event generation register
+    # [ doc = "0x14 - event generation register" ]
     pub egr: Egr,
-    reserved1: [u8; 12usize],
-    /// 0x24 - counter
+    _reserved1: [u8; 12usize],
+    # [ doc = "0x24 - counter" ]
     pub cnt: Cnt,
-    /// 0x28 - prescaler
+    # [ doc = "0x28 - prescaler" ]
     pub psc: Psc,
-    /// 0x2c - auto-reload register
+    # [ doc = "0x2c - auto-reload register" ]
     pub arr: Arr,
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Cr1 {
     register: ::volatile_register::RW<u32>,
 }
@@ -48,59 +48,59 @@ impl Cr1 {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Cr1R {
     bits: u32,
 }
 
 impl Cr1R {
-    /// Bit 0 - Counter enable
+    # [ doc = "Bit 0 - Counter enable" ]
     pub fn cen(&self) -> bool {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 1 - Update disable
+    # [ doc = "Bit 1 - Update disable" ]
     pub fn udis(&self) -> bool {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 2 - Update request source
+    # [ doc = "Bit 2 - Update request source" ]
     pub fn urs(&self) -> bool {
-        const OFFSET: u8 = 2;
+        const OFFSET: u8 = 2u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 3 - One-pulse mode
+    # [ doc = "Bit 3 - One-pulse mode" ]
     pub fn opm(&self) -> bool {
-        const OFFSET: u8 = 3;
+        const OFFSET: u8 = 3u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 7 - Auto-reload preload enable
+    # [ doc = "Bit 7 - Auto-reload preload enable" ]
     pub fn arpe(&self) -> bool {
-        const OFFSET: u8 = 7;
+        const OFFSET: u8 = 7u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 11 - UIF status bit remapping
+    # [ doc = "Bit 11 - UIF status bit remapping" ]
     pub fn uifremap(&self) -> bool {
-        const OFFSET: u8 = 11;
+        const OFFSET: u8 = 11u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Cr1W {
     bits: u32,
 }
 
 impl Cr1W {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        Cr1W { bits: 0 }
+        Cr1W { bits: 0u32 }
     }
-    /// Bit 0 - Counter enable
+    # [ doc = "Bit 0 - Counter enable" ]
     pub fn cen(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -108,9 +108,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 1 - Update disable
+    # [ doc = "Bit 1 - Update disable" ]
     pub fn udis(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -118,9 +118,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 2 - Update request source
+    # [ doc = "Bit 2 - Update request source" ]
     pub fn urs(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 2;
+        const OFFSET: u8 = 2u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -128,9 +128,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 3 - One-pulse mode
+    # [ doc = "Bit 3 - One-pulse mode" ]
     pub fn opm(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 3;
+        const OFFSET: u8 = 3u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -138,9 +138,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 7 - Auto-reload preload enable
+    # [ doc = "Bit 7 - Auto-reload preload enable" ]
     pub fn arpe(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 7;
+        const OFFSET: u8 = 7u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -148,9 +148,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 11 - UIF status bit remapping
+    # [ doc = "Bit 11 - UIF status bit remapping" ]
     pub fn uifremap(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 11;
+        const OFFSET: u8 = 11u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -160,7 +160,7 @@ impl Cr1W {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Cr2 {
     register: ::volatile_register::RW<u32>,
 }
@@ -187,35 +187,35 @@ impl Cr2 {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Cr2R {
     bits: u32,
 }
 
 impl Cr2R {
-    /// Bits 4:6 - Master mode selection
+    # [ doc = "Bits 4:6 - Master mode selection" ]
     pub fn mms(&self) -> u8 {
         const MASK: u32 = 7;
-        const OFFSET: u8 = 4;
+        const OFFSET: u8 = 4u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Cr2W {
     bits: u32,
 }
 
 impl Cr2W {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        Cr2W { bits: 0 }
+        Cr2W { bits: 0u32 }
     }
-    /// Bits 4:6 - Master mode selection
+    # [ doc = "Bits 4:6 - Master mode selection" ]
     pub fn mms(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 4;
+        const OFFSET: u8 = 4u8;
         const MASK: u8 = 7;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
@@ -223,7 +223,7 @@ impl Cr2W {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Dier {
     register: ::volatile_register::RW<u32>,
 }
@@ -250,39 +250,39 @@ impl Dier {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct DierR {
     bits: u32,
 }
 
 impl DierR {
-    /// Bit 8 - Update DMA request enable
+    # [ doc = "Bit 8 - Update DMA request enable" ]
     pub fn ude(&self) -> bool {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 0 - Update interrupt enable
+    # [ doc = "Bit 0 - Update interrupt enable" ]
     pub fn uie(&self) -> bool {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct DierW {
     bits: u32,
 }
 
 impl DierW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        DierW { bits: 0 }
+        DierW { bits: 0u32 }
     }
-    /// Bit 8 - Update DMA request enable
+    # [ doc = "Bit 8 - Update DMA request enable" ]
     pub fn ude(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -290,9 +290,9 @@ impl DierW {
         }
         self
     }
-    /// Bit 0 - Update interrupt enable
+    # [ doc = "Bit 0 - Update interrupt enable" ]
     pub fn uie(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -302,7 +302,7 @@ impl DierW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Sr {
     register: ::volatile_register::RW<u32>,
 }
@@ -329,34 +329,34 @@ impl Sr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct SrR {
     bits: u32,
 }
 
 impl SrR {
-    /// Bit 0 - Update interrupt flag
+    # [ doc = "Bit 0 - Update interrupt flag" ]
     pub fn uif(&self) -> bool {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct SrW {
     bits: u32,
 }
 
 impl SrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        SrW { bits: 0 }
+        SrW { bits: 0u32 }
     }
-    /// Bit 0 - Update interrupt flag
+    # [ doc = "Bit 0 - Update interrupt flag" ]
     pub fn uif(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -366,7 +366,7 @@ impl SrW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Egr {
     register: ::volatile_register::WO<u32>,
 }
@@ -381,34 +381,34 @@ impl Egr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct EgrR {
     bits: u32,
 }
 
 impl EgrR {
-    /// Bit 0 - Update generation
+    # [ doc = "Bit 0 - Update generation" ]
     pub fn ug(&self) -> bool {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct EgrW {
     bits: u32,
 }
 
 impl EgrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        EgrW { bits: 0 }
+        EgrW { bits: 0u32 }
     }
-    /// Bit 0 - Update generation
+    # [ doc = "Bit 0 - Update generation" ]
     pub fn ug(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -418,7 +418,7 @@ impl EgrW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Cnt {
     register: ::volatile_register::RW<u32>,
 }
@@ -445,40 +445,40 @@ impl Cnt {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct CntR {
     bits: u32,
 }
 
 impl CntR {
-    /// Bits 0:15 - Low counter value
+    # [ doc = "Bits 0:15 - Low counter value" ]
     pub fn cnt(&self) -> u16 {
         const MASK: u32 = 65535;
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         ((self.bits >> OFFSET) & MASK) as u16
     }
-    /// Bit 31 - UIF Copy
+    # [ doc = "Bit 31 - UIF Copy" ]
     pub fn uifcpy(&self) -> bool {
-        const OFFSET: u8 = 31;
+        const OFFSET: u8 = 31u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct CntW {
     bits: u32,
 }
 
 impl CntW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        CntW { bits: 0 }
+        CntW { bits: 0u32 }
     }
-    /// Bits 0:15 - Low counter value
+    # [ doc = "Bits 0:15 - Low counter value" ]
     pub fn cnt(&mut self, value: u16) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         const MASK: u16 = 65535;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
@@ -486,7 +486,7 @@ impl CntW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Psc {
     register: ::volatile_register::RW<u32>,
 }
@@ -513,35 +513,35 @@ impl Psc {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct PscR {
     bits: u32,
 }
 
 impl PscR {
-    /// Bits 0:15 - Prescaler value
+    # [ doc = "Bits 0:15 - Prescaler value" ]
     pub fn psc(&self) -> u16 {
         const MASK: u32 = 65535;
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         ((self.bits >> OFFSET) & MASK) as u16
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct PscW {
     bits: u32,
 }
 
 impl PscW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        PscW { bits: 0 }
+        PscW { bits: 0u32 }
     }
-    /// Bits 0:15 - Prescaler value
+    # [ doc = "Bits 0:15 - Prescaler value" ]
     pub fn psc(&mut self, value: u16) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         const MASK: u16 = 65535;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
@@ -549,7 +549,7 @@ impl PscW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Arr {
     register: ::volatile_register::RW<u32>,
 }
@@ -576,35 +576,35 @@ impl Arr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct ArrR {
     bits: u32,
 }
 
 impl ArrR {
-    /// Bits 0:15 - Low Auto-reload value
+    # [ doc = "Bits 0:15 - Low Auto-reload value" ]
     pub fn arr(&self) -> u16 {
         const MASK: u32 = 65535;
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         ((self.bits >> OFFSET) & MASK) as u16
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct ArrW {
     bits: u32,
 }
 
 impl ArrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        ArrW { bits: 0 }
+        ArrW { bits: 0u32 }
     }
-    /// Bits 0:15 - Low Auto-reload value
+    # [ doc = "Bits 0:15 - Low Auto-reload value" ]
     pub fn arr(&mut self, value: u16) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         const MASK: u16 = 65535;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;

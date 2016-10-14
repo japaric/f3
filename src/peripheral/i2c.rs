@@ -1,31 +1,31 @@
-#[repr(C)]
-/// Inter-integrated circuit
+# [ doc = "Inter-integrated circuit" ]
+# [ repr ( C ) ]
 pub struct I2c {
-    /// 0x00 - Control register 1
+    # [ doc = "0x00 - Control register 1" ]
     pub cr1: Cr1,
-    /// 0x04 - Control register 2
+    # [ doc = "0x04 - Control register 2" ]
     pub cr2: Cr2,
-    /// 0x08 - Own address register 1
+    # [ doc = "0x08 - Own address register 1" ]
     pub oar1: Oar1,
-    /// 0x0c - Own address register 2
+    # [ doc = "0x0c - Own address register 2" ]
     pub oar2: Oar2,
-    /// 0x10 - Timing register
+    # [ doc = "0x10 - Timing register" ]
     pub timingr: Timingr,
-    /// 0x14 - Status register 1
+    # [ doc = "0x14 - Status register 1" ]
     pub timeoutr: Timeoutr,
-    /// 0x18 - Interrupt and Status register
+    # [ doc = "0x18 - Interrupt and Status register" ]
     pub isr: Isr,
-    /// 0x1c - Interrupt clear register
+    # [ doc = "0x1c - Interrupt clear register" ]
     pub icr: Icr,
-    /// 0x20 - PEC register
+    # [ doc = "0x20 - PEC register" ]
     pub pecr: Pecr,
-    /// 0x24 - Receive data register
+    # [ doc = "0x24 - Receive data register" ]
     pub rxdr: Rxdr,
-    /// 0x28 - Transmit data register
+    # [ doc = "0x28 - Transmit data register" ]
     pub txdr: Txdr,
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Cr1 {
     register: ::volatile_register::RW<u32>,
 }
@@ -52,130 +52,130 @@ impl Cr1 {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Cr1R {
     bits: u32,
 }
 
 impl Cr1R {
-    /// Bit 0 - Peripheral enable
+    # [ doc = "Bit 0 - Peripheral enable" ]
     pub fn pe(&self) -> bool {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 1 - TX Interrupt enable
+    # [ doc = "Bit 1 - TX Interrupt enable" ]
     pub fn txie(&self) -> bool {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 2 - RX Interrupt enable
+    # [ doc = "Bit 2 - RX Interrupt enable" ]
     pub fn rxie(&self) -> bool {
-        const OFFSET: u8 = 2;
+        const OFFSET: u8 = 2u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 3 - Address match interrupt enable (slave only)
+    # [ doc = "Bit 3 - Address match interrupt enable (slave only)" ]
     pub fn addrie(&self) -> bool {
-        const OFFSET: u8 = 3;
+        const OFFSET: u8 = 3u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 4 - Not acknowledge received interrupt enable
+    # [ doc = "Bit 4 - Not acknowledge received interrupt enable" ]
     pub fn nackie(&self) -> bool {
-        const OFFSET: u8 = 4;
+        const OFFSET: u8 = 4u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 5 - STOP detection Interrupt enable
+    # [ doc = "Bit 5 - STOP detection Interrupt enable" ]
     pub fn stopie(&self) -> bool {
-        const OFFSET: u8 = 5;
+        const OFFSET: u8 = 5u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 6 - Transfer Complete interrupt enable
+    # [ doc = "Bit 6 - Transfer Complete interrupt enable" ]
     pub fn tcie(&self) -> bool {
-        const OFFSET: u8 = 6;
+        const OFFSET: u8 = 6u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 7 - Error interrupts enable
+    # [ doc = "Bit 7 - Error interrupts enable" ]
     pub fn errie(&self) -> bool {
-        const OFFSET: u8 = 7;
+        const OFFSET: u8 = 7u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bits 8:11 - Digital noise filter
+    # [ doc = "Bits 8:11 - Digital noise filter" ]
     pub fn dnf(&self) -> u8 {
         const MASK: u32 = 15;
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bit 12 - Analog noise filter OFF
+    # [ doc = "Bit 12 - Analog noise filter OFF" ]
     pub fn anfoff(&self) -> bool {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 14 - DMA transmission requests enable
+    # [ doc = "Bit 14 - DMA transmission requests enable" ]
     pub fn txdmaen(&self) -> bool {
-        const OFFSET: u8 = 14;
+        const OFFSET: u8 = 14u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 15 - DMA reception requests enable
+    # [ doc = "Bit 15 - DMA reception requests enable" ]
     pub fn rxdmaen(&self) -> bool {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 16 - Slave byte control
+    # [ doc = "Bit 16 - Slave byte control" ]
     pub fn sbc(&self) -> bool {
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 17 - Clock stretching disable
+    # [ doc = "Bit 17 - Clock stretching disable" ]
     pub fn nostretch(&self) -> bool {
-        const OFFSET: u8 = 17;
+        const OFFSET: u8 = 17u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 18 - Wakeup from STOP enable
+    # [ doc = "Bit 18 - Wakeup from STOP enable" ]
     pub fn wupen(&self) -> bool {
-        const OFFSET: u8 = 18;
+        const OFFSET: u8 = 18u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 19 - General call enable
+    # [ doc = "Bit 19 - General call enable" ]
     pub fn gcen(&self) -> bool {
-        const OFFSET: u8 = 19;
+        const OFFSET: u8 = 19u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 20 - SMBus Host address enable
+    # [ doc = "Bit 20 - SMBus Host address enable" ]
     pub fn smbhen(&self) -> bool {
-        const OFFSET: u8 = 20;
+        const OFFSET: u8 = 20u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 21 - SMBus Device Default address enable
+    # [ doc = "Bit 21 - SMBus Device Default address enable" ]
     pub fn smbden(&self) -> bool {
-        const OFFSET: u8 = 21;
+        const OFFSET: u8 = 21u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 22 - SMBUS alert enable
+    # [ doc = "Bit 22 - SMBUS alert enable" ]
     pub fn alerten(&self) -> bool {
-        const OFFSET: u8 = 22;
+        const OFFSET: u8 = 22u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 23 - PEC enable
+    # [ doc = "Bit 23 - PEC enable" ]
     pub fn pecen(&self) -> bool {
-        const OFFSET: u8 = 23;
+        const OFFSET: u8 = 23u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Cr1W {
     bits: u32,
 }
 
 impl Cr1W {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        Cr1W { bits: 0 }
+        Cr1W { bits: 0u32 }
     }
-    /// Bit 0 - Peripheral enable
+    # [ doc = "Bit 0 - Peripheral enable" ]
     pub fn pe(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -183,9 +183,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 1 - TX Interrupt enable
+    # [ doc = "Bit 1 - TX Interrupt enable" ]
     pub fn txie(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -193,9 +193,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 2 - RX Interrupt enable
+    # [ doc = "Bit 2 - RX Interrupt enable" ]
     pub fn rxie(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 2;
+        const OFFSET: u8 = 2u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -203,9 +203,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 3 - Address match interrupt enable (slave only)
+    # [ doc = "Bit 3 - Address match interrupt enable (slave only)" ]
     pub fn addrie(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 3;
+        const OFFSET: u8 = 3u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -213,9 +213,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 4 - Not acknowledge received interrupt enable
+    # [ doc = "Bit 4 - Not acknowledge received interrupt enable" ]
     pub fn nackie(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 4;
+        const OFFSET: u8 = 4u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -223,9 +223,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 5 - STOP detection Interrupt enable
+    # [ doc = "Bit 5 - STOP detection Interrupt enable" ]
     pub fn stopie(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 5;
+        const OFFSET: u8 = 5u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -233,9 +233,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 6 - Transfer Complete interrupt enable
+    # [ doc = "Bit 6 - Transfer Complete interrupt enable" ]
     pub fn tcie(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 6;
+        const OFFSET: u8 = 6u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -243,9 +243,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 7 - Error interrupts enable
+    # [ doc = "Bit 7 - Error interrupts enable" ]
     pub fn errie(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 7;
+        const OFFSET: u8 = 7u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -253,17 +253,17 @@ impl Cr1W {
         }
         self
     }
-    /// Bits 8:11 - Digital noise filter
+    # [ doc = "Bits 8:11 - Digital noise filter" ]
     pub fn dnf(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         const MASK: u8 = 15;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bit 12 - Analog noise filter OFF
+    # [ doc = "Bit 12 - Analog noise filter OFF" ]
     pub fn anfoff(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -271,9 +271,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 13 - Software reset
+    # [ doc = "Bit 13 - Software reset" ]
     pub fn swrst(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 13;
+        const OFFSET: u8 = 13u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -281,9 +281,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 14 - DMA transmission requests enable
+    # [ doc = "Bit 14 - DMA transmission requests enable" ]
     pub fn txdmaen(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 14;
+        const OFFSET: u8 = 14u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -291,9 +291,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 15 - DMA reception requests enable
+    # [ doc = "Bit 15 - DMA reception requests enable" ]
     pub fn rxdmaen(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -301,9 +301,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 16 - Slave byte control
+    # [ doc = "Bit 16 - Slave byte control" ]
     pub fn sbc(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -311,9 +311,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 17 - Clock stretching disable
+    # [ doc = "Bit 17 - Clock stretching disable" ]
     pub fn nostretch(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 17;
+        const OFFSET: u8 = 17u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -321,9 +321,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 18 - Wakeup from STOP enable
+    # [ doc = "Bit 18 - Wakeup from STOP enable" ]
     pub fn wupen(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 18;
+        const OFFSET: u8 = 18u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -331,9 +331,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 19 - General call enable
+    # [ doc = "Bit 19 - General call enable" ]
     pub fn gcen(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 19;
+        const OFFSET: u8 = 19u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -341,9 +341,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 20 - SMBus Host address enable
+    # [ doc = "Bit 20 - SMBus Host address enable" ]
     pub fn smbhen(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 20;
+        const OFFSET: u8 = 20u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -351,9 +351,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 21 - SMBus Device Default address enable
+    # [ doc = "Bit 21 - SMBus Device Default address enable" ]
     pub fn smbden(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 21;
+        const OFFSET: u8 = 21u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -361,9 +361,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 22 - SMBUS alert enable
+    # [ doc = "Bit 22 - SMBUS alert enable" ]
     pub fn alerten(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 22;
+        const OFFSET: u8 = 22u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -371,9 +371,9 @@ impl Cr1W {
         }
         self
     }
-    /// Bit 23 - PEC enable
+    # [ doc = "Bit 23 - PEC enable" ]
     pub fn pecen(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 23;
+        const OFFSET: u8 = 23u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -383,7 +383,7 @@ impl Cr1W {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Cr2 {
     register: ::volatile_register::RW<u32>,
 }
@@ -410,97 +410,97 @@ impl Cr2 {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Cr2R {
     bits: u32,
 }
 
 impl Cr2R {
-    /// Bit 26 - Packet error checking byte
+    # [ doc = "Bit 26 - Packet error checking byte" ]
     pub fn pecbyte(&self) -> bool {
-        const OFFSET: u8 = 26;
+        const OFFSET: u8 = 26u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 25 - Automatic end mode (master mode)
+    # [ doc = "Bit 25 - Automatic end mode (master mode)" ]
     pub fn autoend(&self) -> bool {
-        const OFFSET: u8 = 25;
+        const OFFSET: u8 = 25u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 24 - NBYTES reload mode
+    # [ doc = "Bit 24 - NBYTES reload mode" ]
     pub fn reload(&self) -> bool {
-        const OFFSET: u8 = 24;
+        const OFFSET: u8 = 24u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bits 16:23 - Number of bytes
+    # [ doc = "Bits 16:23 - Number of bytes" ]
     pub fn nbytes(&self) -> u8 {
         const MASK: u32 = 255;
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bit 15 - NACK generation (slave mode)
+    # [ doc = "Bit 15 - NACK generation (slave mode)" ]
     pub fn nack(&self) -> bool {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 14 - Stop generation (master mode)
+    # [ doc = "Bit 14 - Stop generation (master mode)" ]
     pub fn stop(&self) -> bool {
-        const OFFSET: u8 = 14;
+        const OFFSET: u8 = 14u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 13 - Start generation
+    # [ doc = "Bit 13 - Start generation" ]
     pub fn start(&self) -> bool {
-        const OFFSET: u8 = 13;
+        const OFFSET: u8 = 13u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 12 - 10-bit address header only read direction (master receiver mode)
+    # [ doc = "Bit 12 - 10-bit address header only read direction (master receiver mode)" ]
     pub fn head10r(&self) -> bool {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 11 - 10-bit addressing mode (master mode)
+    # [ doc = "Bit 11 - 10-bit addressing mode (master mode)" ]
     pub fn add10(&self) -> bool {
-        const OFFSET: u8 = 11;
+        const OFFSET: u8 = 11u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 10 - Transfer direction (master mode)
+    # [ doc = "Bit 10 - Transfer direction (master mode)" ]
     pub fn rd_wrn(&self) -> bool {
-        const OFFSET: u8 = 10;
+        const OFFSET: u8 = 10u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bits 8:9 - Slave address bit 9:8 (master mode)
+    # [ doc = "Bits 8:9 - Slave address bit 9:8 (master mode)" ]
     pub fn sadd8(&self) -> u8 {
         const MASK: u32 = 3;
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bits 1:7 - Slave address bit 7:1 (master mode)
+    # [ doc = "Bits 1:7 - Slave address bit 7:1 (master mode)" ]
     pub fn sadd1(&self) -> u8 {
         const MASK: u32 = 127;
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bit 0 - Slave address bit 0 (master mode)
+    # [ doc = "Bit 0 - Slave address bit 0 (master mode)" ]
     pub fn sadd0(&self) -> bool {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Cr2W {
     bits: u32,
 }
 
 impl Cr2W {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        Cr2W { bits: 0 }
+        Cr2W { bits: 0u32 }
     }
-    /// Bit 26 - Packet error checking byte
+    # [ doc = "Bit 26 - Packet error checking byte" ]
     pub fn pecbyte(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 26;
+        const OFFSET: u8 = 26u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -508,9 +508,9 @@ impl Cr2W {
         }
         self
     }
-    /// Bit 25 - Automatic end mode (master mode)
+    # [ doc = "Bit 25 - Automatic end mode (master mode)" ]
     pub fn autoend(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 25;
+        const OFFSET: u8 = 25u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -518,9 +518,9 @@ impl Cr2W {
         }
         self
     }
-    /// Bit 24 - NBYTES reload mode
+    # [ doc = "Bit 24 - NBYTES reload mode" ]
     pub fn reload(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 24;
+        const OFFSET: u8 = 24u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -528,17 +528,17 @@ impl Cr2W {
         }
         self
     }
-    /// Bits 16:23 - Number of bytes
+    # [ doc = "Bits 16:23 - Number of bytes" ]
     pub fn nbytes(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         const MASK: u8 = 255;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bit 15 - NACK generation (slave mode)
+    # [ doc = "Bit 15 - NACK generation (slave mode)" ]
     pub fn nack(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -546,9 +546,9 @@ impl Cr2W {
         }
         self
     }
-    /// Bit 14 - Stop generation (master mode)
+    # [ doc = "Bit 14 - Stop generation (master mode)" ]
     pub fn stop(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 14;
+        const OFFSET: u8 = 14u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -556,9 +556,9 @@ impl Cr2W {
         }
         self
     }
-    /// Bit 13 - Start generation
+    # [ doc = "Bit 13 - Start generation" ]
     pub fn start(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 13;
+        const OFFSET: u8 = 13u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -566,9 +566,9 @@ impl Cr2W {
         }
         self
     }
-    /// Bit 12 - 10-bit address header only read direction (master receiver mode)
+    # [ doc = "Bit 12 - 10-bit address header only read direction (master receiver mode)" ]
     pub fn head10r(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -576,9 +576,9 @@ impl Cr2W {
         }
         self
     }
-    /// Bit 11 - 10-bit addressing mode (master mode)
+    # [ doc = "Bit 11 - 10-bit addressing mode (master mode)" ]
     pub fn add10(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 11;
+        const OFFSET: u8 = 11u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -586,9 +586,9 @@ impl Cr2W {
         }
         self
     }
-    /// Bit 10 - Transfer direction (master mode)
+    # [ doc = "Bit 10 - Transfer direction (master mode)" ]
     pub fn rd_wrn(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 10;
+        const OFFSET: u8 = 10u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -596,25 +596,25 @@ impl Cr2W {
         }
         self
     }
-    /// Bits 8:9 - Slave address bit 9:8 (master mode)
+    # [ doc = "Bits 8:9 - Slave address bit 9:8 (master mode)" ]
     pub fn sadd8(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         const MASK: u8 = 3;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bits 1:7 - Slave address bit 7:1 (master mode)
+    # [ doc = "Bits 1:7 - Slave address bit 7:1 (master mode)" ]
     pub fn sadd1(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         const MASK: u8 = 127;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bit 0 - Slave address bit 0 (master mode)
+    # [ doc = "Bit 0 - Slave address bit 0 (master mode)" ]
     pub fn sadd0(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -624,7 +624,7 @@ impl Cr2W {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Oar1 {
     register: ::volatile_register::RW<u32>,
 }
@@ -651,56 +651,56 @@ impl Oar1 {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Oar1R {
     bits: u32,
 }
 
 impl Oar1R {
-    /// Bit 0 - Interface address
+    # [ doc = "Bit 0 - Interface address" ]
     pub fn oa1_0(&self) -> bool {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bits 1:7 - Interface address
+    # [ doc = "Bits 1:7 - Interface address" ]
     pub fn oa1_1(&self) -> u8 {
         const MASK: u32 = 127;
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bits 8:9 - Interface address
+    # [ doc = "Bits 8:9 - Interface address" ]
     pub fn oa1_8(&self) -> u8 {
         const MASK: u32 = 3;
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bit 10 - Own Address 1 10-bit mode
+    # [ doc = "Bit 10 - Own Address 1 10-bit mode" ]
     pub fn oa1mode(&self) -> bool {
-        const OFFSET: u8 = 10;
+        const OFFSET: u8 = 10u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 15 - Own Address 1 enable
+    # [ doc = "Bit 15 - Own Address 1 enable" ]
     pub fn oa1en(&self) -> bool {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Oar1W {
     bits: u32,
 }
 
 impl Oar1W {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        Oar1W { bits: 0 }
+        Oar1W { bits: 0u32 }
     }
-    /// Bit 0 - Interface address
+    # [ doc = "Bit 0 - Interface address" ]
     pub fn oa1_0(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -708,25 +708,25 @@ impl Oar1W {
         }
         self
     }
-    /// Bits 1:7 - Interface address
+    # [ doc = "Bits 1:7 - Interface address" ]
     pub fn oa1_1(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         const MASK: u8 = 127;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bits 8:9 - Interface address
+    # [ doc = "Bits 8:9 - Interface address" ]
     pub fn oa1_8(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         const MASK: u8 = 3;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bit 10 - Own Address 1 10-bit mode
+    # [ doc = "Bit 10 - Own Address 1 10-bit mode" ]
     pub fn oa1mode(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 10;
+        const OFFSET: u8 = 10u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -734,9 +734,9 @@ impl Oar1W {
         }
         self
     }
-    /// Bit 15 - Own Address 1 enable
+    # [ doc = "Bit 15 - Own Address 1 enable" ]
     pub fn oa1en(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -746,7 +746,7 @@ impl Oar1W {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Oar2 {
     register: ::volatile_register::RW<u32>,
 }
@@ -773,62 +773,62 @@ impl Oar2 {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Oar2R {
     bits: u32,
 }
 
 impl Oar2R {
-    /// Bits 1:7 - Interface address
+    # [ doc = "Bits 1:7 - Interface address" ]
     pub fn oa2(&self) -> u8 {
         const MASK: u32 = 127;
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bits 8:10 - Own Address 2 masks
+    # [ doc = "Bits 8:10 - Own Address 2 masks" ]
     pub fn oa2msk(&self) -> u8 {
         const MASK: u32 = 7;
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bit 15 - Own Address 2 enable
+    # [ doc = "Bit 15 - Own Address 2 enable" ]
     pub fn oa2en(&self) -> bool {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct Oar2W {
     bits: u32,
 }
 
 impl Oar2W {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        Oar2W { bits: 0 }
+        Oar2W { bits: 0u32 }
     }
-    /// Bits 1:7 - Interface address
+    # [ doc = "Bits 1:7 - Interface address" ]
     pub fn oa2(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         const MASK: u8 = 127;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bits 8:10 - Own Address 2 masks
+    # [ doc = "Bits 8:10 - Own Address 2 masks" ]
     pub fn oa2msk(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         const MASK: u8 = 7;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bit 15 - Own Address 2 enable
+    # [ doc = "Bit 15 - Own Address 2 enable" ]
     pub fn oa2en(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -838,7 +838,7 @@ impl Oar2W {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Timingr {
     register: ::volatile_register::RW<u32>,
 }
@@ -865,91 +865,91 @@ impl Timingr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct TimingrR {
     bits: u32,
 }
 
 impl TimingrR {
-    /// Bits 0:7 - SCL low period (master mode)
+    # [ doc = "Bits 0:7 - SCL low period (master mode)" ]
     pub fn scll(&self) -> u8 {
         const MASK: u32 = 255;
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bits 8:15 - SCL high period (master mode)
+    # [ doc = "Bits 8:15 - SCL high period (master mode)" ]
     pub fn sclh(&self) -> u8 {
         const MASK: u32 = 255;
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bits 16:19 - Data hold time
+    # [ doc = "Bits 16:19 - Data hold time" ]
     pub fn sdadel(&self) -> u8 {
         const MASK: u32 = 15;
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bits 20:23 - Data setup time
+    # [ doc = "Bits 20:23 - Data setup time" ]
     pub fn scldel(&self) -> u8 {
         const MASK: u32 = 15;
-        const OFFSET: u8 = 20;
+        const OFFSET: u8 = 20u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bits 28:31 - Timing prescaler
+    # [ doc = "Bits 28:31 - Timing prescaler" ]
     pub fn presc(&self) -> u8 {
         const MASK: u32 = 15;
-        const OFFSET: u8 = 28;
+        const OFFSET: u8 = 28u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct TimingrW {
     bits: u32,
 }
 
 impl TimingrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        TimingrW { bits: 0 }
+        TimingrW { bits: 0u32 }
     }
-    /// Bits 0:7 - SCL low period (master mode)
+    # [ doc = "Bits 0:7 - SCL low period (master mode)" ]
     pub fn scll(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         const MASK: u8 = 255;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bits 8:15 - SCL high period (master mode)
+    # [ doc = "Bits 8:15 - SCL high period (master mode)" ]
     pub fn sclh(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         const MASK: u8 = 255;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bits 16:19 - Data hold time
+    # [ doc = "Bits 16:19 - Data hold time" ]
     pub fn sdadel(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         const MASK: u8 = 15;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bits 20:23 - Data setup time
+    # [ doc = "Bits 20:23 - Data setup time" ]
     pub fn scldel(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 20;
+        const OFFSET: u8 = 20u8;
         const MASK: u8 = 15;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bits 28:31 - Timing prescaler
+    # [ doc = "Bits 28:31 - Timing prescaler" ]
     pub fn presc(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 28;
+        const OFFSET: u8 = 28u8;
         const MASK: u8 = 15;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
@@ -957,7 +957,7 @@ impl TimingrW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Timeoutr {
     register: ::volatile_register::RW<u32>,
 }
@@ -985,64 +985,64 @@ impl Timeoutr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct TimeoutrR {
     bits: u32,
 }
 
 impl TimeoutrR {
-    /// Bits 0:11 - Bus timeout A
+    # [ doc = "Bits 0:11 - Bus timeout A" ]
     pub fn timeouta(&self) -> u16 {
         const MASK: u32 = 4095;
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         ((self.bits >> OFFSET) & MASK) as u16
     }
-    /// Bit 12 - Idle clock timeout detection
+    # [ doc = "Bit 12 - Idle clock timeout detection" ]
     pub fn tidle(&self) -> bool {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 15 - Clock timeout enable
+    # [ doc = "Bit 15 - Clock timeout enable" ]
     pub fn timouten(&self) -> bool {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bits 16:27 - Bus timeout B
+    # [ doc = "Bits 16:27 - Bus timeout B" ]
     pub fn timeoutb(&self) -> u16 {
         const MASK: u32 = 4095;
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         ((self.bits >> OFFSET) & MASK) as u16
     }
-    /// Bit 31 - Extended clock timeout enable
+    # [ doc = "Bit 31 - Extended clock timeout enable" ]
     pub fn texten(&self) -> bool {
-        const OFFSET: u8 = 31;
+        const OFFSET: u8 = 31u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct TimeoutrW {
     bits: u32,
 }
 
 impl TimeoutrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        TimeoutrW { bits: 0 }
+        TimeoutrW { bits: 0u32 }
     }
-    /// Bits 0:11 - Bus timeout A
+    # [ doc = "Bits 0:11 - Bus timeout A" ]
     pub fn timeouta(&mut self, value: u16) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         const MASK: u16 = 4095;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bit 12 - Idle clock timeout detection
+    # [ doc = "Bit 12 - Idle clock timeout detection" ]
     pub fn tidle(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1050,9 +1050,9 @@ impl TimeoutrW {
         }
         self
     }
-    /// Bit 15 - Clock timeout enable
+    # [ doc = "Bit 15 - Clock timeout enable" ]
     pub fn timouten(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1060,17 +1060,17 @@ impl TimeoutrW {
         }
         self
     }
-    /// Bits 16:27 - Bus timeout B
+    # [ doc = "Bits 16:27 - Bus timeout B" ]
     pub fn timeoutb(&mut self, value: u16) -> &mut Self {
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         const MASK: u16 = 4095;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
         self
     }
-    /// Bit 31 - Extended clock timeout enable
+    # [ doc = "Bit 31 - Extended clock timeout enable" ]
     pub fn texten(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 31;
+        const OFFSET: u8 = 31u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1080,7 +1080,7 @@ impl TimeoutrW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Isr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1107,115 +1107,115 @@ impl Isr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct IsrR {
     bits: u32,
 }
 
 impl IsrR {
-    /// Bits 17:23 - Address match code (Slave mode)
+    # [ doc = "Bits 17:23 - Address match code (Slave mode)" ]
     pub fn addcode(&self) -> u8 {
         const MASK: u32 = 127;
-        const OFFSET: u8 = 17;
+        const OFFSET: u8 = 17u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
-    /// Bit 16 - Transfer direction (Slave mode)
+    # [ doc = "Bit 16 - Transfer direction (Slave mode)" ]
     pub fn dir(&self) -> bool {
-        const OFFSET: u8 = 16;
+        const OFFSET: u8 = 16u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 15 - Bus busy
+    # [ doc = "Bit 15 - Bus busy" ]
     pub fn busy(&self) -> bool {
-        const OFFSET: u8 = 15;
+        const OFFSET: u8 = 15u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 13 - SMBus alert
+    # [ doc = "Bit 13 - SMBus alert" ]
     pub fn alert(&self) -> bool {
-        const OFFSET: u8 = 13;
+        const OFFSET: u8 = 13u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 12 - Timeout or t_low detection flag
+    # [ doc = "Bit 12 - Timeout or t_low detection flag" ]
     pub fn timeout(&self) -> bool {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 11 - PEC Error in reception
+    # [ doc = "Bit 11 - PEC Error in reception" ]
     pub fn pecerr(&self) -> bool {
-        const OFFSET: u8 = 11;
+        const OFFSET: u8 = 11u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 10 - Overrun/Underrun (slave mode)
+    # [ doc = "Bit 10 - Overrun/Underrun (slave mode)" ]
     pub fn ovr(&self) -> bool {
-        const OFFSET: u8 = 10;
+        const OFFSET: u8 = 10u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 9 - Arbitration lost
+    # [ doc = "Bit 9 - Arbitration lost" ]
     pub fn arlo(&self) -> bool {
-        const OFFSET: u8 = 9;
+        const OFFSET: u8 = 9u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 8 - Bus error
+    # [ doc = "Bit 8 - Bus error" ]
     pub fn berr(&self) -> bool {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 7 - Transfer Complete Reload
+    # [ doc = "Bit 7 - Transfer Complete Reload" ]
     pub fn tcr(&self) -> bool {
-        const OFFSET: u8 = 7;
+        const OFFSET: u8 = 7u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 6 - Transfer Complete (master mode)
+    # [ doc = "Bit 6 - Transfer Complete (master mode)" ]
     pub fn tc(&self) -> bool {
-        const OFFSET: u8 = 6;
+        const OFFSET: u8 = 6u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 5 - Stop detection flag
+    # [ doc = "Bit 5 - Stop detection flag" ]
     pub fn stopf(&self) -> bool {
-        const OFFSET: u8 = 5;
+        const OFFSET: u8 = 5u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 4 - Not acknowledge received flag
+    # [ doc = "Bit 4 - Not acknowledge received flag" ]
     pub fn nackf(&self) -> bool {
-        const OFFSET: u8 = 4;
+        const OFFSET: u8 = 4u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 3 - Address matched (slave mode)
+    # [ doc = "Bit 3 - Address matched (slave mode)" ]
     pub fn addr(&self) -> bool {
-        const OFFSET: u8 = 3;
+        const OFFSET: u8 = 3u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 2 - Receive data register not empty (receivers)
+    # [ doc = "Bit 2 - Receive data register not empty (receivers)" ]
     pub fn rxne(&self) -> bool {
-        const OFFSET: u8 = 2;
+        const OFFSET: u8 = 2u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 1 - Transmit interrupt status (transmitters)
+    # [ doc = "Bit 1 - Transmit interrupt status (transmitters)" ]
     pub fn txis(&self) -> bool {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 0 - Transmit data register empty (transmitters)
+    # [ doc = "Bit 0 - Transmit data register empty (transmitters)" ]
     pub fn txe(&self) -> bool {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct IsrW {
     bits: u32,
 }
 
 impl IsrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        IsrW { bits: 1 }
+        IsrW { bits: 1u32 }
     }
-    /// Bit 1 - Transmit interrupt status (transmitters)
+    # [ doc = "Bit 1 - Transmit interrupt status (transmitters)" ]
     pub fn txis(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 1;
+        const OFFSET: u8 = 1u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1223,9 +1223,9 @@ impl IsrW {
         }
         self
     }
-    /// Bit 0 - Transmit data register empty (transmitters)
+    # [ doc = "Bit 0 - Transmit data register empty (transmitters)" ]
     pub fn txe(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1235,7 +1235,7 @@ impl IsrW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Icr {
     register: ::volatile_register::WO<u32>,
 }
@@ -1250,74 +1250,74 @@ impl Icr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct IcrR {
     bits: u32,
 }
 
 impl IcrR {
-    /// Bit 13 - Alert flag clear
+    # [ doc = "Bit 13 - Alert flag clear" ]
     pub fn alertcf(&self) -> bool {
-        const OFFSET: u8 = 13;
+        const OFFSET: u8 = 13u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 12 - Timeout detection flag clear
+    # [ doc = "Bit 12 - Timeout detection flag clear" ]
     pub fn timoutcf(&self) -> bool {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 11 - PEC Error flag clear
+    # [ doc = "Bit 11 - PEC Error flag clear" ]
     pub fn peccf(&self) -> bool {
-        const OFFSET: u8 = 11;
+        const OFFSET: u8 = 11u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 10 - Overrun/Underrun flag clear
+    # [ doc = "Bit 10 - Overrun/Underrun flag clear" ]
     pub fn ovrcf(&self) -> bool {
-        const OFFSET: u8 = 10;
+        const OFFSET: u8 = 10u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 9 - Arbitration lost flag clear
+    # [ doc = "Bit 9 - Arbitration lost flag clear" ]
     pub fn arlocf(&self) -> bool {
-        const OFFSET: u8 = 9;
+        const OFFSET: u8 = 9u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 8 - Bus error flag clear
+    # [ doc = "Bit 8 - Bus error flag clear" ]
     pub fn berrcf(&self) -> bool {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 5 - Stop detection flag clear
+    # [ doc = "Bit 5 - Stop detection flag clear" ]
     pub fn stopcf(&self) -> bool {
-        const OFFSET: u8 = 5;
+        const OFFSET: u8 = 5u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 4 - Not Acknowledge flag clear
+    # [ doc = "Bit 4 - Not Acknowledge flag clear" ]
     pub fn nackcf(&self) -> bool {
-        const OFFSET: u8 = 4;
+        const OFFSET: u8 = 4u8;
         self.bits & (1 << OFFSET) != 0
     }
-    /// Bit 3 - Address Matched flag clear
+    # [ doc = "Bit 3 - Address Matched flag clear" ]
     pub fn addrcf(&self) -> bool {
-        const OFFSET: u8 = 3;
+        const OFFSET: u8 = 3u8;
         self.bits & (1 << OFFSET) != 0
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct IcrW {
     bits: u32,
 }
 
 impl IcrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        IcrW { bits: 0 }
+        IcrW { bits: 0u32 }
     }
-    /// Bit 13 - Alert flag clear
+    # [ doc = "Bit 13 - Alert flag clear" ]
     pub fn alertcf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 13;
+        const OFFSET: u8 = 13u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1325,9 +1325,9 @@ impl IcrW {
         }
         self
     }
-    /// Bit 12 - Timeout detection flag clear
+    # [ doc = "Bit 12 - Timeout detection flag clear" ]
     pub fn timoutcf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 12;
+        const OFFSET: u8 = 12u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1335,9 +1335,9 @@ impl IcrW {
         }
         self
     }
-    /// Bit 11 - PEC Error flag clear
+    # [ doc = "Bit 11 - PEC Error flag clear" ]
     pub fn peccf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 11;
+        const OFFSET: u8 = 11u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1345,9 +1345,9 @@ impl IcrW {
         }
         self
     }
-    /// Bit 10 - Overrun/Underrun flag clear
+    # [ doc = "Bit 10 - Overrun/Underrun flag clear" ]
     pub fn ovrcf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 10;
+        const OFFSET: u8 = 10u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1355,9 +1355,9 @@ impl IcrW {
         }
         self
     }
-    /// Bit 9 - Arbitration lost flag clear
+    # [ doc = "Bit 9 - Arbitration lost flag clear" ]
     pub fn arlocf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 9;
+        const OFFSET: u8 = 9u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1365,9 +1365,9 @@ impl IcrW {
         }
         self
     }
-    /// Bit 8 - Bus error flag clear
+    # [ doc = "Bit 8 - Bus error flag clear" ]
     pub fn berrcf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 8;
+        const OFFSET: u8 = 8u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1375,9 +1375,9 @@ impl IcrW {
         }
         self
     }
-    /// Bit 5 - Stop detection flag clear
+    # [ doc = "Bit 5 - Stop detection flag clear" ]
     pub fn stopcf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 5;
+        const OFFSET: u8 = 5u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1385,9 +1385,9 @@ impl IcrW {
         }
         self
     }
-    /// Bit 4 - Not Acknowledge flag clear
+    # [ doc = "Bit 4 - Not Acknowledge flag clear" ]
     pub fn nackcf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 4;
+        const OFFSET: u8 = 4u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1395,9 +1395,9 @@ impl IcrW {
         }
         self
     }
-    /// Bit 3 - Address Matched flag clear
+    # [ doc = "Bit 3 - Address Matched flag clear" ]
     pub fn addrcf(&mut self, value: bool) -> &mut Self {
-        const OFFSET: u8 = 3;
+        const OFFSET: u8 = 3u8;
         if value {
             self.bits |= 1 << OFFSET;
         } else {
@@ -1407,7 +1407,7 @@ impl IcrW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Pecr {
     register: ::volatile_register::RO<u32>,
 }
@@ -1418,35 +1418,35 @@ impl Pecr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct PecrR {
     bits: u32,
 }
 
 impl PecrR {
-    /// Bits 0:7 - Packet error checking register
+    # [ doc = "Bits 0:7 - Packet error checking register" ]
     pub fn pec(&self) -> u8 {
         const MASK: u32 = 255;
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct PecrW {
     bits: u32,
 }
 
 impl PecrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        PecrW { bits: 0 }
+        PecrW { bits: 0u32 }
     }
-    /// Bits 0:7 - Packet error checking register
+    # [ doc = "Bits 0:7 - Packet error checking register" ]
     pub fn pec(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         const MASK: u8 = 255;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
@@ -1454,7 +1454,7 @@ impl PecrW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Rxdr {
     register: ::volatile_register::RO<u32>,
 }
@@ -1465,35 +1465,35 @@ impl Rxdr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct RxdrR {
     bits: u32,
 }
 
 impl RxdrR {
-    /// Bits 0:7 - 8-bit receive data
+    # [ doc = "Bits 0:7 - 8-bit receive data" ]
     pub fn rxdata(&self) -> u8 {
         const MASK: u32 = 255;
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct RxdrW {
     bits: u32,
 }
 
 impl RxdrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        RxdrW { bits: 0 }
+        RxdrW { bits: 0u32 }
     }
-    /// Bits 0:7 - 8-bit receive data
+    # [ doc = "Bits 0:7 - 8-bit receive data" ]
     pub fn rxdata(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         const MASK: u8 = 255;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
@@ -1501,7 +1501,7 @@ impl RxdrW {
     }
 }
 
-#[repr(C)]
+# [ repr ( C ) ]
 pub struct Txdr {
     register: ::volatile_register::RW<u32>,
 }
@@ -1528,35 +1528,35 @@ impl Txdr {
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct TxdrR {
     bits: u32,
 }
 
 impl TxdrR {
-    /// Bits 0:7 - 8-bit transmit data
+    # [ doc = "Bits 0:7 - 8-bit transmit data" ]
     pub fn txdata(&self) -> u8 {
         const MASK: u32 = 255;
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         ((self.bits >> OFFSET) & MASK) as u8
     }
 }
 
-#[derive(Clone, Copy)]
-#[repr(C)]
+# [ derive ( Clone , Copy ) ]
+# [ repr ( C ) ]
 pub struct TxdrW {
     bits: u32,
 }
 
 impl TxdrW {
-    /// Reset value
+    # [ doc = r" Reset value" ]
     pub fn reset_value() -> Self {
-        TxdrW { bits: 0 }
+        TxdrW { bits: 0u32 }
     }
-    /// Bits 0:7 - 8-bit transmit data
+    # [ doc = "Bits 0:7 - 8-bit transmit data" ]
     pub fn txdata(&mut self, value: u8) -> &mut Self {
-        const OFFSET: u8 = 0;
+        const OFFSET: u8 = 0u8;
         const MASK: u8 = 255;
         self.bits &= !((MASK as u32) << OFFSET);
         self.bits |= ((value & MASK) as u32) << OFFSET;
