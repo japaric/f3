@@ -1,8 +1,8 @@
-[![Build Status][travis]](https://travis-ci.org/japaric/f3)
+[![Build status](https://travis-ci.org/japaric/f3.svg?branch=master)](https://travis-ci.org/japaric/f3)
+[![crates.io](https://img.shields.io/crates/d/f3.svg)](https://crates.io/crates/f3)
+[![crates.io](https://img.shields.io/crates/v/f3.svg)](https://crates.io/crates/f3)
 
-[travis]: https://travis-ci.org/japaric/f3.svg?branch=master
-
-# `F3`
+# `f3`
 
 > A crate to play with the [STM32F3DISCOVERY]
 
