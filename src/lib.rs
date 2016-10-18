@@ -126,14 +126,16 @@
 //! See the [examples](examples/index.html) module.
 
 #![cfg_attr(target_arch = "arm", feature(core_intrinsics))]
-// #![deny(warnings)]
+#![deny(warnings)]
 #![feature(asm)]
 #![feature(lang_items)]
 #![feature(linkage)]
+#![feature(macro_reexport)]
 #![feature(naked_functions)]
 #![no_std]
 
 #[macro_use]
+#[macro_reexport(bkpt)]
 extern crate cortex_m;
 extern crate compiler_builtins_snapshot;
 extern crate r0;

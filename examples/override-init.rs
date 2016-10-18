@@ -5,7 +5,6 @@
 #![no_std]
 
 #[macro_use]
-extern crate cortex_m;
 extern crate f3;
 
 #[export_name = "_init"]
