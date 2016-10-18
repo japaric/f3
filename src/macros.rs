@@ -1,4 +1,5 @@
-/// Macro for sending `print!`-formatted messages to the ITM (Instrumentation Trace Macrocell).
+/// Macro for sending `print!`-formatted messages to the ITM (Instrumentation
+/// Trace Macrocell).
 #[macro_export]
 macro_rules! iprint {
     ($s:expr) => {
@@ -31,7 +32,8 @@ macro_rules! uprint {
     };
 }
 
-/// Macro for sending `print!`-formatted messages over the Serial Port, with a newline
+/// Macro for sending `print!`-formatted messages over the Serial Port, with a
+/// newline
 #[macro_export]
 macro_rules! uprintln {
     ($fmt:expr) => {

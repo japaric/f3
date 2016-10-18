@@ -2,20 +2,22 @@
 //!
 //! [STM32F3DISCOVERY]: http://www.st.com/en/evaluation-tools/stm32f3discovery.html
 //!
-//! (What? You don't have one? How come? They are awesome and cheap ($15 + shipping))
+//! (What? You don't have one? How come? They are awesome and cheap ($15 +
+//! shipping))
 //!
 //! (No, I'm not associated to STM32. I just like this board in particular.)
 //!
 //! # Features
 //!
 //! - High-level API over LEDs, sensors, timers, etc.
-//! - An `iprint!` family of macros that sink their output to the ITM (Instrumentation Trace
-//!   Macrocell) so you send data to the host over the same USB cable that you are using to debug
-//!   your device.
+//! - An `iprint!` family of macros that sink their output to the ITM
+//!   (Instrumentation Trace Macrocell) so you send data to the host over the
+//!   same USB cable that you are using to debug your device.
 //! - By default, `panic!`s also sink their messages to the ITM
-//! - By default, an informative exception handler that tells you what went wrong.
-//! - By default, everything (LEDs, sensors, etc) is initialized before the user entry point,
-//!   `main`. So everything Just Works out of the box.
+//! - By default, an informative exception handler that tells you what went
+//!   wrong.
+//! - By default, everything (LEDs, sensors, etc) is initialized before the user
+//!   entry point, `main`. So everything Just Works out of the box.
 //! - Plenty of examples
 //!
 //! Also, all the "default" behaviors can be overridden:
@@ -26,13 +28,13 @@
 //!
 //! # Requirements and starter code
 //!
-//! Today, you need these 7 things, one of them optional, but hopefully you won't need 3 of them in
-//! the future:
+//! Today, you need these 7 things, one of them optional, but hopefully you
+//! won't need 3 of them in the future:
 //!
 //! - Nightly Rust compiler: `rustup default nightly`
 //! - [Xargo](https://crates.io/crates/xargo) version 0.1.12 or newer. (After
-//!   [rust-lang/rfcs#1133](https://github.com/rust-lang/rfcs/pull/1133) gets accepted and
-//!   implemented you won't need Xargo anymore)
+//!   [rust-lang/rfcs#1133](https://github.com/rust-lang/rfcs/pull/1133) gets
+//!   accepted and implemented you won't need Xargo anymore)
 //! - A binary Cargo project that depends on this crate.
 //!
 //! ``` text
@@ -42,7 +44,8 @@
 //! f3 = "0.1.0"
 //! ```
 //!
-//! - Optionally, you can also set `profile.release.lto = true` for even smaller binaries.
+//! - Optionally, you can also set `profile.release.lto = true` for even smaller
+//!   binaries.
 //!
 //! ``` text
 //! $ edit Cargo.toml && tail -n2 $_
@@ -50,9 +53,10 @@
 //! lto = true
 //! ```
 //!
-//! - This `.cargo/config` in the root of your Cargo project. (If Cargo build scripts ever gain a
-//!   feature to pass arbitrary arguments to the linker then you won't *need* this. Setting
-//!   `build.target` though always improves ergonomics)
+//! - This `.cargo/config` in the root of your Cargo project. (If Cargo build
+//!   scripts ever gain a feature to pass arbitrary arguments to the linker then
+//!   you won't *need* this. Setting `build.target` though always improves
+//!   ergonomics)
 //!
 //! ``` text
 //! $ cat .cargo/config
@@ -68,8 +72,9 @@
 //! ]
 //! ```
 //!
-//! - This target specification file. (You won't need this after 2016-10-05 as these targets have
-//!   already landed [in the compiler](https://github.com/rust-lang/rust/pull/36874))
+//! - This target specification file. (You won't need this after 2016-10-05 as
+//!   these targets have already landed
+//!   [in the compiler](https://github.com/rust-lang/rust/pull/36874))
 //!
 //! ``` text
 //! $ cat thumbv7em-none-eabihf.json
@@ -111,7 +116,8 @@
 //! $ xargo build [--target thumbv7em-none-eabihf] [--release]
 //! ```
 //!
-//! Check out the [Copper] book for instructions on how to Flash and Debug this program!
+//! Check out the [Copper] book for instructions on how to Flash and Debug this
+//! program!
 //!
 //! [Copper]: http://japaric.github.io/copper/
 //!
@@ -174,8 +180,9 @@ pub unsafe extern "C" fn init() {
 
 extern "C" {
     // `main`, the entry point of the user program
-    // NOTE the right signature of `main` is `fn() -> !`. But the user might get that wrong so
-    // let's err on the side of caution and install a safety net (see below).
+    // NOTE the right signature of `main` is `fn() -> !`. But the user might get
+    // that wrong so let's err on the side of caution and install a safety net
+    // (see below).
     fn main();
 }
 

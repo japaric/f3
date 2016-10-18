@@ -2,7 +2,8 @@
 //!
 //! At the end there's a program that crashes. Run it with `(gdb) continue`:
 //!
-//! By the time you hit the exception, you'll see the following output in `itmdump`:
+//! By the time you hit the exception, you'll see the following output in
+//! `itmdump`:
 //!
 //! ``` text
 //! $ itmdump /tmp/itm.fifo
@@ -10,9 +11,10 @@
 //! EXCEPTION HardFault @ PC=0x080000a2
 //! ```
 //!
-//! which indicates that this is a "hard fault" exception. It also tells you were the crash
-//! originated! The PC (Program Counter) value is the address of the instruction that generated the
-//! crash. You can disassemble your program around that address using GDB:
+//! which indicates that this is a "hard fault" exception. It also tells you
+//! were the crash originated! The PC (Program Counter) value is the address of
+//! the instruction that generated the crash. You can disassemble your program
+//! around that address using GDB:
 //!
 //! ``` text
 //! (gdb) disas /m 0x080000a2
@@ -41,13 +43,13 @@
 //! End of assembler dump.
 //! ```
 //!
-//! `ldr r0, [r0, #0]` is the faulty instruction. It tries to load the word at the address that `r0`
-//! indicates. From the two previous instructions, you can tell that `r0` holds the value
-//! `0x4000a000`.
+//! `ldr r0, [r0, #0]` is the faulty instruction. It tries to load the word at
+//! the address that `r0` indicates. From the two previous instructions, you can
+//! tell that `r0` holds the value `0x4000a000`.
 //!
-//! Wait! That's not everything. There's also a local `sf` variable that points to the stack frame
-//! where the exception occurred. If you print it under GDB, you'll see the state of several
-//! registers at the moment of the crash:
+//! Wait! That's not everything. There's also a local `sf` variable that points
+//! to the stack frame where the exception occurred. If you print it under GDB,
+//! you'll see the state of several registers at the moment of the crash:
 //!
 //! ``` text
 //! (gdb) p/x *sf
@@ -55,7 +57,8 @@
 //!   r12 = 0x8003950, lr = 0x8000085, pc = 0x80000a2, xpsr = 0x1000000}
 //! ```
 //!
-//! See? `r0 = 0x4000a000` that matches our expectations from reading the disassembly.
+//! See? `r0 = 0x4000a000` that matches our expectations from reading the
+//! disassembly.
 
 #![no_main]
 #![no_std]

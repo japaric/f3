@@ -2,7 +2,8 @@
 //!
 //! # Implementation details
 //!
-//! This module uses the TIM7 peripheral and the `_tim7` interrupt under the hood.
+//! This module uses the TIM7 peripheral and the `_tim7` interrupt under the
+//! hood.
 
 use peripheral;
 

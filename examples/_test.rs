@@ -1,5 +1,6 @@
-// This is actually a test that runs on the HOST (!). I had to hack things around quite a bit to
-// make this work; that's way this ended up in this directory :-).
+// This is actually a test that runs on the HOST (!). I had to hack things
+// around quite a bit to make this work; that's way this ended up in this
+// directory :-).
 
 extern crate f3;
 
@@ -9,7 +10,8 @@ macro_rules! offset {
     ($register:expr, $offset:expr) => {
         if $offset != &$register as *const _ as usize {
             panic!("{}: expected 0x{:x}, got 0x{:x}. Off by {}",
-                   stringify!($register), $offset, &$register as *const _ as usize,
+                   stringify!($register), $offset,
+                   &$register as *const _ as usize,
                    (&$register as *const _ as isize - $offset).abs())
         }
     }

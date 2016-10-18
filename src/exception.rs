@@ -1,7 +1,8 @@
 //! Exceptions
 //!
-//! All the exceptions prefixed with an underscore (`_`) can be overridden by the top crate. Check
-//! out [this example](../examples/override_exception/index.html).
+//! All the exceptions prefixed with an underscore (`_`) can be overridden by
+//! the top crate. Check out
+//! [this example](../examples/override_exception/index.html).
 
 use cortex_m::{self, Handler, StackFrame};
 use r0;
@@ -62,7 +63,8 @@ impl Exception {
 pub unsafe extern "C" fn _default_handler() {
     use core::intrinsics;
 
-    // NOTE need asm!, #[naked] and unreachable() to avoid modifying the stack pointer (MSP)
+    // NOTE need asm!, #[naked] and unreachable() to avoid modifying the stack
+    // pointer (MSP)
     asm!("mrs r0, MSP
           ldr r1, [r0, #20]
           b _default_exception_handler_impl" :::: "volatile");
@@ -82,7 +84,8 @@ pub unsafe extern "C" fn default_handler(sf: &StackFrame) -> ! {
     loop {}
 }
 
-/// List of all the exceptions minus the reset handler as allocated in the vector table.
+/// List of all the exceptions minus the reset handler as allocated in the
+/// vector table.
 ///
 /// `None` indicates that the spot is RESERVED.
 #[link_section = ".text.exceptions"]

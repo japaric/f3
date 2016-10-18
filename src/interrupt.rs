@@ -1,9 +1,11 @@
 //! Interrupts
 //!
-//! **WARNING** Here be dragons. Interrupts are key for writing asynchronous programs but they also
-//! open the door to data races. Tread with care and mind your `unsafe`s.
+//! **WARNING** Here be dragons. Interrupts are key for writing asynchronous
+//! programs but they also open the door to data races. Tread with care and mind
+//! your `unsafe`s.
 //!
-//! All the interrupts prefixed with an underscore (`_`) can be overridden by the top crate.
+//! All the interrupts prefixed with an underscore (`_`) can be overridden by
+//! the top crate.
 
 use cortex_m::Handler;
 
@@ -219,9 +221,11 @@ extern "C" {
     pub fn _dma2_channel5();
     /// ADC4 global interrupt
     pub fn _adc4();
-    /// COMP1 & COMP2 & COMP3 interrupts combined with EXTI Lines 21,22 and 29 interrupts
+    /// COMP1 & COMP2 & COMP3 interrupts combined with EXTI Lines 21,22 and 29
+    /// interrupts
     pub fn _comp1_2_3();
-    /// COMP4 & COMP5 & COMP6 interrupts combined with EXTI Lines 30, 31 and 32 interrupts
+    /// COMP4 & COMP5 & COMP6 interrupts combined with EXTI Lines 30, 31 and 32
+    /// interrupts
     pub fn _comp4_5_6();
     /// COMP7 interrupt combined with EXTI Line 33 interrupt
     pub fn _comp7();

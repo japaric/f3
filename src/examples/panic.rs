@@ -1,15 +1,17 @@
 // Auto-generated. Do not modify this file! Instead modify examples/panic.rs
 //! `panic!`s send their messages to the ITM
 //!
-//! See the `itm` example for instruction on how the receive "ITM" messages on the HOST, e.g. your
-//! laptop. You should see the following output after running the program below:
+//! See the `itm` example for instruction on how the receive "ITM" messages on
+//! the HOST, e.g. your laptop. You should see the following output after
+//! running the program below:
 //!
 //! ``` text
 //! $ itmdump /tmp/itm.fifo
 //! PANIC at 'Hello, world!', examples/panic.rs:21
 //! ```
 //!
-//! Like with "`std`" panics, these panics also report file and line information.
+//! Like with "`std`" panics, these panics also report file and line
+//! information.
 //!
 //! ``` rust,no_run
 //! #![feature(asm)]
