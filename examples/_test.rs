@@ -18,7 +18,7 @@ macro_rules! offset {
 }
 
 fn main() {
-    let btim = unsafe { &*(0x0 as *const peripheral::tim::BTim) };
+    let btim = unsafe { &*(0x0 as *const peripheral::btim::BTim) };
 
     offset!(btim.cr1, 0x0);
     offset!(btim.cr2, 0x4);
@@ -50,7 +50,7 @@ fn main() {
     offset!(gpio.afrh, 0x24);
     offset!(gpio.brr, 0x28);
 
-    let gptim = unsafe { &*(0x0 as *const peripheral::tim::GpTim) };
+    let gptim = unsafe { &*(0x0 as *const peripheral::gptim::GpTim) };
 
     offset!(gptim.cr1, 0x0);
     offset!(gptim.cr2, 0x4);
@@ -58,8 +58,8 @@ fn main() {
     offset!(gptim.dier, 0xc);
     offset!(gptim.sr, 0x10);
     offset!(gptim.egr, 0x14);
-    offset!(gptim.ccmr1, 0x18);
-    offset!(gptim.ccmr2, 0x1c);
+    offset!(gptim.ccmr1_output, 0x18);
+    offset!(gptim.ccmr2_output, 0x1c);
     offset!(gptim.ccer, 0x20);
     offset!(gptim.cnt, 0x24);
     offset!(gptim.psc, 0x28);
