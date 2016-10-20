@@ -148,6 +148,7 @@ mod macros;
 mod lang_items;
 
 pub mod delay;
+#[cfg(feature = "examples")]
 pub mod examples;
 pub mod exception;
 pub mod fpu;
