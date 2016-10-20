@@ -4,24 +4,27 @@
 //!
 //! # Notes
 //!
-//! - Although the `*_mut()` functions always return a valid/live reference, the API doesn't prevent
-//!   the user from creating multiple mutable aliases. It's up to the user to ensure that no
-//!   unsynchonized concurrent access is performed through these references.
+//! Although the `*_mut()` functions always return a valid/live reference, the
+//! API doesn't prevent the user from creating multiple mutable aliases. It's up
+//! to the user to ensure that no //!   unsynchonized concurrent access is
+//! performed through these references.
 
+pub mod btim;
 pub mod dbgmcu;
 pub mod gpio;
+pub mod gptim;
 pub mod i2c;
 pub mod rcc;
 pub mod spi;
-pub mod tim;
 pub mod usart;
 
+use self::btim::BTim;
 use self::dbgmcu::Dbgmcu;
 use self::gpio::Gpio;
+use self::gptim::GpTim;
 use self::i2c::I2c;
 use self::rcc::Rcc;
 use self::spi::Spi;
-use self::tim::Tim;
 use self::usart::Usart;
 
 const GPIOA: usize = 0x48000000;
@@ -36,7 +39,7 @@ const GPIOF: usize = 0x48001400;
 const RCC: usize = 0x40021000;
 // const DMA1: usize = 0x40020000;
 // const DMA2: usize = 0x40020400;
-// const TIM2: usize = 0x40000000;
+const TIM2: usize = 0x40000000;
 // const TIM3: usize = 0x40000400;
 // const TIM4: usize = 0x40000800;
 // const TIM15: usize = 0x40014000;
@@ -159,19 +162,27 @@ pub unsafe fn spi1_mut() -> &'static mut Spi {
     deref_mut(SPI1)
 }
 
-pub fn tim6() -> &'static Tim {
+pub fn tim6() -> &'static BTim {
     unsafe { deref(TIM6) }
 }
 
-pub unsafe fn tim6_mut() -> &'static mut Tim {
+pub fn tim2() -> &'static GpTim {
+    unsafe { deref(TIM2) }
+}
+
+pub unsafe fn tim2_mut() -> &'static mut GpTim {
+    deref_mut(TIM2)
+}
+
+pub unsafe fn tim6_mut() -> &'static mut BTim {
     deref_mut(TIM6)
 }
 
-pub fn tim7() -> &'static Tim {
+pub fn tim7() -> &'static BTim {
     unsafe { deref(TIM7) }
 }
 
-pub unsafe fn tim7_mut() -> &'static mut Tim {
+pub unsafe fn tim7_mut() -> &'static mut BTim {
     deref_mut(TIM7)
 }
 

@@ -1,6 +1,6 @@
 # [ doc = "Basic timers" ]
 # [ repr ( C ) ]
-pub struct Tim {
+pub struct BTim {
     # [ doc = "0x00 - control register 1" ]
     pub cr1: Cr1,
     # [ doc = "0x04 - control register 2" ]

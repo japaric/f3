@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - the low level API over peripherals is now aware of the bit fields/flags of each register
 - low level access to I2C and SPI
 - high level API for the LSM303DLHC and L3GD20
+- a timeit module to time sections of code
 
 ### Changed
 

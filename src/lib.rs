@@ -159,6 +159,7 @@ pub mod led;
 pub mod lsm303dlhc;
 pub mod peripheral;
 pub mod serial;
+pub mod timeit;
 
 #[derive(Debug)]
 pub struct I16x3 {
@@ -179,6 +180,7 @@ pub unsafe extern "C" fn init() {
     led::init();
     lsm303dlhc::init();
     serial::init();
+    timeit::init();
 }
 
 extern "C" {
@@ -190,4 +192,5 @@ extern "C" {
 }
 
 // Hz
+const APB1_CLOCK: u32 = 8_000_000;
 const APB2_CLOCK: u32 = 8_000_000;
