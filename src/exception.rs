@@ -4,7 +4,9 @@
 //! the top crate. Check out
 //! [this example](../examples/override_exception/index.html).
 
-use cortex_m::{self, Handler, StackFrame};
+use cortex_m::{self, Handler};
+#[cfg(feature = "default-exception-handler")]
+use cortex_m::StackFrame;
 use r0;
 
 /// Kind of exception
@@ -55,12 +57,11 @@ impl Exception {
     }
 }
 
-#[cfg(target_arch = "arm")]
+#[cfg(all(target_arch = "arm", feature = "default-exception-handler"))]
 #[doc(hidden)]
 #[export_name = "_default_exception_handler"]
-#[linkage = "weak"]
 #[naked]
-pub unsafe extern "C" fn _default_handler() {
+pub unsafe extern "C" fn default_handler_entry_point() {
     use core::intrinsics;
 
     // NOTE need asm!, #[naked] and unreachable() to avoid modifying the stack
@@ -68,12 +69,11 @@ pub unsafe extern "C" fn _default_handler() {
     asm!("mrs r0, MSP
           ldr r1, [r0, #20]
           b _default_exception_handler_impl" :::: "volatile");
+
     intrinsics::unreachable();
 }
 
-#[cfg(not(target_arch = "arm"))]
-pub extern "C" fn _default_handler() {}
-
+#[cfg(feature = "default-exception-handler")]
 #[doc(hidden)]
 #[export_name = "_default_exception_handler_impl"]
 pub unsafe extern "C" fn default_handler(sf: &StackFrame) -> ! {
@@ -127,20 +127,32 @@ extern "C" {
 /// Reset handler
 #[export_name = "_reset"]
 pub unsafe extern "C" fn reset() -> ! {
+    #[cfg(feature = "default-init")]
+    use ::_init;
+
     extern "C" {
         static _ebss: u32;
         static _edata: u32;
         static _sidata: u32;
         static mut _sbss: u32;
         static mut _sdata: u32;
+
+        #[cfg(not(feature = "default-init"))]
+        fn _init();
+
+        // `main`, the entry point of the user program
+        // NOTE the right signature of `main` is `fn() -> !`. But the user might
+        // get that wrong so let's err on the side of caution and install a
+        // safety net. (See below)
+        fn main();
     }
 
     r0::zero_bss(&mut _sbss, &_ebss);
     r0::init_data(&mut _sdata, &_edata, &_sidata);
 
-    ::init();
+    _init();
 
-    ::main();
+    main();
 
     // safety net in case `main` returns
     panic!("returned from main!")

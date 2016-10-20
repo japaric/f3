@@ -1,8 +1,8 @@
+#[cfg(feature = "default-panic-fmt")]
 use core::fmt::Arguments;
 
-#[export_name = "rust_begin_unwind"]
+#[cfg(feature = "default-panic-fmt")]
 #[lang = "panic_fmt"]
-#[linkage = "weak"]
 unsafe extern "C" fn panic_fmt(msg: Arguments,
                                file: &'static str,
                                line: u32)

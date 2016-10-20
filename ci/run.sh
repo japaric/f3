@@ -14,54 +14,31 @@ main() {
         return
     fi
 
-    # test weak symbols and overrides
+    # test that disabling default features work
+    xargo build --target $target --no-default-features
+
+    local flags=
     for example in $(ls examples); do
         case $example in
             _test.rs | *.rs.bk)
                 continue
                 ;;
+            override-default-exception-handler.rs)
+                flags="--target $target --example ${example%.*} --no-default-features --features \"compiler-builtins-snapshot/memcpy default-init default-panic-fmt\""
+                ;;
+            override-init.rs)
+                flags="--target $target --example ${example%.*} --no-default-features --features \"compiler-builtins-snapshot/memcpy default-exception-handler default-panic-fmt\""
+                ;;
+            override-panic-fmt.rs)
+                flags="--target $target --example ${example%.*} --no-default-features --features \"compiler-builtins-snapshot/memcpy default-exception-handler default-init\""
+                continue
+                ;;
+            *)
+                flags="--target $target --example ${example%.*}"
         esac
 
-        xargo build --target $target --example ${example%.*}
-        xargo build --target $target --example ${example%.*} --release
-    done
-
-    for profile in $profiles; do
-        weak_symbols=$(arm-none-eabi-nm -g target/$target/$profile/examples/_all-the-weak-symbols | grep ' W ')
-
-        echo "$weak_symbols" | grep _default_exception_handler
-        echo "$weak_symbols" | grep _init
-        echo "$weak_symbols" | grep rust_begin_unwind
-    done
-
-    for profile in $profiles; do
-        weak_symbols=$(arm-none-eabi-nm -g target/$target/$profile/examples/override-init | grep ' W ')
-
-        # `_init` should have been overriden
-        set +e
-        echo "$weak_symbols" | grep _init
-        test $? -eq 0 && exit 1
-        set -e
-    done
-
-    for profile in $profiles; do
-        weak_symbols=$(arm-none-eabi-nm -g target/$target/$profile/examples/override-panic-fmt | grep ' W ')
-
-        # `rust_begin_unwind` should have been overriden
-        set +e
-        echo "$weak_symbols" | grep rust_begin_unwind
-        test $? -eq 0 && exit 1
-        set -e
-    done
-
-    for profile in $profiles; do
-        weak_symbols=$(arm-none-eabi-nm -g target/$target/$profile/examples/override-default-exception-handler | grep ' W ')
-
-        # `_default_exception_handler` should have been overriden
-        set +e
-        echo "$weak_symbols" | grep _default_exception_handler
-        test $? -eq 0 && exit 1
-        set -e
+        eval "xargo build $flags"
+        eval "xargo build $flags --release"
     done
 
     # show the binary sizes of our examples

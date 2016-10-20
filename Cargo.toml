@@ -19,7 +19,16 @@ volatile-register = "0.1.1"
 m = "0.1.0"
 
 [features]
-default = ["compiler-builtins-snapshot/memcpy", "examples"]
+default = [
+    "compiler-builtins-snapshot/memcpy",
+    "default-exception-handler",
+    "default-init",
+    "default-panic-fmt",
+    "examples",
+]
+default-exception-handler = []
+default-init = []
+default-panic-fmt = []
 examples = []
 
 [profile.release]

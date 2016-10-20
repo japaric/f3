@@ -125,11 +125,12 @@
 //!
 //! See the [examples](examples/index.html) module.
 
-#![cfg_attr(target_arch = "arm", feature(core_intrinsics))]
+#![cfg_attr(all(target_arch = "arm",
+                feature = "default-exception-handler"),
+            feature(core_intrinsics))]
 #![deny(warnings)]
 #![feature(asm)]
 #![feature(lang_items)]
-#![feature(linkage)]
 #![feature(macro_reexport)]
 #![feature(naked_functions)]
 #![no_std]
@@ -169,10 +170,9 @@ pub struct I16x3 {
 }
 
 // Default initialization routine
+#[cfg(feature = "default-init")]
 #[doc(hidden)]
-#[export_name = "_init"]
-#[linkage = "weak"]
-pub unsafe extern "C" fn init() {
+pub unsafe fn _init() {
     delay::init();
     fpu::init();
     itm::init();
@@ -181,14 +181,6 @@ pub unsafe extern "C" fn init() {
     lsm303dlhc::init();
     serial::init();
     timeit::init();
-}
-
-extern "C" {
-    // `main`, the entry point of the user program
-    // NOTE the right signature of `main` is `fn() -> !`. But the user might get
-    // that wrong so let's err on the side of caution and install a safety net
-    // (see below).
-    fn main();
 }
 
 // Hz
