@@ -20,6 +20,7 @@ pub fn ms(n: u16) {
         tim7.egr.write(|w| w.ug(true));
 
         // Clear any previous "update" event by clearing the update event flag
+        tim7.sr.read();
         tim7.sr.write(|w| w);
 
         // CEN: Enable the counter
