@@ -49,6 +49,11 @@ SECTIONS
   }
 }
 
+/* HACK to make these symbols overrideable by _dependencies_ (they were already
+   overridable by the top crate), we declare them as undefined (EXTERN) here. */
+EXTERN(_default_exception_handler);
+EXTERN(_init);
+
 /* Exceptions */
 PROVIDE(_nmi = _default_exception_handler);
 PROVIDE(_hard_fault = _default_exception_handler);
