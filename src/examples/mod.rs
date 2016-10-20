@@ -22,3 +22,4 @@ pub mod panic;
 pub mod serial;
 pub mod spi_read_multi;
 pub mod spi_read_single;
+pub mod timeit;
