@@ -18,6 +18,17 @@ macro_rules! offset {
 }
 
 fn main() {
+    let btim = unsafe { &*(0x0 as *const peripheral::tim::BTim) };
+
+    offset!(btim.cr1, 0x0);
+    offset!(btim.cr2, 0x4);
+    offset!(btim.dier, 0xc);
+    offset!(btim.sr, 0x10);
+    offset!(btim.egr, 0x14);
+    offset!(btim.cnt, 0x24);
+    offset!(btim.psc, 0x28);
+    offset!(btim.arr, 0x2c);
+
     let dbgmcu = unsafe { &*(0x0 as *const peripheral::dbgmcu::Dbgmcu) };
 
     offset!(dbgmcu.idcode, 0x0);
@@ -38,6 +49,27 @@ fn main() {
     offset!(gpio.afrl, 0x20);
     offset!(gpio.afrh, 0x24);
     offset!(gpio.brr, 0x28);
+
+    let gptim = unsafe { &*(0x0 as *const peripheral::tim::GpTim) };
+
+    offset!(gptim.cr1, 0x0);
+    offset!(gptim.cr2, 0x4);
+    offset!(gptim.smcr, 0x8);
+    offset!(gptim.dier, 0xc);
+    offset!(gptim.sr, 0x10);
+    offset!(gptim.egr, 0x14);
+    offset!(gptim.ccmr1, 0x18);
+    offset!(gptim.ccmr2, 0x1c);
+    offset!(gptim.ccer, 0x20);
+    offset!(gptim.cnt, 0x24);
+    offset!(gptim.psc, 0x28);
+    offset!(gptim.arr, 0x2c);
+    offset!(gptim.ccr1, 0x34);
+    offset!(gptim.ccr2, 0x38);
+    offset!(gptim.ccr3, 0x3c);
+    offset!(gptim.ccr4, 0x40);
+    offset!(gptim.dcr, 0x48);
+    offset!(gptim.dmar, 0x4c);
 
     let i2c = unsafe { &*(0x0 as *const peripheral::i2c::I2c) };
 
@@ -80,17 +112,6 @@ fn main() {
     offset!(spi.txcrcr, 0x18);
     offset!(spi.i2scfgr, 0x1C);
     offset!(spi.i2spr, 0x20);
-
-    let tim = unsafe { &*(0x0 as *const peripheral::tim::Tim) };
-
-    offset!(tim.cr1, 0x0);
-    offset!(tim.cr2, 0x4);
-    offset!(tim.dier, 0xc);
-    offset!(tim.sr, 0x10);
-    offset!(tim.egr, 0x14);
-    offset!(tim.cnt, 0x24);
-    offset!(tim.psc, 0x28);
-    offset!(tim.arr, 0x2c);
 
     let usart = unsafe { &*(0x0 as *const peripheral::usart::Usart) };
 
