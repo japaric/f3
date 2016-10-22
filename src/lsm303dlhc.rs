@@ -24,7 +24,7 @@ use I16x3;
 use peripheral;
 
 // Slave addresses
-const ACCELEROMETER: u8 = 0b0011001;
+const ACCELEROMETER: u8 = 0b001_1001;
 const MAGNETOMETER: u8 = 0b001_1110;
 
 // Register addresses
@@ -151,6 +151,6 @@ pub unsafe fn init() {
     // LSM303DLHC: configure the accelerometer to operate at 400 Hz
     write(ACCELEROMETER, CTRL_REG1_A, 0b0111_0111);
 
-    // LSM303DLHC: configure the magentometer to operate in continuous mode
+    // LSM303DLHC: configure the magnetometer to operate in continuous mode
     write(MAGNETOMETER, MR_REG_M, 0b00);
 }

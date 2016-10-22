@@ -103,7 +103,7 @@
 //! extern crate f3;
 //!
 //! #[export_name = "main"]
-//! pub fn main() -> ! {
+//! pub extern "C" fn main() -> ! {
 //!     // Your code goes here!
 //!
 //!     loop {}
