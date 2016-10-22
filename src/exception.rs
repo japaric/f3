@@ -147,8 +147,13 @@ pub unsafe extern "C" fn reset() -> ! {
         fn main();
     }
 
-    r0::zero_bss(&mut _sbss, &_ebss);
-    r0::init_data(&mut _sdata, &_edata, &_sidata);
+    if &_sbss as *const u32 as usize != &_ebss as *const u32 as usize {
+        r0::zero_bss(&mut _sbss, &_ebss);
+    }
+
+    if &_sdata as *const u32 as usize != &_edata as *const u32 as usize {
+        r0::init_data(&mut _sdata, &_edata, &_sidata);
+    }
 
     _init();
 
