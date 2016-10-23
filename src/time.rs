@@ -8,6 +8,7 @@ use peripheral::gptim::CntR;
 /// The inverse of this value is the length of a single tick in seconds.
 pub const FREQUENCY: u32 = ::APB1_CLOCK;
 
+#[derive(Clone, Copy)]
 pub struct Instant {
     cnt: CntR,
 }
