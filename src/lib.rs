@@ -128,7 +128,7 @@
 #![cfg_attr(all(target_arch = "arm",
                 feature = "default-exception-handler"),
             feature(core_intrinsics))]
-#![deny(warnings)]
+// #![deny(warnings)]
 #![feature(asm)]
 #![feature(lang_items)]
 #![feature(macro_reexport)]
@@ -160,7 +160,7 @@ pub mod led;
 pub mod lsm303dlhc;
 pub mod peripheral;
 pub mod serial;
-pub mod timeit;
+pub mod time;
 
 #[derive(Debug)]
 pub struct I16x3 {
@@ -180,7 +180,7 @@ pub unsafe fn _init() {
     led::init();
     lsm303dlhc::init();
     serial::init();
-    timeit::init();
+    time::init();
 }
 
 // Hz
