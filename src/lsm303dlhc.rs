@@ -8,8 +8,8 @@
 //! # Accelerometer
 //!
 //! - Sample rate: `400 Hz`
-//! - Input range: `[-2g, +2g]`
-//! - Gain: `1 mg / LSB`
+//! - Input range: `[-8g, +8g]`
+//! - Gain: `8 mg / LSB`
 //! - Output range: 16 bits (`i16`)
 //!
 //! # Magnetometer
@@ -29,6 +29,7 @@ const MAGNETOMETER: u8 = 0b001_1110;
 
 // Register addresses
 const CTRL_REG1_A: u8 = 0x20;
+const CTRL_REG4_A: u8 = 0x23;
 const MR_REG_M: u8 = 0x02;
 const OUT_X_H_M: u8 = 0x3;
 const OUT_X_L_A: u8 = 0x28;
@@ -150,6 +151,15 @@ pub unsafe fn init() {
 
     // LSM303DLHC: configure the accelerometer to operate at 400 Hz
     write(ACCELEROMETER, CTRL_REG1_A, 0b0111_0111);
+
+    // LSM303DLHC: configure the accelerometer to operate in the [-8g, +8g]
+    // range
+    // TODO use the `ref_slice` crate
+    let mut register = [0u8];
+    read(ACCELEROMETER, CTRL_REG4_A, &mut register);
+    register[0] &= !(0b11 << 4);
+    register[0] |= 0b10 << 4;
+    write(ACCELEROMETER, CTRL_REG4_A, register[0]);
 
     // LSM303DLHC: configure the magnetometer to operate in continuous mode
     write(MAGNETOMETER, MR_REG_M, 0b00);
