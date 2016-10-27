@@ -73,6 +73,7 @@ unsafe fn write(register: u8, value: u8) {
     gpioe.bsrr.write(|w| w.bs3(true));
 }
 
+/// Reads the angular rate
 pub fn angular_rate() -> I16x3 {
     let mut bytes = [0; 6];
 

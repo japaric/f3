@@ -9,13 +9,21 @@
 //! to the user to ensure that no //!   unsynchonized concurrent access is
 //! performed through these references.
 
+#[allow(missing_docs)]
 pub mod btim;
+#[allow(missing_docs)]
 pub mod dbgmcu;
+#[allow(missing_docs)]
 pub mod gpio;
+#[allow(missing_docs)]
 pub mod gptim;
+#[allow(missing_docs)]
 pub mod i2c;
+#[allow(missing_docs)]
 pub mod rcc;
+#[allow(missing_docs)]
 pub mod spi;
+#[allow(missing_docs)]
 pub mod usart;
 
 use self::btim::BTim;
@@ -82,114 +90,142 @@ const DBGMCU: usize = 0xe0042000;
 // const SYSCFG: usize = 0x40010000;
 // const OPAMP: usize = 0x40010038;
 
+/// DBGMCU register block (&'static)
 pub fn dbgmcu() -> &'static Dbgmcu {
     unsafe { deref(DBGMCU) }
 }
 
+/// DBGMCU register block (&'static mut)
 pub unsafe fn dbgmcu_mut() -> &'static mut Dbgmcu {
     deref_mut(DBGMCU)
 }
 
+/// GPIOA register block (&'static)
 pub fn gpioa() -> &'static Gpio {
     unsafe { deref(GPIOA) }
 }
 
+/// GPIOA register block (&'static mut)
 pub unsafe fn gpioa_mut() -> &'static mut Gpio {
     deref_mut(GPIOA)
 }
 
+/// GPIOB register block (&'static)
 pub fn gpiob() -> &'static Gpio {
     unsafe { deref(GPIOB) }
 }
 
+/// GPIOB register block (&'static mut)
 pub unsafe fn gpiob_mut() -> &'static mut Gpio {
     deref_mut(GPIOB)
 }
 
+/// GPIOC register block (&'static)
 pub fn gpioc() -> &'static Gpio {
     unsafe { deref(GPIOC) }
 }
 
+/// GPIOC register block (&'static mut)
 pub unsafe fn gpioc_mut() -> &'static mut Gpio {
     deref_mut(GPIOC)
 }
 
+/// GPIOD register block (&'static)
 pub fn gpiod() -> &'static Gpio {
     unsafe { deref(GPIOD) }
 }
 
+/// GPIOD register block (&'static mut)
 pub unsafe fn gpiod_mut() -> &'static mut Gpio {
     deref_mut(GPIOD)
 }
 
+/// GPIOE register block (&'static)
 pub fn gpioe() -> &'static Gpio {
     unsafe { deref(GPIOE) }
 }
 
+/// GPIOE register block (&'static mut)
 pub unsafe fn gpioe_mut() -> &'static mut Gpio {
     deref_mut(GPIOE)
 }
 
+/// GPIOF register block (&'static)
 pub fn gpiof() -> &'static Gpio {
     unsafe { deref(GPIOF) }
 }
 
+/// GPIOF register block (&'static mut)
 pub unsafe fn gpiof_mut() -> &'static mut Gpio {
     deref_mut(GPIOF)
 }
 
+/// I2C1 register block (&'static)
 pub fn i2c1() -> &'static I2c {
     unsafe { deref(I2C1) }
 }
 
+/// I2C1 register block (&'static mut)
 pub unsafe fn i2c1_mut() -> &'static mut I2c {
     deref_mut(I2C1)
 }
 
+/// RCC register block (&'static)
 pub fn rcc() -> &'static Rcc {
     unsafe { deref(RCC) }
 }
 
+/// RCC register block (&'static mut)
 pub unsafe fn rcc_mut() -> &'static mut Rcc {
     deref_mut(RCC)
 }
 
+/// SPI1 register block (&'static)
 pub fn spi1() -> &'static Spi {
     unsafe { deref(SPI1) }
 }
 
+/// SPI1 register block (&'static mut)
 pub unsafe fn spi1_mut() -> &'static mut Spi {
     deref_mut(SPI1)
 }
 
-pub fn tim6() -> &'static BTim {
-    unsafe { deref(TIM6) }
-}
-
+/// TIM2 register block (&'static)
 pub fn tim2() -> &'static GpTim {
     unsafe { deref(TIM2) }
 }
 
+/// TIM2 register block (&'static mut)
 pub unsafe fn tim2_mut() -> &'static mut GpTim {
     deref_mut(TIM2)
 }
 
+/// TIM6 register block (&'static)
+pub fn tim6() -> &'static BTim {
+    unsafe { deref(TIM6) }
+}
+
+/// TIM6 register block (&'static mut)
 pub unsafe fn tim6_mut() -> &'static mut BTim {
     deref_mut(TIM6)
 }
 
+/// TIM7 register block (&'static)
 pub fn tim7() -> &'static BTim {
     unsafe { deref(TIM7) }
 }
 
+/// TIM7 register block (&'static mut)
 pub unsafe fn tim7_mut() -> &'static mut BTim {
     deref_mut(TIM7)
 }
 
+/// USART1 register block (&'static)
 pub fn usart1() -> &'static Usart {
     unsafe { deref(USART1) }
 }
 
+/// USART1 register block (&'static mut)
 pub unsafe fn usart1_mut() -> &'static mut Usart {
     deref_mut(USART1)
 }
@@ -207,10 +243,12 @@ unsafe fn deref_mut<T>(address: usize) -> &'static mut T {
 use core::ptr;
 
 impl self::spi::Dr {
+    /// Reads a byte (`u8`) from this register
     pub fn read_u8(&self) -> u8 {
         unsafe { ptr::read_volatile(self as *const _ as *const u8) }
     }
 
+    /// Writes a byte (`u8`) to this register
     pub fn write_u8(&mut self, value: u8) {
         unsafe { ptr::write_volatile(self as *mut _ as *mut u8, value) }
     }

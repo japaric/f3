@@ -128,7 +128,8 @@
 #![cfg_attr(all(target_arch = "arm",
                 feature = "default-exception-handler"),
             feature(core_intrinsics))]
-// #![deny(warnings)]
+#![deny(missing_docs)]
+#![deny(warnings)]
 #![feature(asm)]
 #![feature(lang_items)]
 #![feature(macro_reexport)]
@@ -162,10 +163,14 @@ pub mod peripheral;
 pub mod serial;
 pub mod time;
 
+/// Three `i16` integers packed in a struct
 #[derive(Debug)]
 pub struct I16x3 {
+    /// X component
     pub x: i16,
+    /// Y component
     pub y: i16,
+    /// Z component
     pub z: i16,
 }
 

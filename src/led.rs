@@ -12,6 +12,7 @@ pub static LEDS: [Led; 8] = [Led { i: 9 },
                              Led { i: 15 },
                              Led { i: 8 }];
 
+/// A single LED
 pub struct Led {
     i: u8,
 }
@@ -78,17 +79,26 @@ pub unsafe fn init() {
 
 /// An enum over the LEDs, each LED has associated to it a direction
 pub enum Direction {
+    /// North
     North,
+    /// Northeast
     NorthEast,
+    /// East
     East,
+    /// Southeast
     SouthEast,
+    /// South
     South,
+    /// Southwest
     SouthWest,
+    /// West
     West,
+    /// Northwest
     NorthWest,
 }
 
 impl Direction {
+    /// Turns on this LED
     pub fn on(&self) {
         match *self {
             Direction::North => LEDS[0].on(),
