@@ -20,10 +20,7 @@
 //! - Gain Z: `980 LSB / Gauss`
 //! - Output range: 12 bits (`[-2048, +2047]`)
 
-use ref_slice;
-
-use I16x3;
-use peripheral;
+use futuro::prelude::Future;
 
 // Slave addresses
 const ACCELEROMETER: u8 = 0b001_1001;
@@ -35,136 +32,130 @@ const CTRL_REG4_A: u8 = 0x23;
 const MR_REG_M: u8 = 0x02;
 const OUT_X_H_M: u8 = 0x3;
 const OUT_X_L_A: u8 = 0x28;
+const MULTI_READ: u8 = 1 << 7;
 
-unsafe fn read(slave: u8, register: u8, bytes: &mut [u8]) {
-    let i2c1 = peripheral::i2c1_mut();
-    i2c1.cr2.write(|w| {
-        w.sadd1(slave).rd_wrn(false).nbytes(1).start(true).autoend(false)
-    });
+use i2c::{Address, Free, I2c};
 
-    while !i2c1.isr.read().txis() {}
-    i2c1.txdr.write(|w| w.txdata(register));
+/// Acceleration reading
+pub struct Acceleration {
+    buffer: [u8; 6],
+}
 
-    while !i2c1.isr.read().tc() {}
+impl Acceleration {
+    /// Computes the X component
+    pub fn x(&self) -> i16 {
+        let out_x_l_a = u16::from(self.buffer[0]);
+        let out_x_h_a = u16::from(self.buffer[1]);
 
-    i2c1.cr2.modify(|_, w| {
-        w.nbytes(bytes.len() as u8).rd_wrn(true).start(true).autoend(true)
-    });
+        ((out_x_h_a << 8) + out_x_l_a) as i16
+    }
 
-    for byte in bytes {
-        while !i2c1.isr.read().rxne() {}
+    /// Computes the Y component
+    pub fn y(&self) -> i16 {
+        let out_y_l_a = u16::from(self.buffer[2]);
+        let out_y_h_a = u16::from(self.buffer[3]);
 
-        *byte = i2c1.rxdr.read().rxdata();
+        ((out_y_h_a << 8) + out_y_l_a) as i16
+    }
+
+    /// Computes the Z component
+    pub fn z(&self) -> i16 {
+        let out_z_l_a = u16::from(self.buffer[4]);
+        let out_z_h_a = u16::from(self.buffer[5]);
+
+        ((out_z_h_a << 8) + out_z_l_a) as i16
     }
 }
 
-unsafe fn write(slave: u8, register: u8, value: u8) {
-    let i2c1 = peripheral::i2c1_mut();
-    i2c1.cr2.write(|w| {
-        w.sadd1(slave).rd_wrn(false).nbytes(2).start(true).autoend(true)
-    });
-
-    while !i2c1.isr.read().txis() {}
-    i2c1.txdr.write(|w| w.txdata(register));
-
-    while !i2c1.isr.read().txis() {}
-    i2c1.txdr.write(|w| w.txdata(value));
+/// Magnetic field reading
+pub struct MagneticField {
+    buffer: [u8; 6],
 }
 
-/// Reads the acceleration
-pub fn acceleration() -> I16x3 {
-    const MULTI_READ: u8 = 1 << 7;
+impl MagneticField {
+    /// Computes the X component
+    pub fn x(&self) -> i16 {
+        let out_x_h_m = u16::from(self.buffer[0]);
+        let out_x_l_m = u16::from(self.buffer[1]);
 
-    let mut bytes = [0; 6];
-    unsafe {
-        read(ACCELEROMETER, MULTI_READ | OUT_X_L_A, &mut bytes);
+        ((out_x_h_m << 8) + out_x_l_m) as i16
     }
 
-    let out_x_l_a = u16::from(bytes[0]);
-    let out_x_h_a = u16::from(bytes[1]);
-    let out_y_l_a = u16::from(bytes[2]);
-    let out_y_h_a = u16::from(bytes[3]);
-    let out_z_l_a = u16::from(bytes[4]);
-    let out_z_h_a = u16::from(bytes[5]);
+    /// Computes the Y component
+    pub fn y(&self) -> i16 {
+        let out_y_h_m = u16::from(self.buffer[4]);
+        let out_y_l_m = u16::from(self.buffer[5]);
 
-    I16x3 {
-        x: ((out_x_h_a << 8) + out_x_l_a) as i16,
-        y: ((out_y_h_a << 8) + out_y_l_a) as i16,
-        z: ((out_z_h_a << 8) + out_z_l_a) as i16,
+        ((out_y_h_m << 8) + out_y_l_m) as i16
+    }
+
+    /// Computes the Z component
+    pub fn z(&self) -> i16 {
+        let out_z_h_m = u16::from(self.buffer[2]);
+        let out_z_l_m = u16::from(self.buffer[3]);
+
+        ((out_z_h_m << 8) + out_z_l_m) as i16
     }
 }
 
-/// Reads the magnetic field
-pub fn magnetic_field() -> I16x3 {
-    let mut bytes = [0; 6];
-
-    unsafe {
-        read(MAGNETOMETER, OUT_X_H_M, &mut bytes);
-    }
-
-    let out_x_h_m = u16::from(bytes[0]);
-    let out_x_l_m = u16::from(bytes[1]);
-    let out_z_h_m = u16::from(bytes[2]);
-    let out_z_l_m = u16::from(bytes[3]);
-    let out_y_h_m = u16::from(bytes[4]);
-    let out_y_l_m = u16::from(bytes[5]);
-
-    I16x3 {
-        x: ((out_x_h_m << 8) + out_x_l_m) as i16,
-        y: ((out_y_h_m << 8) + out_y_l_m) as i16,
-        z: ((out_z_h_m << 8) + out_z_l_m) as i16,
-    }
+/// LSM303DLHC
+pub struct Lsm303dlhc {
+    i2c: I2c<Free>,
 }
 
-/// Initializes the LSM303DLHC
-///
-/// # Safety
-///
-/// - Must be called once
-/// - Must be called in an interrupt-free environment
-pub unsafe fn init() {
-    let gpiob = peripheral::gpiob_mut();
-    let i2c1 = peripheral::i2c1_mut();
-    let rcc = peripheral::rcc_mut();
+impl Lsm303dlhc {
+    /// Connects to and initializes the LSM303DLHC
+    pub fn new(i2c: I2c<Free>) -> Lsm303dlhc {
+        // configure the accelerometer to operate at 400 Hz
+        // configure the accelerometer to operate in the [-8g, +8g] range
+        // configure the magnetometer to operate in continuous mode
+        let (i2c, mut register) =
+            i2c.write_all(Address::u7(ACCELEROMETER),
+                           [CTRL_REG1_A, 0b0111_0111])
+                .wait()
+                .write(None, CTRL_REG4_A)
+                .wait()
+                .read(None)
+                .wait();
 
-    // RCC: enable the I2C1 peripheral
-    rcc.ahbenr.modify(|_, w| w.iopben(true));
-    rcc.apb1enr.modify(|_, w| w.i2c1en(true));
+        register &= !(0b11 << 4);
+        register |= 0b10 << 4;
 
-    // GPIOB: configure PB6 and PB7 for I2C use
-    // AFRL6 = 4 (I2C1_SCL)
-    // AFRL7 = 4 (I2C1_SDA)
-    // MODER* = 0b10 (Alternate function)
-    gpiob.afrl.modify(|_, w| w.afrl6(4).afrl7(4));
-    gpiob.moder.modify(|_, w| w.moder6(0b10).moder7(0b10));
+        let i2c = i2c.write_all(None, [CTRL_REG4_A, register])
+            .wait()
+            .stop()
+            .wait()
+            .write_all(Address::u7(MAGNETOMETER), [MR_REG_M, 0b00])
+            .wait()
+            .stop()
+            .wait();
 
-    // Configure for "fast mode" (400 KHz)
-    // PRESC:  t_I2CCLK = (0 + 1) / 8 MHz = 125 ns
-    // SCLL:   t_SCLL   = (9 + 1) * t_I2CCLK = 1.25 us
-    // SCLH:   t_SCLH   = (3 + 1) * t_I2CCLK = 0.5 us
-    //
-    // t_SYNC1 + t_SYNC2 > 4 * t_I2CCLK = 0.5 us
-    // t_SCL = t_SYNC1 + t_SYNC2 t_SCLL + t_SCLH ~= 2.5 us
-    i2c1.timingr.write(|w| w.presc(0).scll(9).sclh(3).sdadel(1).scldel(3));
-    i2c1.cr2.write(|w| w.add10(false));
+        Lsm303dlhc { i2c: i2c }
+    }
 
-    // Enable the peripheral
-    i2c1.cr1.write(|w| w.pe(true));
+    /// Reads the acceleration
+    pub fn acceleration(self) -> impl Future<Item = (Self, Acceleration)> {
+        self.i2c
+            .write(Address::u7(ACCELEROMETER), MULTI_READ | OUT_X_L_A)
+            .and_then(|i2c| i2c.read_exact(None, [0; 6]))
+            .and_then(|(i2c, buffer)| {
+                i2c.stop().map(move |i2c| {
 
-    // LSM303DLHC: configure the accelerometer to operate at 400 Hz
-    write(ACCELEROMETER, CTRL_REG1_A, 0b0111_0111);
+                    (Lsm303dlhc { i2c: i2c }, Acceleration { buffer: buffer })
+                })
+            })
+    }
 
-    // LSM303DLHC: configure the accelerometer to operate in the [-8g, +8g]
-    // range
-    // TODO use the `ref_slice` crate
-    let mut register = 0u8;
-    read(ACCELEROMETER,
-         CTRL_REG4_A,
-         ref_slice::ref_slice_mut(&mut register));
-    register &= !(0b11 << 4);
-    register |= 0b10 << 4;
-    write(ACCELEROMETER, CTRL_REG4_A, register);
+    /// Reads the magnetic field
+    pub fn magnetic_field(self) -> impl Future<Item = (Self, MagneticField)> {
+        self.i2c
+            .write(Address::u7(MAGNETOMETER), OUT_X_H_M)
+            .and_then(|i2c| i2c.read_exact(None, [0; 6]))
+            .and_then(|(i2c, buffer)| {
+                i2c.stop().map(move |i2c| {
 
-    // LSM303DLHC: configure the magnetometer to operate in continuous mode
-    write(MAGNETOMETER, MR_REG_M, 0b00);
+                    (Lsm303dlhc { i2c: i2c }, MagneticField { buffer: buffer })
+                })
+            })
+    }
 }
