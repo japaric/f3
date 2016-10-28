@@ -25,7 +25,7 @@ SECTIONS
   .text ORIGIN(FLASH) :
   {
     /* Vector table */
-    LONG(ORIGIN(RAM) + LENGTH(RAM));
+    LONG(ORIGIN(CCRAM) + LENGTH(CCRAM));
     LONG(_reset + 1);
     KEEP(*(.text.exceptions));
     _eexceptions = .;");
