@@ -20,6 +20,8 @@
 //! - Gain Z: `980 LSB / Gauss`
 //! - Output range: 12 bits (`[-2048, +2047]`)
 
+use ref_slice;
+
 use I16x3;
 use peripheral;
 
@@ -155,11 +157,13 @@ pub unsafe fn init() {
     // LSM303DLHC: configure the accelerometer to operate in the [-8g, +8g]
     // range
     // TODO use the `ref_slice` crate
-    let mut register = [0u8];
-    read(ACCELEROMETER, CTRL_REG4_A, &mut register);
-    register[0] &= !(0b11 << 4);
-    register[0] |= 0b10 << 4;
-    write(ACCELEROMETER, CTRL_REG4_A, register[0]);
+    let mut register = 0u8;
+    read(ACCELEROMETER,
+         CTRL_REG4_A,
+         ref_slice::ref_slice_mut(&mut register));
+    register &= !(0b11 << 4);
+    register |= 0b10 << 4;
+    write(ACCELEROMETER, CTRL_REG4_A, register);
 
     // LSM303DLHC: configure the magnetometer to operate in continuous mode
     write(MAGNETOMETER, MR_REG_M, 0b00);

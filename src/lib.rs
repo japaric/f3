@@ -142,6 +142,7 @@ extern crate cortex_m;
 extern crate compiler_builtins_snapshot;
 #[cfg(feature = "static-ram")]
 extern crate r0;
+extern crate ref_slice;
 extern crate volatile_register;
 
 #[macro_use]
