@@ -20,8 +20,7 @@ main() {
     rustfmt src/peripheral/*.rs
     set -e
 
-    xargo build --target thumbv7em-none-eabi
+    xargo build --target thumbv7em-none-eabihf
 }
 
 main
-
