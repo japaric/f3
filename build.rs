@@ -82,6 +82,7 @@ SECTIONS
 /* HACK to make these symbols overrideable by _dependencies_ (they were
    already overridable by the top crate), we declare them as undefined
    (EXTERN) here. */
+EXTERN(__aeabi_memclr4);
 EXTERN(_default_exception_handler);
 EXTERN(_init);
 
