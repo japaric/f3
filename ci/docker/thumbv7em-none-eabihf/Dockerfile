@@ -5,8 +5,6 @@ RUN apt-get install -y --no-install-recommends \
     curl \
     gcc \
     gcc-arm-none-eabi \
-    libc6-dev\
-    libcurl4-openssl-dev \
-    libssh2-1
-RUN curl -sf "https://raw.githubusercontent.com/japaric/rust-everywhere/master/install.sh" | \
-    bash -s -- --at /usr/bin --from japaric/xargo --for x86_64-unknown-linux-gnu --tag v0.1.13
+    libc6-dev
+RUN curl -sf "https://japaric.github.io/trust/install.sh" | \
+    sh -s -- --git japaric/xargo --tag v0.2.0 --target x86_64-unknown-linux-gnu --to /usr/bin
