@@ -7,7 +7,6 @@
 use cortex_m::{self, Handler};
 #[cfg(feature = "default-exception-handler")]
 use cortex_m::StackFrame;
-use r0;
 
 /// Kind of exception
 #[derive(Debug)]
@@ -147,12 +146,19 @@ pub unsafe extern "C" fn reset() -> ! {
         fn main();
     }
 
-    if &_sbss as *const u32 as usize != &_ebss as *const u32 as usize {
-        r0::zero_bss(&mut _sbss, &_ebss);
-    }
+    match () {
+        #[cfg(feature = "static-ram")]
+        () => {
+            if &_sbss as *const u32 as usize != &_ebss as *const u32 as usize {
+                ::r0::zero_bss(&mut _sbss, &_ebss);
+            }
 
-    if &_sdata as *const u32 as usize != &_edata as *const u32 as usize {
-        r0::init_data(&mut _sdata, &_edata, &_sidata);
+            if &_sdata as *const u32 as usize != &_edata as *const u32 as usize {
+                ::r0::init_data(&mut _sdata, &_edata, &_sidata);
+            }
+        }
+        #[cfg(not(feature = "static-ram"))]
+        () => {}
     }
 
     _init();
