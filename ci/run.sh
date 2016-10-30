@@ -15,7 +15,6 @@ main() {
 
     # test that disabling default features work
     xargo build --target $target --no-default-features
-    xargo build --target $target --no-default-features --example minimal
 
     local flags=
     for example in $(ls examples); do
@@ -24,13 +23,13 @@ main() {
                 continue
                 ;;
             override-default-exception-handler.rs)
-                flags="--target $target --example ${example%.*} --no-default-features --features \"compiler-builtins-snapshot/memcpy default-init default-panic-fmt\""
+                flags="--target $target --example ${example%.*} --no-default-features --features \"default-init default-panic-fmt\""
                 ;;
             override-init.rs)
-                flags="--target $target --example ${example%.*} --no-default-features --features \"compiler-builtins-snapshot/memcpy default-exception-handler default-panic-fmt\""
+                flags="--target $target --example ${example%.*} --no-default-features --features \"default-exception-handler default-panic-fmt\""
                 ;;
             override-panic-fmt.rs)
-                flags="--target $target --example ${example%.*} --no-default-features --features \"compiler-builtins-snapshot/memcpy default-exception-handler default-init\""
+                flags="--target $target --example ${example%.*} --no-default-features --features \"default-exception-handler default-init\""
                 continue
                 ;;
             *)
