@@ -1,3 +1,5 @@
+//! `intrinsics::abort` triggers an exception
+
 #![feature(core_intrinsics)]
 #![no_main]
 #![no_std]

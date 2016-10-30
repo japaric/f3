@@ -1,6 +1,7 @@
 // Auto-generated. Do not modify!
 //! Examples
 
+pub mod abort;
 pub mod angle_meter;
 pub mod exception;
 pub mod fpu;
