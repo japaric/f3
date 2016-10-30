@@ -3,7 +3,6 @@ set -ex
 main() {
     local target=$1
     local profiles="debug release"
-    local weak_symbols=
 
     if [ $target = x86_64-unknown-linux-gnu ]; then
         cargo build
@@ -16,6 +15,7 @@ main() {
 
     # test that disabling default features work
     xargo build --target $target --no-default-features
+    xargo build --target $target --no-default-features --example minimal
 
     local flags=
     for example in $(ls examples); do
