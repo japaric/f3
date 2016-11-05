@@ -22,6 +22,9 @@ main() {
             _test.rs | *.rs.bk)
                 continue
                 ;;
+            minimal.rs)
+                flags="--target $target --example ${example%.*} --no-default-features"
+                ;;
             override-default-exception-handler.rs)
                 flags="--target $target --example ${example%.*} --no-default-features --features \"default-init default-panic-fmt\""
                 ;;
