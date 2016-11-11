@@ -11,7 +11,7 @@
 //! use core::intrinsics;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     unsafe { intrinsics::abort() }
 //! }
 //! ```

@@ -12,7 +12,7 @@
 //! use f3::peripheral;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     // Accelerometer
 //!     const SLAVE_ADDRESS: u8 = 0b0011001;
 //!     // CTRL_REG1_A

@@ -31,7 +31,7 @@
 //! }
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     timeit!(delay::ms(1_000));
 //!     timeit!(delay::ms(1_000));
 //!     timeit!(delay::ms(1_000));

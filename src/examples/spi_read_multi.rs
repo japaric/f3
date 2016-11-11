@@ -11,7 +11,7 @@
 //! use f3::peripheral;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     // OUT_X_L
 //!     const REGISTER_ADDRESS_START: u8 = 0x28;
 //!     // Read the register

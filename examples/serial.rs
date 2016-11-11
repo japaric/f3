@@ -7,7 +7,7 @@
 extern crate f3;
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     uprintln!("The quick brown fox jumps over the lazy dog.");
 
     loop {}

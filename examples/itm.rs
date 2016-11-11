@@ -56,7 +56,7 @@
 extern crate f3;
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     iprintln!("Hello, world!");
 
     loop {}

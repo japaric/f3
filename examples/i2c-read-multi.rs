@@ -10,7 +10,7 @@ extern crate f3;
 use f3::peripheral;
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     // Magnetometer
     const SLAVE_ADDRESS: u8 = 0b001_1110;
     // CRA_REG_M

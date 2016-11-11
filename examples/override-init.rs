@@ -8,7 +8,7 @@
 extern crate f3;
 
 #[export_name = "_init"]
-pub extern "C" fn init() {
+pub fn init() {
     unsafe {
         // You'll hit this breakpoint first and ...
         bkpt!();
@@ -16,7 +16,7 @@ pub extern "C" fn init() {
 }
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     unsafe {
         // ... then you'll reach this breakpoint.
         bkpt!();

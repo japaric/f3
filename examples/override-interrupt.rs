@@ -10,7 +10,7 @@ extern crate f3;
 use f3::delay;
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     // This function uses the TIM7 interrupt under the hood. After a second has
     // passed, the `_tim7` interrupt handler will be called and ...
     delay::ms(1_000);

@@ -9,7 +9,7 @@
 //! extern crate f3;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     loop {}
 //! }
 //!
@@ -19,7 +19,7 @@
 //! }
 //!
 //! #[export_name = "_default_exception_handler"]
-//! pub fn handler() {
+//! pub extern "C" fn handler() {
 //!     loop {}
 //! }
 //!

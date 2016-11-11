@@ -18,7 +18,7 @@
 //! use m::Float;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     loop {
 //!         let I16x3 { x, y, .. } = lsm303dlhc::magnetic_field();
 //!

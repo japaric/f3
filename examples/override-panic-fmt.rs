@@ -10,7 +10,7 @@ extern crate f3;
 use core::fmt::Arguments;
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     // Panic here and ...
     panic!("Hello, world!")
 }

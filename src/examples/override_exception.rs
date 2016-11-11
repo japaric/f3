@@ -10,7 +10,7 @@
 //! extern crate f3;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     let _hard_fault_exception = unsafe {
 //!         // After you hit this exception ...
 //!         *((0x4000_0000 + 40 * 1024) as *const u32)

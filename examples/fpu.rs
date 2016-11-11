@@ -8,7 +8,7 @@
 extern crate f3;
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     let x = black_box(2.5_f32);
     let y = black_box(3.5_f32);
     let z = black_box(x * y);

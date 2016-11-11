@@ -135,7 +135,9 @@ pub unsafe extern "C" fn reset() -> ! {
         static _sidata: u32;
         static mut _sbss: u32;
         static mut _sdata: u32;
+    }
 
+    extern "Rust" {
         #[cfg(not(feature = "default-init"))]
         fn _init();
 
@@ -149,11 +151,11 @@ pub unsafe extern "C" fn reset() -> ! {
     match () {
         #[cfg(feature = "static-ram")]
         () => {
-            if &_sbss as *const u32 as usize != &_ebss as *const u32 as usize {
+            if &_sbss as *const _ as usize != &_ebss as *const _ as usize {
                 ::r0::zero_bss(&mut _sbss, &_ebss);
             }
 
-            if &_sdata as *const u32 as usize != &_edata as *const u32 as usize {
+            if &_sdata as *const _ as usize != &_edata as *const _ as usize {
                 ::r0::init_data(&mut _sdata, &_edata, &_sidata);
             }
         }

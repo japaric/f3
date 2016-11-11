@@ -68,7 +68,7 @@
 //! extern crate f3;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     // This reads beyond the boundary of available RAM (40KiB starting at
 //!     // 0x4000_0000) and triggers an exception
 //!     let _hard_fault_exception =

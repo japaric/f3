@@ -8,7 +8,7 @@
 extern crate f3;
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     // After you hit this exception ...
     let _exception = unsafe { *((0x4000_0000 + 40 * 1024) as *const u32) };
 

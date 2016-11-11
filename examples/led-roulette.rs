@@ -11,7 +11,7 @@ use f3::led::LEDS;
 use f3::delay;
 
 #[export_name = "main"]
-pub extern "C" fn main() -> ! {
+pub fn main() -> ! {
     loop {
         for (current, next) in LEDS.iter()
             .zip(LEDS.iter().skip(1).chain(iter::once(&LEDS[0]))) {

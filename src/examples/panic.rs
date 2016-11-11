@@ -23,7 +23,7 @@
 //! extern crate f3;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     panic!("Hello, world!")
 //! }
 //! ```
