@@ -27,12 +27,12 @@ SECTIONS
     /* Vector table */
     LONG(ORIGIN(RAM) + LENGTH(RAM));
     LONG(_reset + 1);
-    KEEP(*(.text.exceptions));
+    KEEP(*(.rodata._EXCEPTIONS));
     _eexceptions = .;");
 
     if interrupts {
         ld.push_str("
-    KEEP(*(.text.interrupts));
+    KEEP(*(.rodata._INTERRUPTS));
     _einterrupts = .;");
     }
 

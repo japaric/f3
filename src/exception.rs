@@ -87,8 +87,7 @@ pub unsafe extern "C" fn default_handler(sf: &StackFrame) -> ! {
 /// vector table.
 ///
 /// `None` indicates that the spot is RESERVED.
-#[link_section = ".text.exceptions"]
-#[no_mangle]
+#[export_name = "_EXCEPTIONS"]
 pub static EXCEPTIONS: [Option<Handler>; 14] = [Some(_nmi),
                                                 Some(_hard_fault),
                                                 Some(_memmanage_fault),
