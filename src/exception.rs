@@ -87,6 +87,7 @@ pub unsafe extern "C" fn default_handler(sf: &StackFrame) -> ! {
 /// vector table.
 ///
 /// `None` indicates that the spot is RESERVED.
+#[doc(hidden)]
 #[export_name = "_EXCEPTIONS"]
 pub static EXCEPTIONS: [Option<Handler>; 14] = [Some(_nmi),
                                                 Some(_hard_fault),
@@ -123,6 +124,7 @@ extern "C" {
 }
 
 /// Reset handler
+#[doc(hidden)]
 #[export_name = "_reset"]
 pub unsafe extern "C" fn reset() -> ! {
     #[cfg(feature = "default-init")]

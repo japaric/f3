@@ -10,31 +10,35 @@
 //! # Features
 //!
 //! - High-level API over LEDs, sensors, timers, etc.
+//!
 //! - An `iprint!` family of macros that sink their output to the ITM
 //!   (Instrumentation Trace Macrocell) so you send data to the host over the
 //!   same USB cable that you are using to debug your device.
+//!
 //! - By default, `panic!`s also sink their messages to the ITM
+//!
+//! - An `uprint!` family of macros that send their messages through the Serial
+//!   interface.
+//!
 //! - By default, an informative exception handler that tells you what went
 //!   wrong.
+//!
 //! - By default, everything (LEDs, sensors, etc) is initialized before the user
 //!   entry point, `main`. So everything Just Works out of the box.
+//!
 //! - Plenty of examples
-//!
-//! Also, all the "default" behaviors can be overridden:
-//!
-//! - The default exception handler
-//! - The default `panic_fmt` implementation
-//! - The default system initialization routine that runs before main.
 //!
 //! # Requirements and starter code
 //!
-//! Today, you need these 7 things, one of them optional, but hopefully you
+//! Today, you need these 6 things, one of them optional, but hopefully you
 //! won't need 3 of them in the future:
 //!
-//! - Nightly Rust compiler: `rustup default nightly`
-//! - [Xargo](https://crates.io/crates/xargo) version 0.1.12 or newer. (After
+//! - Nightly Rust compiler newer than 2016-10-05: `rustup default nightly`
+//!
+//! - [Xargo](https://crates.io/crates/xargo) version 0.1.13 or newer. (After
 //!   [rust-lang/rfcs#1133](https://github.com/rust-lang/rfcs/pull/1133) gets
 //!   accepted and implemented you won't need Xargo anymore)
+//!
 //! - A binary Cargo project that depends on this crate.
 //!
 //! ``` text
@@ -72,27 +76,6 @@
 //! ]
 //! ```
 //!
-//! - This target specification file. (You won't need this after 2016-10-05 as
-//!   these targets have already landed
-//!   [in the compiler](https://github.com/rust-lang/rust/pull/36874))
-//!
-//! ``` text
-//! $ cat thumbv7em-none-eabihf.json
-//! {
-//!     "arch": "arm",
-//!     "data-layout": "e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64",
-//!     "executables": true,
-//!     "features": "+vfp4,+d16,+fp-only-sp",
-//!     "linker": "arm-none-eabi-gcc",
-//!     "llvm-target": "thumbv7em-none-eabihf",
-//!     "os": "none",
-//!     "panic-strategy": "abort",
-//!     "relocation-model": "static",
-//!     "target-endian": "little",
-//!     "target-pointer-width": "32"
-//! }
-//! ```
-//!
 //! - And this starter code:
 //!
 //! ``` text
@@ -103,7 +86,7 @@
 //! extern crate f3;
 //!
 //! #[export_name = "main"]
-//! pub extern "C" fn main() -> ! {
+//! pub fn main() -> ! {
 //!     // Your code goes here!
 //!
 //!     loop {}
@@ -116,10 +99,56 @@
 //! $ xargo build [--target thumbv7em-none-eabihf] [--release]
 //! ```
 //!
-//! Check out the [Copper] book for instructions on how to Flash and Debug this
+//! Check out my [Copper] book for instructions on how to Flash and Debug this
 //! program!
 //!
-//! [Copper]: http://japaric.github.io/copper/
+//! [Copper]: https://japaric.github.io/copper/
+//!
+//! Also, check out my [Discovery] book for an introductory course in
+//! microcontrollers based on the STM32F3DISCOVERY.
+//!
+//! [Discovery]: https://japaric.github.io/discovery
+//!
+//! # Overriding default behaviors
+//!
+//! Cargo features can be used to disable/override some default behaviors:
+//!
+//! - "default-exception-handler". If disabled, the default exception handler
+//!   can be overridden using the `_default_exception_handler` symbol
+//!   (`extern "C" fn`).
+//!
+//! - "default-init". If disabled, the pre-main initialization routine can be
+//!   overridden via the `_init` symbol (`fn`).
+//!
+//! - "default-panic-fmt". If disabled, you can override the default behavior of
+//!   `panic!` using the `panic_fmt` lang item (`extern "C" fn`) .
+//!
+//! - "interrupts". If disabled, interrupts can't be used (the handlers can't be
+//!   "installed"/overriden). This saves some space in Flash memory.
+//!
+//! - "static-ram". If disabled, the RAM initialization routine is not executed
+//!    and `static mut` variables can't be used. This saves some space in Flash
+//!    memory and makes the boot process slightly faster.
+//!
+//! # Overriding the interrupt and exception handlers
+//!
+//! By default, all the interrupts and exceptions are handled using the same
+//! "handler" (function). You can override this behavior exposing a "symbol"
+//! (`extern "C" fn`) in your crate. For example, the override the TIM7
+//! interrupt handler, you would expose the `_tim7` symbol:
+//!
+//! ```
+//! #[export_name = "_tim7"]
+//! pub extern "C" fn my_tim7_interrupt_handler() {
+//!     // ..
+//! }
+//! ```
+//!
+//! For a list of these symbol, check the [exception] and [interrupt] modules.
+//! All the overridable symbols start with an underscore (`_`).
+//!
+//! [exception]: exception/index.html
+//! [interrupt]: interrupt/index.html
 //!
 //! # Examples
 //!

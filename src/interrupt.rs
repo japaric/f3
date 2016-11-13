@@ -12,6 +12,7 @@ use cortex_m::Handler;
 /// List of all the interrupts as allocated in the vector table.
 ///
 /// `None` indicates that the spot is RESERVED.
+#[doc(hidden)]
 #[export_name = "_INTERRUPTS"]
 pub static INTERRUPTS: [Option<Handler>; 85] = [Some(_wwdg),
                                                 Some(_pvd),
