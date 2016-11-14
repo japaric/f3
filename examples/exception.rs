@@ -19,7 +19,7 @@
 //! ``` text
 //! (gdb) disas /m 0x080000a2
 //! Dump of assembler code for function exception::main:
-//! 32      pub extern "C" fn main() -> ! {
+//! 32      pub fn main() -> ! {
 //!    0x08000092 <+0>:     sub     sp, #8
 //!    0x08000094 <+2>:     b.n     0x8000096 <exception::main+4>
 //!

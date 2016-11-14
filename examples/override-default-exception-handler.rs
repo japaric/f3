@@ -1,4 +1,7 @@
 //! Override the default exception handler
+//!
+//! The `default-exception-handler` Cargo feature must be disabled for this to
+//! work.
 
 #![feature(asm)]
 #![no_main]

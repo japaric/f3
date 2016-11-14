@@ -1,6 +1,9 @@
 // Auto-generated. Do not modify this file! Instead modify examples/override-default-exception-handler.rs
 //! Override the default exception handler
 //!
+//! The `default-exception-handler` Cargo feature must be disabled for this to
+//! work.
+//!
 //! ``` rust,no_run
 //! #![feature(asm)]
 //! #![no_main]

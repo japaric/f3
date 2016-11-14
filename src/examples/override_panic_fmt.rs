@@ -1,6 +1,8 @@
 // Auto-generated. Do not modify this file! Instead modify examples/override-panic-fmt.rs
 //! Override `panic_fmt`
 //!
+//! The `default-panic-fmt` Cargo feature must be disabled for this to work.
+//!
 //! ``` rust,no_run
 //! #![feature(asm)]
 //! #![no_main]

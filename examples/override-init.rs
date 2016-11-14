@@ -1,4 +1,6 @@
 //! Override the initialization routine that runs before `main`
+//!
+//! The `default-init` Cargo feature must be disabled for this to work.
 
 #![feature(asm)]
 #![no_main]
