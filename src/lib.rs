@@ -172,7 +172,8 @@ extern crate compiler_builtins_snapshot;
 #[cfg(feature = "static-ram")]
 extern crate r0;
 extern crate ref_slice;
-extern crate volatile_register;
+
+pub extern crate stm32f30x_memory_map as peripheral;
 
 #[macro_use]
 mod macros;
@@ -190,7 +191,6 @@ pub mod itm;
 pub mod l3gd20;
 pub mod led;
 pub mod lsm303dlhc;
-pub mod peripheral;
 pub mod serial;
 pub mod time;
 
