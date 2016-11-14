@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.3.0] - 2016-11-14
+
 ### Added
 
 - A "static-ram" opt-out Cargo feature to remove the RAM initialization routine.
@@ -63,5 +65,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Low level access to some peripherals: DBGMCU, GPIO, RCC and TIM
 
-[Unreleased]: https://github.com/japaric/f3/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/japaric/f3/compare/v0.3.0...HEAD
+[v0.3.0]: https://github.com/japaric/f3/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/japaric/f3/compare/v0.1.0...v0.2.0
