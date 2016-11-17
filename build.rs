@@ -67,7 +67,8 @@ SECTIONS
     ld.push_str("
   /DISCARD/ :
   {
-    *(.ARM.exidx.*)");
+    *(.ARM.exidx.*)
+    *(.note.gnu.build-id.*)");
 
     if !static_ram {
         ld.push_str("
