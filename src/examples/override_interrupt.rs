@@ -11,7 +11,7 @@
 //!
 //! use f3::delay;
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     // This function uses the TIM7 interrupt under the hood. After a second has
 //!     // passed, the `_tim7` interrupt handler will be called and ...

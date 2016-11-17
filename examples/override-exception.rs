@@ -7,7 +7,7 @@
 #[macro_use]
 extern crate f3;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     let _hard_fault_exception = unsafe {
         // After you hit this exception ...

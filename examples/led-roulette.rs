@@ -10,7 +10,7 @@ use core::iter;
 use f3::led::LEDS;
 use f3::delay;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     loop {
         for (current, next) in LEDS.iter()

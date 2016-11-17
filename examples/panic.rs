@@ -20,7 +20,7 @@
 extern crate cortex_m;
 extern crate f3;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     panic!("Hello, world!")
 }

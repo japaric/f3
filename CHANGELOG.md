@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Fixed the override-panic-fmt example to use the panic_fmt lang item rather
+  than the more unstable symbol name (`rust_begin_unwind`)
+
 ## [v0.3.0] - 2016-11-14
 
 ### Added

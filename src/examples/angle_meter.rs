@@ -10,7 +10,7 @@
 //!
 //! use f3::{delay, l3gd20};
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     const GAIN: f32 = 8.75e-3;
 //!     const PERIOD: u16 = 10;

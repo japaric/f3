@@ -11,7 +11,7 @@
 //!
 //! use f3::peripheral;
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     // Accelerometer
 //!     const SLAVE_ADDRESS: u8 = 0b0011001;

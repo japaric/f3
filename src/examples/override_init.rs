@@ -19,7 +19,7 @@
 //!     }
 //! }
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     unsafe {
 //!         // ... then you'll reach this breakpoint.

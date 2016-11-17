@@ -15,7 +15,7 @@ use f3::{delay, led, lsm303dlhc};
 
 use m::Float;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     loop {
         let I16x3 { x, y, .. } = lsm303dlhc::magnetic_field();

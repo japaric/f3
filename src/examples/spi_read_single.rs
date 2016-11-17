@@ -10,7 +10,7 @@
 //!
 //! use f3::peripheral;
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     // WHO_AM_I
 //!     const REGISTER_ADDRESS: u8 = 0x0f;

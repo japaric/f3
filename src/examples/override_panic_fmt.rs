@@ -5,6 +5,7 @@
 //!
 //! ``` rust,no_run
 //! #![feature(asm)]
+//! #![feature(lang_items)]
 //! #![no_main]
 //! #![no_std]
 //!
@@ -13,14 +14,13 @@
 //!
 //! use core::fmt::Arguments;
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     // Panic here and ...
 //!     panic!("Hello, world!")
 //! }
 //!
-//! #[allow(dead_code)]
-//! #[export_name = "rust_begin_unwind"]
+//! #[lang = "panic_fmt"]
 //! extern "C" fn panic_fmt(_msg: Arguments, _file: &'static str, _line: u32) -> ! {
 //!     unsafe {
 //!         // ... you'll reach this breakpoint!

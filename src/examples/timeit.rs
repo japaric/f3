@@ -30,7 +30,7 @@
 //!     }
 //! }
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     timeit!(delay::ms(1_000));
 //!     timeit!(delay::ms(1_000));

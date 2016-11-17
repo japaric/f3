@@ -7,7 +7,7 @@
 #[macro_use]
 extern crate f3;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     let x = black_box(2.5_f32);
     let y = black_box(3.5_f32);

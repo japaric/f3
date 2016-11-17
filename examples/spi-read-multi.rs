@@ -8,7 +8,7 @@ extern crate f3;
 
 use f3::peripheral;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     // OUT_X_L
     const REGISTER_ADDRESS_START: u8 = 0x28;

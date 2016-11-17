@@ -10,7 +10,7 @@
 #[macro_use]
 extern crate f3;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     // After you hit this exception ...
     let _exception = unsafe { *((0x4000_0000 + 40 * 1024) as *const u32) };

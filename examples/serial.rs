@@ -6,7 +6,7 @@
 #[macro_use]
 extern crate f3;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     uprintln!("The quick brown fox jumps over the lazy dog.");
 

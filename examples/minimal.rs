@@ -6,7 +6,7 @@
 
 extern crate f3;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     loop {}
 }

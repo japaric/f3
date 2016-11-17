@@ -10,7 +10,7 @@
 //!
 //! use core::intrinsics;
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     unsafe { intrinsics::abort() }
 //! }

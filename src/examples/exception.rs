@@ -67,7 +67,7 @@
 //!
 //! extern crate f3;
 //!
-//! #[export_name = "main"]
+//! #[no_mangle]
 //! pub fn main() -> ! {
 //!     // This reads beyond the boundary of available RAM (40KiB starting at
 //!     // 0x4000_0000) and triggers an exception

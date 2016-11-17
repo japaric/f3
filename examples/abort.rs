@@ -8,7 +8,7 @@ extern crate f3;
 
 use core::intrinsics;
 
-#[export_name = "main"]
+#[no_mangle]
 pub fn main() -> ! {
     unsafe { intrinsics::abort() }
 }
