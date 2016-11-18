@@ -3,7 +3,7 @@ dist: trusty
 language: rust
 services: docker
 sudo: required
-rust: nightly
+rust: nightly-2016-11-16
 
 matrix:
   include:
