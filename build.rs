@@ -25,6 +25,7 @@ SECTIONS
   .text ORIGIN(FLASH) :
   {
     /* Vector table */
+    _VECTOR_TABLE = .;
     LONG(ORIGIN(RAM) + LENGTH(RAM));
     LONG(_reset + 1);
     KEEP(*(.rodata._EXCEPTIONS));
