@@ -39,6 +39,7 @@ main() {
                 flags="--target $target --example ${example%.*}"
         esac
 
+        export RUST_LOG=cargo::ops::cargo_rustc::fingerprint
         eval "xargo build $flags --verbose"
         eval "xargo build $flags --release --verbose"
     done
