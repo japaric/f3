@@ -39,8 +39,8 @@ main() {
                 flags="--target $target --example ${example%.*}"
         esac
 
-        eval "xargo build $flags"
-        eval "xargo build $flags --release"
+        eval "xargo build $flags --verbose"
+        eval "xargo build $flags --release --verbose"
     done
 
     # show the binary sizes of our examples
