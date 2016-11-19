@@ -26,7 +26,7 @@ SECTIONS
   {
     /* Vector table */
     _VECTOR_TABLE = .;
-    LONG(ORIGIN(RAM) + LENGTH(RAM));
+    LONG(ORIGIN(CCRAM) + LENGTH(CCRAM));
     LONG(_reset + 1);
     KEEP(*(.rodata._EXCEPTIONS));
     _eexceptions = .;");
@@ -62,7 +62,10 @@ SECTIONS
     _edata = ALIGN(4);
   } > RAM AT > FLASH
 
-  _sidata = LOADADDR(.data);");
+  _sidata = LOADADDR(.data);
+  _heap_start = .;
+  _heap_end = ORIGIN(RAM) + LENGTH(RAM);
+");
     }
 
     ld.push_str("

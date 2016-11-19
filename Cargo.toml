@@ -10,20 +10,17 @@ repository = "https://github.com/japaric/f3"
 version = "0.3.0"
 
 [dependencies]
+cortex-m = "0.1.5"
 ref_slice = "1.1.1"
 stm32f30x-memory-map = "0.1.0"
+
+[dependencies.alloc-cortex-m]
+branch = "moar-docs"
+git = "https://github.com/japaric/alloc-cortex-m"
 
 [dependencies.compiler-builtins-snapshot]
 features = ["memcpy"]
 version = "0.0.20161008"
-
-[dependencies.cortex-m]
-branch = "mutex"
-git = "https://github.com/japaric/cortex-m"
-
-[dependencies.linked_list_allocator]
-branch = "init"
-git = "https://github.com/japaric/linked-list-allocator"
 
 [dependencies.r0]
 optional = true

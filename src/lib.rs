@@ -154,25 +154,22 @@
 //!
 //! See the [examples](examples/index.html) module.
 
-#![allocator]
 #![cfg_attr(all(target_arch = "arm",
                 feature = "default-exception-handler"),
             feature(core_intrinsics))]
 #![deny(missing_docs)]
 #![deny(warnings)]
-#![feature(allocator)]
 #![feature(asm)]
-#![feature(const_fn)]
 #![feature(lang_items)]
 #![feature(macro_reexport)]
 #![feature(naked_functions)]
 #![no_std]
 
+extern crate alloc_cortex_m;
 #[macro_use]
 #[macro_reexport(bkpt)]
 extern crate cortex_m;
 extern crate compiler_builtins_snapshot;
-extern crate linked_list_allocator;
 #[cfg(feature = "static-ram")]
 extern crate r0;
 extern crate ref_slice;
@@ -185,8 +182,6 @@ mod macros;
 #[cfg(target_arch = "arm")]
 mod lang_items;
 
-#[doc(hidden)]
-pub mod alloc;
 pub mod delay;
 #[cfg(feature = "examples")]
 pub mod examples;
@@ -215,8 +210,12 @@ pub struct I16x3 {
 #[cfg(feature = "default-init")]
 #[doc(hidden)]
 pub unsafe fn _init() {
-    alloc::HEAP.lock(|heap| heap.init(0x2000_0000, 1_000));
+    extern "C" {
+        static mut _heap_end: usize;
+        static mut _heap_start: usize;
+    }
 
+    alloc_cortex_m::init(&mut _heap_start, &mut _heap_end);
     delay::init();
     fpu::init();
     itm::init();
