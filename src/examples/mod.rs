@@ -2,6 +2,7 @@
 //! Examples
 
 pub mod abort;
+pub mod alloc;
 pub mod angle_meter;
 pub mod exception;
 pub mod fpu;
