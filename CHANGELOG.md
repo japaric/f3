@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- A heap allocator which is enabled by default but can be disabled via the
+  "alloc" Cargo feature.
+
 ### Changed
 
 - Fixed the override-panic-fmt example to use the panic_fmt lang item rather
