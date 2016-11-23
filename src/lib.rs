@@ -160,6 +160,8 @@
 #![deny(missing_docs)]
 #![deny(warnings)]
 #![feature(asm)]
+#![feature(conservative_impl_trait)]
+#![feature(const_fn)]
 #![feature(lang_items)]
 #![feature(macro_reexport)]
 #![feature(naked_functions)]
@@ -169,9 +171,9 @@
 #[macro_reexport(bkpt)]
 extern crate cortex_m;
 extern crate compiler_builtins_snapshot;
+extern crate futuro;
 #[cfg(feature = "static-ram")]
 extern crate r0;
-extern crate ref_slice;
 
 pub extern crate stm32f30x_memory_map as peripheral;
 
@@ -181,41 +183,29 @@ mod macros;
 #[cfg(target_arch = "arm")]
 mod lang_items;
 
-pub mod delay;
 #[cfg(feature = "examples")]
 pub mod examples;
 pub mod exception;
 pub mod fpu;
+pub mod i2c;
 pub mod interrupt;
 pub mod itm;
 pub mod l3gd20;
 pub mod led;
 pub mod lsm303dlhc;
 pub mod serial;
+pub mod spi;
 pub mod time;
-
-/// Three `i16` integers packed in a struct
-#[derive(Debug)]
-pub struct I16x3 {
-    /// X component
-    pub x: i16,
-    /// Y component
-    pub y: i16,
-    /// Z component
-    pub z: i16,
-}
+pub mod timer;
 
 // Default initialization routine
 #[cfg(feature = "default-init")]
 #[doc(hidden)]
 pub unsafe fn _init() {
-    delay::init();
     fpu::init();
     itm::init();
-    l3gd20::init();
+    // l3gd20::init();
     led::init();
-    lsm303dlhc::init();
-    serial::init();
     time::init();
 }
 

@@ -18,6 +18,9 @@ stm32f30x-memory-map = "0.1.0"
 features = ["memcpy"]
 version = "0.0.20161008"
 
+[dependencies.futuro]
+git = "https://github.com/japaric/futuro"
+
 [dependencies.r0]
 optional = true
 version = "0.1.0"
