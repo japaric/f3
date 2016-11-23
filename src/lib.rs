@@ -165,7 +165,7 @@
 #![feature(naked_functions)]
 #![no_std]
 
-#[cfg(feature = "alloc")]
+#[cfg(all(target_arch = "arm", feature = "alloc"))]
 extern crate alloc_cortex_m;
 #[macro_use]
 #[macro_reexport(bkpt)]
@@ -211,18 +211,18 @@ pub struct I16x3 {
 #[cfg(feature = "default-init")]
 #[doc(hidden)]
 pub unsafe fn _init() {
-    #[cfg(feature = "alloc")]
+    #[cfg(all(target_arch = "arm", feature = "alloc"))]
     extern "C" {
         static mut _heap_end: usize;
         static mut _heap_start: usize;
     }
 
     match () {
-        #[cfg(feature = "alloc")]
+        #[cfg(all(target_arch = "arm", feature = "alloc"))]
         () => {
             alloc_cortex_m::init(&mut _heap_start, &mut _heap_end);
         }
-        #[cfg(not(feature = "alloc"))]
+        #[cfg(not(all(target_arch = "arm", feature = "alloc")))]
         () => {}
     }
     delay::init();

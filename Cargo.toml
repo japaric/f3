@@ -10,10 +10,13 @@ repository = "https://github.com/japaric/f3"
 version = "0.3.0"
 
 [dependencies]
-alloc-cortex-m = "0.2.0"
 cortex-m = "0.1.5"
 ref_slice = "1.1.1"
 stm32f30x-memory-map = "0.1.0"
+
+[target.'cfg(target_arch = "arm")'.dependencies.alloc-cortex-m]
+optional = true
+version = "0.2.0"
 
 [dependencies.compiler-builtins-snapshot]
 features = ["memcpy"]
@@ -27,7 +30,7 @@ version = "0.1.0"
 m = "0.1.0"
 
 [features]
-alloc = ["default-init", "static-ram"]
+alloc = ["alloc-cortex-m", "default-init", "static-ram"]
 default = ["alloc", "default-exception-handler", "default-init", "default-panic-fmt", "examples", "interrupts", "static-ram"]
 default-exception-handler = []
 default-init = []
