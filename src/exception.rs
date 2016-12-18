@@ -72,7 +72,7 @@ pub unsafe extern "C" fn _default_exception_handler() {
     intrinsics::unreachable();
 }
 
-#[cfg(feature = "default-exception-handler")]
+#[cfg(all(target_arch = "arm", feature = "default-exception-handler"))]
 #[doc(hidden)]
 extern "C" fn deh(sf: &StackFrame) -> ! {
     iprintln!("EXCEPTION {:?} @ PC=0x{:08x}", Exception::current(), sf.pc);
