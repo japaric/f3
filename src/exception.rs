@@ -5,7 +5,7 @@
 //! [this example](../examples/override_exception/index.html).
 
 use cortex_m::{self, Handler};
-#[cfg(feature = "default-exception-handler")]
+#[cfg(all(target_arch = "arm", feature = "default-exception-handler"))]
 use cortex_m::StackFrame;
 
 /// Kind of exception
