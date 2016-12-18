@@ -7,4 +7,4 @@ RUN apt-get install -y --no-install-recommends \
     gcc-arm-none-eabi \
     libc6-dev
 RUN curl -sf "https://japaric.github.io/trust/install.sh" | \
-    sh -s -- --git japaric/xargo --tag v0.2.0 --target x86_64-unknown-linux-gnu --to /usr/bin
+    sh -s -- --git japaric/xargo --tag v0.2.2 --target x86_64-unknown-linux-gnu --to /usr/bin

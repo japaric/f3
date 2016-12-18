@@ -12,6 +12,7 @@ pub fn main() -> ! {
 }
 
 #[lang = "panic_fmt"]
+#[no_mangle]
 extern "C" fn panic_fmt() -> ! {
     loop {}
 }
