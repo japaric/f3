@@ -58,27 +58,28 @@ impl Exception {
 
 #[cfg(all(target_arch = "arm", feature = "default-exception-handler"))]
 #[doc(hidden)]
-#[export_name = "_default_exception_handler"]
 #[naked]
-pub unsafe extern "C" fn default_handler_entry_point() {
+#[no_mangle]
+pub unsafe extern "C" fn _default_exception_handler() {
     use core::intrinsics;
 
     // NOTE need asm!, #[naked] and unreachable() to avoid modifying the stack
     // pointer (MSP)
     asm!("mrs r0, MSP
           ldr r1, [r0, #20]
-          b _default_exception_handler_impl" :::: "volatile");
+          b $0" :: "i"(deh as extern "C" fn(&StackFrame) -> !) :: "volatile");
 
     intrinsics::unreachable();
 }
 
 #[cfg(feature = "default-exception-handler")]
 #[doc(hidden)]
-#[export_name = "_default_exception_handler_impl"]
-pub unsafe extern "C" fn default_handler(sf: &StackFrame) -> ! {
+extern "C" fn deh(sf: &StackFrame) -> ! {
     iprintln!("EXCEPTION {:?} @ PC=0x{:08x}", Exception::current(), sf.pc);
 
-    bkpt!();
+    unsafe {
+        bkpt!();
+    }
 
     loop {}
 }
