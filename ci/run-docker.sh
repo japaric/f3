@@ -19,7 +19,7 @@ run() {
            -v $HOME/.cargo:/cargo \
            -v `pwd`/target:/target \
            -v `pwd`:/checkout:ro \
-           -v `rustc --print sysroot`:/rust:ro \
+           -v `rustc --print sysroot`:/rust \
            -w /checkout \
            -it $target \
            sh -c "PATH=\$PATH:/rust/bin ci/run.sh $target"
