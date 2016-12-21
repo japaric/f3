@@ -1,9 +1,9 @@
 cache: cargo
 dist: trusty
 language: rust
+rust: nightly
 services: docker
 sudo: required
-rust: nightly-2016-11-16
 
 matrix:
   include:
@@ -11,25 +11,32 @@ matrix:
 env: TARGET=x86_64-unknown-linux-gnu
 
 install:
-  - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=$TRAVIS_RUST_VERSION -y
-  - source ~/.cargo/env
-  - rustup component add rust-src
+  # NOTE(TRAVIS_BRANCH) Travis is configured to only build *pushes* (not PRs).
+  - if [ $TRAVIS_BRANCH != master ] || [ $TRAVIS_EVENT_TYPE = cron ]; then
+      curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain=$TRAVIS_RUST_VERSION -y;
+      source ~/.cargo/env;
+      rustup component add rust-src;
+    fi
 
 script:
-  - cargo generate-lockfile
-  - sh ci/run-docker.sh $TARGET
-  # check if `src/examples` has not been re-generated
-  - if [ $TARGET = x86_64-unknown-linux-gnu ]; then
-      ./gen-examples.sh;
-      stdout=$(git status --porcelain);
-      test "$stdout" = "" || ( echo "Outdated examples:" && echo "$stdout" && false );
+  # NOTE(TRAVIS_BRANCH) See the NOTE in the `install` section
+  # if: check if `src/examples` has not been re-generated
+  # chmod: Travis can't cache files that are not readable by "others"
+  - if [ $TRAVIS_BRANCH != master ] || [ $TRAVIS_EVENT_TYPE = cron ]; then
+      cargo generate-lockfile;
+      sh ci/run-docker.sh $TARGET;
+      if [ $TARGET = x86_64-unknown-linux-gnu ]; then
+        ./gen-examples.sh;
+        stdout=$(git status --porcelain);
+        test "$stdout" = "" || ( echo "Outdated examples:" && echo "$stdout" && false );
+      fi;
+      chmod -R a+r $HOME/.cargo;
     fi
-  # Travis can't cache files that are not readable by "others"
-  - chmod -R a+r $HOME/.cargo
 
 branches:
   only:
     - auto
+    - master
     - try
 
 notifications:
