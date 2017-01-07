@@ -174,6 +174,7 @@ extern crate compiler_builtins_snapshot;
 #[cfg(feature = "static-ram")]
 extern crate r0;
 extern crate ref_slice;
+extern crate embedded_serial;
 
 pub extern crate stm32f30x_memory_map as peripheral;
 

@@ -11,6 +11,7 @@
 //! [Reference Manual]: http://www.st.com/resource/en/reference_manual/dm00043574.pdf
 
 use core::fmt::{self, Arguments, Write};
+use embedded_serial::{BlockingTx, NonBlockingRx};
 
 use peripheral;
 
@@ -18,15 +19,42 @@ struct Port {}
 
 impl Write for Port {
     fn write_str(&mut self, s: &str) -> fmt::Result {
+        for byte in s.as_bytes().iter().cloned() {
+            self.putc(byte).unwrap();
+        }
+        Ok(())
+    }
+}
+
+impl BlockingTx for Port {
+    type Error = ();
+
+    /// Emit a single octet, first busy-waiting if the data register
+    /// is not yet empty.
+    /// Never returns `Err`.
+    fn putc(&mut self, value: u8) -> Result<(), Self::Error> {
         unsafe {
             let usart1 = peripheral::usart1_mut();
+            while !usart1.isr.read().txe() {}
+            usart1.tdr.write(|w| w.tdr(value as u16));
+        }
+        Ok(())
+    }
+}
 
-            for byte in s.as_bytes().iter().cloned() {
-                while !usart1.isr.read().txe() {}
-                usart1.tdr.write(|w| w.tdr(byte as u16));
+impl NonBlockingRx for Port {
+    type Error = ();
+
+    /// Attempts to read from the UART. Returns `Err(())`
+    /// if the data register isn't full, or `Ok(octet)`.
+    fn getc_try(&mut self) -> Result<u8, Self::Error> {
+        unsafe {
+            let usart1 = peripheral::usart1_mut();
+            if usart1.isr.read().rxne() {
+                Ok(usart1.rdr.read().rdr() as u8)
+            } else {
+                Err(())
             }
-
-            Ok(())
         }
     }
 }
