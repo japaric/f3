@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.3.1] - 2017-04-03
+
+### Modified
+
+- Force the linker to keep the _reset symbol around. Newer gcc versions are
+  dropping it even though it's marked as the entry point.
+
 ## [v0.3.0] - 2016-11-14
 
 ### Added
