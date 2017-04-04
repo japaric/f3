@@ -39,7 +39,7 @@ SECTIONS
     ld.push_str("
     /* Entry point: reset handler */
     _reset = .;
-    *(.text._reset);
+    KEEP(*(.text._reset));
 
     *(.text.*);
     *(.rodata.*);
