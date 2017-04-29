@@ -1,92 +1,126 @@
-//! Serial Port communication
+//! Serial interface
 //!
-//! - Baud rate: `115200`
-//! - "Transmit" (`TX`) pin - `PA9`
-//! - "Receive" (`RX`) pin - `PA10`
-//!
-//! # References
-//!
-//! - RM0316: STM32F303xC [Reference Manual] - Section 29.8 USART Registers
-//!
-//! [Reference Manual]: http://www.st.com/resource/en/reference_manual/dm00043574.pdf
+//! - TX - PA9
+//! - RX - PA10
 
-use core::fmt::{self, Arguments, Write};
+use core::ptr;
 
-use peripheral;
+use cast::{u16, u8};
+use stm32f30x::{Gpioa, Rcc, Usart1};
 
-struct Port {}
+use frequency;
 
-impl Write for Port {
-    fn write_str(&mut self, s: &str) -> fmt::Result {
-        unsafe {
-            let usart1 = peripheral::usart1_mut();
+/// Specialized `Result` type
+pub type Result<T> = ::core::result::Result<T, Error>;
 
-            for byte in s.as_bytes().iter().cloned() {
-                while !usart1.isr.read().txe() {}
-                usart1.tdr.write(|w| w.tdr(byte as u16));
-            }
+/// An error
+pub struct Error {
+    _0: (),
+}
 
-            Ok(())
+/// Serial interface
+///
+/// # Interrupts
+///
+/// - `Usart1Exti25` - RXNE (RX buffer not empty)
+#[derive(Clone, Copy)]
+pub struct Serial<'a>(pub &'a Usart1);
+
+impl<'a> Serial<'a> {
+    /// Initializes the serial interface with a baud rate of `baut_rate` bits
+    /// per second
+    pub fn init(self, gpioa: &Gpioa, rcc: &Rcc, baud_rate: u32) {
+        let usart1 = self.0;
+
+        // Power up the peripherals
+        rcc.apb2enr.modify(|_, w| w.usart1en().enabled());
+        rcc.ahbenr.modify(|_, w| w.iopaen().enabled());
+
+        // Configure PA9 as TX and PA10 as RX
+        gpioa
+            .afrh
+            .modify(|_, w| unsafe { w.afrh9().bits(7).afrh10().bits(7) });
+        gpioa
+            .moder
+            .modify(|_, w| w.moder9().alternate().moder10().alternate());
+
+        // 8 data bits, 0 stop bits
+        usart1.cr2.write(|w| unsafe { w.stop().bits(0b00) });
+
+        // Disable hardware flow control
+        usart1
+            .cr3
+            .write(|w| unsafe { w.rtse().bits(0).ctse().bits(0) });
+
+        // set baud rate
+        let brr = u16(frequency::APB2 / baud_rate).unwrap();
+        let fraction = u8(brr & 0b1111).unwrap();
+        let mantissa = brr >> 4;
+        usart1
+            .brr
+            .write(
+                |w| unsafe {
+                    w.div_fraction()
+                        .bits(fraction)
+                        .div_mantissa()
+                        .bits(mantissa)
+                },
+            );
+
+        // enable peripheral, transmitter, receiver
+        // enable RXNE event
+        usart1
+            .cr1
+            .write(
+                |w| unsafe {
+                    w.ue()
+                        .bits(1)
+                        .re()
+                        .bits(1)
+                        .te()
+                        .bits(1)
+                        .pce()
+                        .bits(0)
+                        .over8()
+                        .bits(0)
+                        .rxneie()
+                        .bits(1)
+                },
+            );
+    }
+
+    /// Reads a byte from the RX buffer
+    ///
+    /// Returns `None` if the buffer is empty
+    pub fn read(self) -> Result<u8> {
+        let usart1 = self.0;
+
+        if usart1.isr.read().rxne().bits() == 1 {
+            // NOTE(read_volatile) the register is 9 bits big but we'll only
+            // work with the first 8 bits
+            Ok(
+                unsafe {
+                    ptr::read_volatile(&usart1.rdr as *const _ as *const u8)
+                },
+            )
+        } else {
+            Err(Error { _0: () })
         }
     }
-}
 
-/// Initializes the necessary stuff to be able to use the Serial Port
-///
-/// # Safety
-///
-/// - Must be called once
-/// - Must be called in an interrupt-free environment
-pub unsafe fn init() {
-    let gpioa = peripheral::gpioa_mut();
-    let rcc = peripheral::rcc_mut();
-    let usart1 = peripheral::usart1_mut();
+    /// Writes byte into the TX buffer
+    ///
+    /// Returns `Err` if the buffer is already full
+    pub fn write(self, byte: u8) -> Result<()> {
+        let usart1 = self.0;
 
-    // RCC: Enable USART1 and GPIOC
-    rcc.apb2enr.modify(|_, w| w.usart1en(true));
-    rcc.ahbenr.modify(|_, w| w.iopaen(true));
-
-    // GPIO: configure PA9 as TX and PA10 as RX
-    // AFRH9: USART1_TX
-    // AFRH10: USART1_RX
-    gpioa.afrh.modify(|_, w| w.afrh9(7).afrh10(7));
-    // MODER9: Alternate mode
-    // MODER10: Alternate mode
-    gpioa.moder.modify(|_, w| w.moder9(0b10).moder10(0b10));
-
-    // USART1: 115200 - 8N1
-    usart1.cr2.write(|w| w.stop(0b00));
-
-    // Disable hardware flow control
-    usart1.cr3.write(|w| w.rtse(false).ctse(false));
-
-    const BAUD_RATE: u32 = 115200;
-    let brr = (::APB2_CLOCK / BAUD_RATE) as u16;
-    usart1.brr.write(|w| {
-        w.div_fraction((brr & 0b1111) as u8)
-            .div_mantissa(brr >> 4)
-    });
-
-    // UE: Enable USART
-    // RE: Enable the receiver
-    // TE: Enable the transmitter
-    // PCE: No parity
-    // OVER8: Oversampling by 16 -- to set the baud rate
-    usart1.cr1.write(|w| {
-        w.ue(true)
-            .re(true)
-            .te(true)
-            .pce(false)
-            .over8(false)
-    });
-}
-
-#[doc(hidden)]
-pub fn write_fmt(args: Arguments) {
-    Port {}.write_fmt(args).ok();
-}
-
-#[doc(hidden)]
-pub fn write_str(s: &str) {
-    Port {}.write_str(s).ok();
+        if usart1.isr.read().txe().bits() == 1 {
+            unsafe {
+                ptr::write_volatile(&usart1.tdr as *const _ as *mut u8, byte)
+            }
+            Ok(())
+        } else {
+            Err(Error { _0: () })
+        }
+    }
 }

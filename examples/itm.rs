@@ -1,63 +1,56 @@
-//! With the `iprint!` macros you can send `print!`-formatted messages to the
-//! HOST
+//! Sends Hello and then World through the first ITM stimulus port
 //!
-//! Where the HOST is the machine, likely your laptop, that's debugging the F3
-//! using OpenOCD+GDB.
+//! You'll need to run `itmdump itm.fifo` (mind the file paths) to receive the
+//! message on the host. Read the [`itm`] crate documentation for details.
 //!
-//! To receive the messages on the HOST you can use the `itmdump` tool to parse
-//! the "instrumentation packets" that the F3 will send:
-//!
-//! ``` text
-//! $ cargo install itm
-//! ```
-//!
-//! `itmdump` uses a named pipe to receive the data that the F3 sends. Call
-//! `itmdump` like this to create and use a named pipe in the `/tmp` directory:
-//!
-//! ``` text
-//! $ itmdump /tmp/itm.fifo
-//! ```
-//!
-//! The command will block, let it be. Next, configure OpenOCD to send the F3
-//! messages to the named pipe that you just created. You can do this from your
-//! current GDB session:
-//!
-//! ``` text
-//! (gdb) monitor tpiu config internal /tmp/itm.fifo uart off 8000000
-//! ```
-//!
-//! (The above command assumes your F3 is running at 8MHz, which is the default
-//! clock frequency)
-//!
-//! After that, the output of every `iprint!` call will appear in `itmdump`
-//! stdout! Note that if `itmdump` is connected to a terminal, its output will
-//! be line buffered so won't see anything printed on screen until a newline
-//! (`\n`) is reached. The example below, produces the following output.
-//!
-//! ```
-//! $ itmdump /tmp/itm.fifo
-//! Hello, world!
-//! ```
-//!
-//! # Notes
-//!
-//! You'll have to enter that `monitor` command on each GDB session so it's a
-//! good idea to add it to your `.gdbinit` so it gets done automatically when
-//! GDB starts.
-//!
-//! OTOH, You *don't* have to spawn a new `itmdump` command  for each debug
-//! session. The same process will continue to work for all subsequent debug
-//! sessions as long as you don't exit it (e.g. with Ctrl+C).
+//! [`itm`]: https://docs.rs/itm/0.1.1/itm/
 
-#![no_main]
+#![feature(const_fn)]
+#![feature(used)]
 #![no_std]
 
+// version = "0.2.4"
 #[macro_use]
+extern crate cortex_m;
+
+// version = "0.2.0"
+extern crate cortex_m_rt;
+
+// version = "0.1.0"
+#[macro_use]
+extern crate cortex_m_rtfm as rtfm;
+
 extern crate f3;
 
-#[no_mangle]
-pub fn main() -> ! {
-    iprintln!("Hello, world!");
+use f3::stm32f30x;
+use rtfm::{C0, C16, P0};
 
-    loop {}
+// RESOURCES
+peripherals!(stm32f30x, {
+    ITM: Peripheral {
+        register_block: Itm,
+        ceiling: C0,
+    },
+});
+
+// INITIALIZATION PHASE
+fn init(ref prio: P0, ceil: &C16) {
+    let itm = ITM.access(prio, ceil);
+
+    iprintln!(&itm.stim[0], "Hello");
 }
+
+// IDLE LOOP
+fn idle(ref prio: P0, ref ceil: C0) -> ! {
+    let itm = ITM.access(prio, ceil);
+
+    iprintln!(&itm.stim[0], "World");
+
+    // Sleep
+    loop {
+        rtfm::wfi();
+    }
+}
+
+// TASKS
+tasks!(stm32f30x, {});

@@ -7,15 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Added
-
-- A heap allocator which is enabled by default but can be disabled via the
-  "alloc" Cargo feature.
+## [v0.4.0] - 2017-04-28
 
 ### Changed
 
-- Fixed the override-panic-fmt example to use the panic_fmt lang item rather
-  than the more unstable symbol name (`rust_begin_unwind`)
+- [breaking-change] The startup routine has been removed from this crate. This
+  crate is now meant to be used with the [cortex-m-quickstart] template, check
+  the crate level documentation for details.
+
+[cortex-m-quickstart]: https://docs.rs/cortex-m-quickstart/0.1.1/cortex_m_quickstart/
+
+- [breaking-change] The whole API is now async only (check the `examples`
+  module). Note that for this release we are not on parity with the v0.3.0 API
+  in terms of functionality.
 
 ## [v0.3.0] - 2016-11-14
 
@@ -75,6 +79,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Low level access to some peripherals: DBGMCU, GPIO, RCC and TIM
 
-[Unreleased]: https://github.com/japaric/f3/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/japaric/f3/compare/v0.4.0...HEAD
+[v0.4.0]: https://github.com/japaric/f3/compare/v0.3.0...v0.4.0
+[v0.3.1]: https://github.com/japaric/f3/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/japaric/f3/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/japaric/f3/compare/v0.1.0...v0.2.0

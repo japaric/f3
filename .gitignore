@@ -1,5 +1,3 @@
-*.org
-*.rs.bk
-*.svd
+**/*.rs.bk
 Cargo.lock
-target
+target/
