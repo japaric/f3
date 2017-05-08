@@ -1,11 +1,14 @@
-//! Sharing memory using `Resource`
+//! Sharing memory using a `Resource`
 //!
 //! This builds on top of the `concurrent` example. The `loopback` task now
-//! additionally parses the received data as a command. Two commands are
+//! additionally parses the received data as a command. Three commands are
 //! available:
 //!
 //! - `reverse` - reverses the spin direction of the LED roulette
-//! - `reset` - moves the roulette back to its start position (North)
+//! - `bounce` - puts the roulette in *bounce* mode where it reverses its spin
+//!   direction every time it completes one turn.
+//! - `continuous` - puts the roulette in *continuous* mode where it keeps
+//!   spinning in the same direction.
 //!
 //! ```
 //! 
@@ -13,7 +16,7 @@
 //! #![feature(used)]
 //! #![no_std]
 //! 
-//! // version = "0.2.0", default-features = false
+//! // version = "0.2.2", default-features = false
 //! extern crate cast;
 //! 
 //! // version = "0.2.0"
@@ -37,7 +40,22 @@
 //! use f3::stm32f30x;
 //! use f3::timer::Timer;
 //! use heapless::Vec;
-//! use rtfm::{C0, C1, C16, Local, P0, P1, Resource};
+//! use rtfm::{C1, Local, P0, P1, Resource, T0, T1, TMax};
+//! 
+//! // SUPPORT CODE
+//! struct State {
+//!     direction: Cell<Direction>,
+//!     mode: Cell<Mode>,
+//! }
+//! 
+//! impl State {
+//!     const fn new() -> Self {
+//!         State {
+//!             direction: Cell::new(Direction::Clockwise),
+//!             mode: Cell::new(Mode::Continuous),
+//!         }
+//!     }
+//! }
 //! 
 //! #[derive(Clone, Copy)]
 //! enum Direction {
@@ -45,18 +63,19 @@
 //!     Counterclockwise,
 //! }
 //! 
-//! struct Command {
-//!     direction: Cell<Direction>,
-//!     reset: Cell<bool>,
-//! }
-//! 
-//! impl Command {
-//!     const fn new() -> Command {
-//!         Command {
-//!             direction: Cell::new(Direction::Clockwise),
-//!             reset: Cell::new(false),
+//! impl Direction {
+//!     fn reverse(self) -> Self {
+//!         match self {
+//!             Direction::Clockwise => Direction::Counterclockwise,
+//!             Direction::Counterclockwise => Direction::Clockwise,
 //!         }
 //!     }
+//! }
+//! 
+//! #[derive(Clone, Copy, PartialEq)]
+//! enum Mode {
+//!     Bounce,
+//!     Continuous,
 //! }
 //! 
 //! // CONFIGURATION
@@ -87,16 +106,16 @@
 //!     },
 //! });
 //! 
-//! static COMMAND: Resource<Command, C1> = Resource::new(Command::new());
+//! static SHARED: Resource<State, C1> = Resource::new(State::new());
 //! 
 //! // INITIALIZATION PHASE
-//! fn init(ref prio: P0, ceil: &C16) {
-//!     let gpioa = GPIOA.access(prio, ceil);
-//!     let gpioe = GPIOE.access(prio, ceil);
-//!     let rcc = RCC.access(prio, ceil);
-//!     let tim7 = TIM7.access(prio, ceil);
+//! fn init(ref priority: P0, threshold: &TMax) {
+//!     let gpioa = GPIOA.access(priority, threshold);
+//!     let gpioe = GPIOE.access(priority, threshold);
+//!     let rcc = RCC.access(priority, threshold);
+//!     let tim7 = TIM7.access(priority, threshold);
 //!     let timer = Timer(&tim7);
-//!     let usart1 = USART1.access(prio, ceil);
+//!     let usart1 = USART1.access(priority, threshold);
 //! 
 //!     led::init(&gpioe, &rcc);
 //!     timer.init(&rcc, FREQUENCY);
@@ -106,7 +125,7 @@
 //! }
 //! 
 //! // IDLE LOOP
-//! fn idle(_prio: P0, _ceil: C0) -> ! {
+//! fn idle(_priority: P0, _threshold: T0) -> ! {
 //!     // Sleep
 //!     loop {
 //!         rtfm::wfi();
@@ -127,12 +146,13 @@
 //!     },
 //! });
 //! 
-//! fn receive(mut task: Usart1Exti25, ref prio: P1, ref ceil: C1) {
+//! fn receive(mut task: Usart1Exti25, ref priority: P1, ref threshold: T1) {
+//!     // 16 byte buffer
 //!     static BUFFER: Local<Vec<u8, [u8; 16]>, Usart1Exti25> = {
 //!         Local::new(Vec::new([0; 16]))
 //!     };
 //! 
-//!     let usart1 = USART1.access(prio, ceil);
+//!     let usart1 = USART1.access(priority, threshold);
 //!     let serial = Serial(&usart1);
 //! 
 //!     if let Ok(byte) = serial.read() {
@@ -148,31 +168,24 @@
 //!         if byte == b'r' {
 //!             // end of command
 //! 
-//!             let command = COMMAND.access(prio, ceil);
+//!             let shared = SHARED.access(priority, threshold);
 //!             match &**buffer {
+//!                 b"bounce" => shared.mode.set(Mode::Bounce),
+//!                 b"continuous" => shared.mode.set(Mode::Continuous),
 //!                 b"reverse" => {
-//!                     let Command { ref direction, .. } = *command;
-//! 
-//!                     match direction.get() {
-//!                         Direction::Clockwise => {
-//!                             direction.set(Direction::Counterclockwise)
-//!                         }
-//!                         Direction::Counterclockwise => {
-//!                             direction.set(Direction::Clockwise)
-//!                         }
-//!                     }
-//!                 }
-//!                 b"reset" => {
-//!                     command.reset.set(true);
+//!                     shared.direction.set(shared.direction.get().reverse());
 //!                 }
 //!                 _ => {}
 //!             }
 //! 
+//!             // clear the buffer to prepare for the next command
 //!             buffer.clear();
 //!         } else {
+//!             // push the byte into the buffer
+//! 
 //!             if buffer.push(byte).is_err() {
-//!                 // TODO proper error handling
-//!                 // for now we just clear the buffer when full
+//!                 // error: buffer full
+//!                 // KISS: we just clear the buffer when it gets full
 //!                 buffer.clear();
 //!             }
 //!         }
@@ -183,31 +196,28 @@
 //!     }
 //! }
 //! 
-//! fn roulette(mut task: Tim7, ref prio: P1, ref ceil: C1) {
+//! fn roulette(mut task: Tim7, ref priority: P1, ref threshold: T1) {
 //!     static STATE: Local<u8, Tim7> = Local::new(0);
 //! 
-//!     let tim7 = TIM7.access(prio, ceil);
+//!     let tim7 = TIM7.access(priority, threshold);
 //!     let timer = Timer(&tim7);
 //! 
 //!     if timer.clear_update_flag().is_ok() {
 //!         let state = STATE.borrow_mut(&mut task);
 //!         let curr = *state;
 //! 
-//!         let command = COMMAND.access(prio, ceil);
-//!         let direction = command.direction.get();
-//!         let Command { ref reset, .. } = *command;
+//!         let shared = SHARED.access(priority, threshold);
+//!         let mut direction = shared.direction.get();
+//! 
+//!         if curr == 0 && shared.mode.get() == Mode::Bounce {
+//!             direction = direction.reverse();
+//!             shared.direction.set(direction);
+//!         }
 //! 
 //!         let n = u8(LEDS.len()).unwrap();
-//!         let next = if reset.get() {
-//!             reset.set(false);
-//!             0
-//!         } else {
-//!             match direction {
-//!                 Direction::Clockwise => (curr + 1) % n,
-//!                 Direction::Counterclockwise => {
-//!                     curr.checked_sub(1).unwrap_or(n - 1)
-//!                 }
-//!             }
+//!         let next = match direction {
+//!             Direction::Clockwise => (curr + 1) % n,
+//!             Direction::Counterclockwise => curr.checked_sub(1).unwrap_or(n - 1),
 //!         };
 //! 
 //!         LEDS[usize(curr)].off();

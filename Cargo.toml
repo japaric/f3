@@ -7,10 +7,10 @@ keywords = ["arm", "cortex-m", "stm32"]
 license = "MIT OR Apache-2.0"
 name = "f3"
 repository = "https://github.com/japaric/f3"
-version = "0.4.0"
+version = "0.4.1"
 
 [dependencies]
-stm32f30x = "0.4.0"
+stm32f30x = "0.4.1"
 
 [dependencies.cast]
 default-features = false

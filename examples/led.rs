@@ -15,7 +15,7 @@ extern crate f3;
 
 use f3::led::{self, LEDS};
 use f3::stm32f30x;
-use rtfm::{C0, C16, P0};
+use rtfm::{P0, T0, TMax};
 
 // RESOURCES
 peripherals!(stm32f30x, {
@@ -30,15 +30,15 @@ peripherals!(stm32f30x, {
 });
 
 // INITIALIZATION PHASE
-fn init(ref prio: P0, ceil: &C16) {
-    let gpioe = GPIOE.access(prio, ceil);
-    let rcc = RCC.access(prio, ceil);
+fn init(ref priority: P0, threshold: &TMax) {
+    let gpioe = GPIOE.access(priority, threshold);
+    let rcc = RCC.access(priority, threshold);
 
     led::init(&gpioe, &rcc);
 }
 
 // IDLE LOOP
-fn idle(_prio: P0, _ceil: C0) -> ! {
+fn idle(_priority: P0, _threshold: T0) -> ! {
     for led in &LEDS {
         led.on();
     }

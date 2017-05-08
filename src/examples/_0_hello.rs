@@ -1,11 +1,11 @@
-//! Prints Hello and then World on the OpenOCD console
+//! Prints "Hello" and then "World" on the OpenOCD console
 //!
 //! ```
 //! 
 //! #![feature(used)]
 //! #![no_std]
 //! 
-//! // version = "0.2.4"
+//! // version = "0.2.6"
 //! #[macro_use]
 //! extern crate cortex_m;
 //! 
@@ -19,15 +19,18 @@
 //! extern crate f3;
 //! 
 //! use f3::stm32f30x;
-//! use rtfm::{C0, C16, P0};
+//! use rtfm::{P0, T0, TMax};
+//! 
+//! // TASKS
+//! tasks!(stm32f30x, {});
 //! 
 //! // INITIALIZATION PHASE
-//! fn init(_prio: P0, _ceil: &C16) {
+//! fn init(_priority: P0, _threshold: &TMax) {
 //!     hprintln!("Hello");
 //! }
 //! 
 //! // IDLE LOOP
-//! fn idle(_prio: P0, _ceil: C0) -> ! {
+//! fn idle(_priority: P0, _threshold: T0) -> ! {
 //!     hprintln!("World");
 //! 
 //!     // Sleep
@@ -35,8 +38,5 @@
 //!         rtfm::wfi();
 //!     }
 //! }
-//! 
-//! // TASKS
-//! tasks!(stm32f30x, {});
 //! ```
 // Auto-generated. Do not modify.

@@ -11,7 +11,7 @@
 //! #![feature(used)]
 //! #![no_std]
 //! 
-//! // version = "0.2.4"
+//! // version = "0.2.6"
 //! #[macro_use]
 //! extern crate cortex_m;
 //! 
@@ -25,7 +25,7 @@
 //! extern crate f3;
 //! 
 //! use f3::stm32f30x;
-//! use rtfm::{C0, C16, P0};
+//! use rtfm::{P0, T0, TMax};
 //! 
 //! // RESOURCES
 //! peripherals!(stm32f30x, {
@@ -36,15 +36,15 @@
 //! });
 //! 
 //! // INITIALIZATION PHASE
-//! fn init(ref prio: P0, ceil: &C16) {
-//!     let itm = ITM.access(prio, ceil);
+//! fn init(ref priority: P0, threshold: &TMax) {
+//!     let itm = ITM.access(priority, threshold);
 //! 
 //!     iprintln!(&itm.stim[0], "Hello");
 //! }
 //! 
 //! // IDLE LOOP
-//! fn idle(ref prio: P0, ref ceil: C0) -> ! {
-//!     let itm = ITM.access(prio, ceil);
+//! fn idle(ref priority: P0, ref threshold: T0) -> ! {
+//!     let itm = ITM.access(priority, threshold);
 //! 
 //!     iprintln!(&itm.stim[0], "World");
 //! 

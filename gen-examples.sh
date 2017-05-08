@@ -11,7 +11,7 @@ main() {
         blinky
         roulette
         loopback
-        concurrent
+        concurrency
         resource
         preemption
     )

@@ -1,4 +1,4 @@
-//! LED roulette and software loopback running concurrently
+//! LED roulette and serial loopback running concurrently
 //!
 //! ```
 //! 
@@ -6,7 +6,7 @@
 //! #![feature(used)]
 //! #![no_std]
 //! 
-//! // version = "0.2.0", default-features = false
+//! // version = "0.2.2", default-features = false
 //! extern crate cast;
 //! 
 //! // version = "0.2.0"
@@ -24,7 +24,7 @@
 //! use f3::stm32f30x::interrupt::{Tim7, Usart1Exti25};
 //! use f3::stm32f30x;
 //! use f3::timer::Timer;
-//! use rtfm::{C0, C1, C16, Local, P0, P1};
+//! use rtfm::{Local, P0, P1, T0, T1, TMax};
 //! 
 //! // CONFIGURATION
 //! pub const BAUD_RATE: u32 = 115_200; // bits per second
@@ -55,23 +55,25 @@
 //! });
 //! 
 //! // INITIALIZATION PHASE
-//! fn init(ref prio: P0, ceil: &C16) {
-//!     let gpioa = GPIOA.access(prio, ceil);
-//!     let gpioe = GPIOE.access(prio, ceil);
-//!     let rcc = RCC.access(prio, ceil);
-//!     let tim7 = TIM7.access(prio, ceil);
+//! fn init(ref priority: P0, threshold: &TMax) {
+//!     let gpioa = GPIOA.access(priority, threshold);
+//!     let gpioe = GPIOE.access(priority, threshold);
+//!     let rcc = RCC.access(priority, threshold);
+//!     let tim7 = TIM7.access(priority, threshold);
+//!     let usart1 = USART1.access(priority, threshold);
+//! 
 //!     let timer = Timer(&tim7);
-//!     let usart1 = USART1.access(prio, ceil);
+//!     let serial = Serial(&usart1);
 //! 
 //!     led::init(&gpioe, &rcc);
 //!     timer.init(&rcc, FREQUENCY);
-//!     Serial(&usart1).init(&gpioa, &rcc, BAUD_RATE);
+//!     serial.init(&gpioa, &rcc, BAUD_RATE);
 //! 
 //!     timer.resume();
 //! }
 //! 
 //! // IDLE LOOP
-//! fn idle(_prio: P0, _ceil: C0) -> ! {
+//! fn idle(_priority: P0, _threshold: T0) -> ! {
 //!     // Sleep
 //!     loop {
 //!         rtfm::wfi();
@@ -92,8 +94,8 @@
 //!     },
 //! });
 //! 
-//! fn loopback(_task: Usart1Exti25, ref prio: P1, ref ceil: C1) {
-//!     let usart1 = USART1.access(prio, ceil);
+//! fn loopback(_task: Usart1Exti25, ref priority: P1, ref threshold: T1) {
+//!     let usart1 = USART1.access(priority, threshold);
 //!     let serial = Serial(&usart1);
 //! 
 //!     if let Ok(byte) = serial.read() {
@@ -110,10 +112,10 @@
 //!     }
 //! }
 //! 
-//! fn roulette(mut task: Tim7, ref prio: P1, ref ceil: C1) {
+//! fn roulette(mut task: Tim7, ref priority: P1, ref threshold: T1) {
 //!     static STATE: Local<u8, Tim7> = Local::new(0);
 //! 
-//!     let tim7 = TIM7.access(prio, ceil);
+//!     let tim7 = TIM7.access(priority, threshold);
 //!     let timer = Timer(&tim7);
 //! 
 //!     if timer.clear_update_flag().is_ok() {

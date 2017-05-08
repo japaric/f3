@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.4.1] - 2017-05-09
+
+### Changed
+
+- Bumped `stm32f30x` dependency to v0.4.1
+- Updated the examples to match the stable release of the cortex-m-rtfm crate
+
 ## [v0.4.0] - 2017-04-28
 
 ### Changed
@@ -79,7 +86,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Low level access to some peripherals: DBGMCU, GPIO, RCC and TIM
 
-[Unreleased]: https://github.com/japaric/f3/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/japaric/f3/compare/v0.4.1...HEAD
+[v0.4.1]: https://github.com/japaric/f3/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/japaric/f3/compare/v0.3.1...v0.4.0
 [v0.3.1]: https://github.com/japaric/f3/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/japaric/f3/compare/v0.2.0...v0.3.0
