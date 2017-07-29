@@ -3,7 +3,7 @@
 use core::u16;
 
 use cast::{u16, u32};
-use stm32f30x::{Rcc, Tim7};
+use stm32f30x::{RCC, TIM7};
 
 use frequency;
 
@@ -21,13 +21,13 @@ pub struct Error {
 ///
 /// - `Tim7` - update event
 #[derive(Clone, Copy)]
-pub struct Timer<'a>(pub &'a Tim7);
+pub struct Timer<'a>(pub &'a TIM7);
 
 impl<'a> Timer<'a> {
     /// Initializes the timer with a periodic timeout of `frequency` Hz
     ///
     /// NOTE After initialization, the timer will be in the paused state.
-    pub fn init(&self, rcc: &Rcc, frequency: u32) {
+    pub fn init(&self, rcc: &RCC, frequency: u32) {
         let tim7 = self.0;
 
         // Power up peripherals
@@ -39,7 +39,7 @@ impl<'a> Timer<'a> {
         let arr = u16(ratio / u32(psc + 1)).unwrap();
         tim7.arr.write(|w| w.arr().bits(arr));
 
-        tim7.dier.write(|w| unsafe { w.uie().bits(1) });
+        tim7.dier.write(|w| w.uie().bit(true));
         tim7.cr1.write(|w| w.opm().continuous());
     }
 

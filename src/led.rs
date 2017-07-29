@@ -1,6 +1,6 @@
 //! User LEDs
 
-use stm32f30x::{GPIOE, Gpioe, Rcc};
+use stm32f30x::{GPIOE, RCC};
 
 /// All the user LEDs
 pub static LEDS: [Led; 8] = [
@@ -34,31 +34,27 @@ impl Led {
 }
 
 /// Initializes all the user LEDs
-pub fn init(gpioe: &Gpioe, rcc: &Rcc) {
+pub fn init(gpioe: &GPIOE, rcc: &RCC) {
     // Power up peripherals
     rcc.ahbenr.modify(|_, w| w.iopeen().enabled());
 
     // Configure pins 8-15 as outputs
-    gpioe
-        .moder
-        .modify(
-            |_, w| {
-                w.moder8()
-                    .output()
-                    .moder9()
-                    .output()
-                    .moder10()
-                    .output()
-                    .moder11()
-                    .output()
-                    .moder12()
-                    .output()
-                    .moder13()
-                    .output()
-                    .moder14()
-                    .output()
-                    .moder15()
-                    .output()
-            },
-        );
+    gpioe.moder.modify(|_, w| {
+        w.moder8()
+            .output()
+            .moder9()
+            .output()
+            .moder10()
+            .output()
+            .moder11()
+            .output()
+            .moder12()
+            .output()
+            .moder13()
+            .output()
+            .moder14()
+            .output()
+            .moder15()
+            .output()
+    });
 }
