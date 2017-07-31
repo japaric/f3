@@ -1,61 +1,50 @@
 //! A LED roulette!
-
-#![feature(const_fn)]
-#![feature(used)]
+#![deny(unsafe_code)]
+#![deny(warnings)]
+#![feature(proc_macro)]
 #![no_std]
 
-// version = "0.2.2", default-features = false
 extern crate cast;
-
-// version = "0.2.0"
-extern crate cortex_m_rt;
-
-// version = "0.1.0"
-#[macro_use]
+extern crate f3;
+extern crate cortex_m;
 extern crate cortex_m_rtfm as rtfm;
 
-extern crate f3;
-
-use cast::{u8, usize};
+use cast::{usize, u8};
+use cortex_m::peripheral::SystClkSource;
 use f3::led::{self, LEDS};
-use f3::stm32f30x::interrupt::Tim7;
-use f3::stm32f30x;
-use f3::timer::Timer;
-use rtfm::{Local, P0, P1, T0, T1, TMax};
+use rtfm::{app, Threshold};
 
 // CONFIGURATION
-const FREQUENCY: u32 = 4; // Hz
+const FREQUENCY: u32 = 4;
 
-// RESOURCES
-peripherals!(stm32f30x, {
-    GPIOE: Peripheral {
-        register_block: Gpioe,
-        ceiling: C0,
+// TASKS & RESOURCES
+app! {
+    device: f3::stm32f30x,
+
+    resources: {
+        static STATE: u8 = 0;
     },
-    RCC: Peripheral {
-        register_block: Rcc,
-        ceiling: C0,
+
+    tasks: {
+        SYS_TICK: {
+            path: roulette,
+            resources: [STATE],
+        },
     },
-    TIM7: Peripheral {
-        register_block: Tim7,
-        ceiling: C1,
-    },
-});
+}
 
 // INITIALIZATION PHASE
-fn init(ref priority: P0, threshold: &TMax) {
-    let gpioe = GPIOE.access(priority, threshold);
-    let rcc = RCC.access(priority, threshold);
-    let tim7 = TIM7.access(priority, threshold);
-    let timer = Timer(&tim7);
+fn init(p: init::Peripherals, _r: init::Resources) {
+    led::init(p.GPIOE, p.RCC);
 
-    led::init(&gpioe, &rcc);
-    timer.init(&rcc, FREQUENCY);
-    timer.resume();
+    p.SYST.set_clock_source(SystClkSource::Core);
+    p.SYST.set_reload(8_000_000 / FREQUENCY);
+    p.SYST.enable_interrupt();
+    p.SYST.enable_counter();
 }
 
 // IDLE LOOP
-fn idle(_priority: P0, _threshold: T0) -> ! {
+fn idle() -> ! {
     // Sleep
     loop {
         rtfm::wfi();
@@ -63,33 +52,12 @@ fn idle(_priority: P0, _threshold: T0) -> ! {
 }
 
 // TASKS
-tasks!(stm32f30x, {
-    roulette: Task {
-        interrupt: Tim7,
-        priority: P1,
-        enabled: true,
-    },
-});
+fn roulette(_t: &mut Threshold, r: SYS_TICK::Resources) {
+    let curr = **r.STATE;
+    let next = (curr + 1) % u8(LEDS.len()).unwrap();
 
-fn roulette(mut task: Tim7, ref priority: P1, ref threshold: T1) {
-    static STATE: Local<u8, Tim7> = Local::new(0);
+    LEDS[usize(curr)].off();
+    LEDS[usize(next)].on();
 
-    let tim7 = TIM7.access(priority, threshold);
-    let timer = Timer(&tim7);
-
-    if timer.clear_update_flag().is_ok() {
-        let state = STATE.borrow_mut(&mut task);
-
-        let curr = *state;
-        let next = (curr + 1) % u8(LEDS.len()).unwrap();
-
-        LEDS[usize(curr)].off();
-        LEDS[usize(next)].on();
-
-        *state = next;
-    } else {
-        // Only reachable through `rtfm::request(roulette)`
-        #[cfg(debug_assertion)]
-        unreachable!()
-    }
+    **r.STATE = next;
 }

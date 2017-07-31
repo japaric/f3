@@ -1,44 +1,27 @@
 //! Turns all the user LEDs on
-
-#![feature(const_fn)]
-#![feature(used)]
+#![deny(unsafe_code)]
+#![deny(warnings)]
+#![feature(proc_macro)]
 #![no_std]
 
-// version = "0.2.0"
-extern crate cortex_m_rt;
-
-// version = "0.1.0"
-#[macro_use]
 extern crate cortex_m_rtfm as rtfm;
-
 extern crate f3;
 
 use f3::led::{self, LEDS};
-use f3::stm32f30x;
-use rtfm::{P0, T0, TMax};
+use rtfm::app;
 
-// RESOURCES
-peripherals!(stm32f30x, {
-    GPIOE: Peripheral {
-        register_block: Gpioe,
-        ceiling: C0,
-    },
-    RCC: Peripheral {
-        register_block: Rcc,
-        ceiling: C0,
-    },
-});
+// TASKS & RESOURCES
+app! {
+    device: f3::stm32f30x,
+}
 
 // INITIALIZATION PHASE
-fn init(ref priority: P0, threshold: &TMax) {
-    let gpioe = GPIOE.access(priority, threshold);
-    let rcc = RCC.access(priority, threshold);
-
-    led::init(&gpioe, &rcc);
+fn init(p: init::Peripherals) {
+    led::init(&p.GPIOE, &p.RCC);
 }
 
 // IDLE LOOP
-fn idle(_priority: P0, _threshold: T0) -> ! {
+fn idle() -> ! {
     for led in &LEDS {
         led.on();
     }
@@ -48,6 +31,3 @@ fn idle(_priority: P0, _threshold: T0) -> ! {
         rtfm::wfi();
     }
 }
-
-// TASKS
-tasks!(stm32f30x, {});

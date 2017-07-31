@@ -4,53 +4,38 @@
 //! message on the host. Read the [`itm`] crate documentation for details.
 //!
 //! [`itm`]: https://docs.rs/itm/0.1.1/itm/
-
-#![feature(const_fn)]
-#![feature(used)]
+#![deny(unsafe_code)]
+#![deny(warnings)]
+#![feature(proc_macro)]
 #![no_std]
 
-// version = "0.2.6"
 #[macro_use]
 extern crate cortex_m;
-
-// version = "0.2.0"
-extern crate cortex_m_rt;
-
-// version = "0.1.0"
-#[macro_use]
 extern crate cortex_m_rtfm as rtfm;
-
 extern crate f3;
 
-use f3::stm32f30x;
-use rtfm::{P0, T0, TMax};
+use rtfm::{app, Threshold};
 
-// RESOURCES
-peripherals!(stm32f30x, {
-    ITM: Peripheral {
-        register_block: Itm,
-        ceiling: C0,
+// TASK & RESOURCES
+app! {
+    device: f3::stm32f30x,
+
+    idle: {
+        resources: [ITM],
     },
-});
+}
 
 // INITIALIZATION PHASE
-fn init(ref priority: P0, threshold: &TMax) {
-    let itm = ITM.access(priority, threshold);
-
-    iprintln!(&itm.stim[0], "Hello");
+fn init(p: init::Peripherals) {
+    iprintln!(&p.ITM.stim[0], "Hello");
 }
 
 // IDLE LOOP
-fn idle(ref priority: P0, ref threshold: T0) -> ! {
-    let itm = ITM.access(priority, threshold);
-
-    iprintln!(&itm.stim[0], "World");
+fn idle(_t: &mut Threshold, r: idle::Resources) -> ! {
+    iprintln!(&r.ITM.stim[0], "World");
 
     // Sleep
     loop {
         rtfm::wfi();
     }
 }
-
-// TASKS
-tasks!(stm32f30x, {});

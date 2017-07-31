@@ -7,7 +7,7 @@
 //! configuration of the quickstart crate. Additionally, uncomment the "if using
 //! ITM" block in the `.gdbinit` file.
 //!
-//! [i]: https://docs.rs/cortex-m-quickstart/0.1.1/cortex_m_quickstart/
+//! [i]: https://docs.rs/cortex-m-quickstart/0.2.0/cortex_m_quickstart/
 //!
 //! # Examples
 //!

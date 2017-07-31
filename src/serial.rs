@@ -6,7 +6,7 @@
 use core::ptr;
 
 use cast::{u16, u8};
-use stm32f30x::{Gpioa, Rcc, Usart1};
+use stm32f30x::{USART1, GPIOA, RCC};
 
 use frequency;
 
@@ -14,8 +14,10 @@ use frequency;
 pub type Result<T> = ::core::result::Result<T, Error>;
 
 /// An error
-pub struct Error {
-    _0: (),
+#[derive(Debug)]
+pub enum Error {
+    #[doc(hidden)]
+    _Extensible,
 }
 
 /// Serial interface
@@ -23,13 +25,12 @@ pub struct Error {
 /// # Interrupts
 ///
 /// - `Usart1Exti25` - RXNE (RX buffer not empty)
-#[derive(Clone, Copy)]
-pub struct Serial<'a>(pub &'a Usart1);
+pub struct Serial<'a>(pub &'a USART1);
 
 impl<'a> Serial<'a> {
     /// Initializes the serial interface with a baud rate of `baut_rate` bits
     /// per second
-    pub fn init(self, gpioa: &Gpioa, rcc: &Rcc, baud_rate: u32) {
+    pub fn init(&self, gpioa: &GPIOA, rcc: &RCC, baud_rate: u32) {
         let usart1 = self.0;
 
         // Power up the peripherals
@@ -50,77 +51,67 @@ impl<'a> Serial<'a> {
         // Disable hardware flow control
         usart1
             .cr3
-            .write(|w| unsafe { w.rtse().bits(0).ctse().bits(0) });
+            .write(|w| w.rtse().clear_bit().ctse().clear_bit());
 
         // set baud rate
         let brr = u16(frequency::APB2 / baud_rate).unwrap();
         let fraction = u8(brr & 0b1111).unwrap();
         let mantissa = brr >> 4;
-        usart1
-            .brr
-            .write(
-                |w| unsafe {
-                    w.div_fraction()
-                        .bits(fraction)
-                        .div_mantissa()
-                        .bits(mantissa)
-                },
-            );
+        usart1.brr.write(|w| unsafe {
+            w.div_fraction()
+                .bits(fraction)
+                .div_mantissa()
+                .bits(mantissa)
+        });
 
         // enable peripheral, transmitter, receiver
         // enable RXNE event
-        usart1
-            .cr1
-            .write(
-                |w| unsafe {
-                    w.ue()
-                        .bits(1)
-                        .re()
-                        .bits(1)
-                        .te()
-                        .bits(1)
-                        .pce()
-                        .bits(0)
-                        .over8()
-                        .bits(0)
-                        .rxneie()
-                        .bits(1)
-                },
-            );
+        usart1.cr1.write(|w| {
+            w.ue()
+                .set_bit()
+                .re()
+                .set_bit()
+                .te()
+                .set_bit()
+                .pce()
+                .clear_bit()
+                .over8()
+                .clear_bit()
+                .rxneie()
+                .set_bit()
+        });
     }
 
     /// Reads a byte from the RX buffer
     ///
     /// Returns `None` if the buffer is empty
-    pub fn read(self) -> Result<u8> {
+    pub fn read(&self) -> Result<u8> {
         let usart1 = self.0;
 
-        if usart1.isr.read().rxne().bits() == 1 {
+        if usart1.isr.read().rxne().bit_is_set() {
             // NOTE(read_volatile) the register is 9 bits big but we'll only
             // work with the first 8 bits
-            Ok(
-                unsafe {
-                    ptr::read_volatile(&usart1.rdr as *const _ as *const u8)
-                },
-            )
+            Ok(unsafe {
+                ptr::read_volatile(&usart1.rdr as *const _ as *const u8)
+            })
         } else {
-            Err(Error { _0: () })
+            Err(Error::_Extensible)
         }
     }
 
     /// Writes byte into the TX buffer
     ///
     /// Returns `Err` if the buffer is already full
-    pub fn write(self, byte: u8) -> Result<()> {
+    pub fn write(&self, byte: u8) -> Result<()> {
         let usart1 = self.0;
 
-        if usart1.isr.read().txe().bits() == 1 {
+        if usart1.isr.read().txe().bit_is_set() {
             unsafe {
                 ptr::write_volatile(&usart1.tdr as *const _ as *mut u8, byte)
             }
             Ok(())
         } else {
-            Err(Error { _0: () })
+            Err(Error::_Extensible)
         }
     }
 }

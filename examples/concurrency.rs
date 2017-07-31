@@ -1,77 +1,60 @@
 //! LED roulette and serial loopback running concurrently
-
-#![feature(const_fn)]
-#![feature(used)]
+#![deny(unsafe_code)]
+#![deny(warnings)]
+#![feature(proc_macro)]
 #![no_std]
 
-// version = "0.2.2", default-features = false
 extern crate cast;
-
-// version = "0.2.0"
-extern crate cortex_m_rt;
-
-// version = "0.1.0"
-#[macro_use]
+extern crate cortex_m;
 extern crate cortex_m_rtfm as rtfm;
-
 extern crate f3;
 
-use cast::{u8, usize};
+use cast::{usize, u8};
+use cortex_m::peripheral::SystClkSource;
 use f3::led::{self, LEDS};
 use f3::serial::Serial;
-use f3::stm32f30x::interrupt::{Tim7, Usart1Exti25};
-use f3::stm32f30x;
-use f3::timer::Timer;
-use rtfm::{Local, P0, P1, T0, T1, TMax};
+use rtfm::{app, Threshold};
 
 // CONFIGURATION
-pub const BAUD_RATE: u32 = 115_200; // bits per second
+const BAUD_RATE: u32 = 115_200; // bits per second
 const FREQUENCY: u32 = 4; // Hz
 
-// RESOURCES
-peripherals!(stm32f30x, {
-    GPIOA: Peripheral {
-        register_block: Gpioa,
-        ceiling: C0,
+// TASKS & RESOURCES
+app! {
+    device: f3::stm32f30x,
+
+    resources: {
+        static STATE: u8 = 0;
     },
-    GPIOE: Peripheral {
-        register_block: Gpioe,
-        ceiling: C0,
-    },
-    RCC: Peripheral {
-        register_block: Rcc,
-        ceiling: C0,
-    },
-    TIM7: Peripheral {
-        register_block: Tim7,
-        ceiling: C1,
-    },
-    USART1: Peripheral {
-        register_block: Usart1,
-        ceiling: C1,
-    },
-});
+
+    tasks: {
+        SYS_TICK: {
+            path: roulette,
+            resources: [STATE],
+        },
+
+        USART1_EXTI25: {
+            path: loopback,
+            resources: [USART1],
+        },
+    }
+}
 
 // INITIALIZATION PHASE
-fn init(ref priority: P0, threshold: &TMax) {
-    let gpioa = GPIOA.access(priority, threshold);
-    let gpioe = GPIOE.access(priority, threshold);
-    let rcc = RCC.access(priority, threshold);
-    let tim7 = TIM7.access(priority, threshold);
-    let usart1 = USART1.access(priority, threshold);
+fn init(p: init::Peripherals, _r: init::Resources) {
+    let serial = Serial(&p.USART1);
 
-    let timer = Timer(&tim7);
-    let serial = Serial(&usart1);
+    led::init(&p.GPIOE, &p.RCC);
+    serial.init(&p.GPIOA, &p.RCC, BAUD_RATE);
 
-    led::init(&gpioe, &rcc);
-    timer.init(&rcc, FREQUENCY);
-    serial.init(&gpioa, &rcc, BAUD_RATE);
-
-    timer.resume();
+    p.SYST.set_clock_source(SystClkSource::Core);
+    p.SYST.set_reload(8_000_000 / FREQUENCY);
+    p.SYST.enable_interrupt();
+    p.SYST.enable_counter();
 }
 
 // IDLE LOOP
-fn idle(_priority: P0, _threshold: T0) -> ! {
+fn idle() -> ! {
     // Sleep
     loop {
         rtfm::wfi();
@@ -79,22 +62,8 @@ fn idle(_priority: P0, _threshold: T0) -> ! {
 }
 
 // TASKS
-tasks!(stm32f30x, {
-    loopback: Task {
-        interrupt: Usart1Exti25,
-        priority: P1,
-        enabled: true,
-    },
-    roulette: Task {
-        interrupt: Tim7,
-        priority: P1,
-        enabled: true,
-    },
-});
-
-fn loopback(_task: Usart1Exti25, ref priority: P1, ref threshold: T1) {
-    let usart1 = USART1.access(priority, threshold);
-    let serial = Serial(&usart1);
+fn loopback(_t: &mut Threshold, r: USART1_EXTI25::Resources) {
+    let serial = Serial(&r.USART1);
 
     if let Ok(byte) = serial.read() {
         if serial.write(byte).is_err() {
@@ -110,25 +79,12 @@ fn loopback(_task: Usart1Exti25, ref priority: P1, ref threshold: T1) {
     }
 }
 
-fn roulette(mut task: Tim7, ref priority: P1, ref threshold: T1) {
-    static STATE: Local<u8, Tim7> = Local::new(0);
+fn roulette(_t: &mut Threshold, r: SYS_TICK::Resources) {
+    let curr = **r.STATE;
+    let next = (curr + 1) % u8(LEDS.len()).unwrap();
 
-    let tim7 = TIM7.access(priority, threshold);
-    let timer = Timer(&tim7);
+    LEDS[usize(curr)].off();
+    LEDS[usize(next)].on();
 
-    if timer.clear_update_flag().is_ok() {
-        let state = STATE.borrow_mut(&mut task);
-
-        let curr = *state;
-        let next = (curr + 1) % u8(LEDS.len()).unwrap();
-
-        LEDS[usize(curr)].off();
-        LEDS[usize(next)].on();
-
-        *state = next;
-    } else {
-        // Only reachable through `rtfm::request(roulette)`
-        #[cfg(debug_assertion)]
-        unreachable!()
-    }
+    **r.STATE = next;
 }

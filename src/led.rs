@@ -1,6 +1,6 @@
 //! User LEDs
 
-use stm32f30x::{GPIOE, Gpioe, Rcc};
+use stm32f30x::{GPIOE, RCC};
 
 /// All the user LEDs
 pub static LEDS: [Led; 8] = [
@@ -34,7 +34,7 @@ impl Led {
 }
 
 /// Initializes all the user LEDs
-pub fn init(gpioe: &Gpioe, rcc: &Rcc) {
+pub fn init(gpioe: &GPIOE, rcc: &RCC) {
     // Power up peripherals
     rcc.ahbenr.modify(|_, w| w.iopeen().enabled());
 

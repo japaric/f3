@@ -1,37 +1,30 @@
-//! Prints "Hello" and then "World" on the OpenOCD console
-
-#![feature(used)]
+//! Prints "Hello, world" on the OpenOCD console
+#![deny(unsafe_code)]
+#![deny(warnings)]
+#![feature(proc_macro)]
 #![no_std]
 
-// version = "0.2.6"
-#[macro_use]
-extern crate cortex_m;
-
-// version = "0.2.0"
-extern crate cortex_m_rt;
-
-// version = "0.1.0"
-#[macro_use]
 extern crate cortex_m_rtfm as rtfm;
-
+extern crate cortex_m_semihosting as semihosting;
 extern crate f3;
 
-use f3::stm32f30x;
-use rtfm::{P0, T0, TMax};
+use core::fmt::Write;
 
-// TASKS
-tasks!(stm32f30x, {});
+use rtfm::app;
+use semihosting::hio;
 
-// INITIALIZATION PHASE
-fn init(_priority: P0, _threshold: &TMax) {
-    hprintln!("Hello");
+// TASKS & RESOURCES
+app! {
+    device: f3::stm32f30x,
 }
 
-// IDLE LOOP
-fn idle(_priority: P0, _threshold: T0) -> ! {
-    hprintln!("World");
+// INITIALIZATION PHASE
+fn init(_p: init::Peripherals) {}
 
-    // Sleep
+// IDLE LOOP
+fn idle() -> ! {
+    writeln!(hio::hstdout().unwrap(), "Hello, world!").unwrap();
+
     loop {
         rtfm::wfi();
     }
