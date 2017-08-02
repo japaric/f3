@@ -1,18 +1,15 @@
-set -ex
+set -euxo pipefail
 
 main() {
-    local tag=$(git ls-remote --tags --refs --exit-code https://github.com/japaric/cross \
-                    | cut -d/ -f3 \
-                    | grep -E '^v0.1.[0-9]+$' \
-                    | sort --version-sort \
-                    | tail -n1)
+    if [ $TARGET = thumbv7m-none-eabi ]; then
+        local vers=0.3.7
 
-    curl -LSfs https://japaric.github.io/trust/install.sh | \
-        sh -s -- \
-           --force \
-           --git japaric/cross \
-           --tag $tag \
-           --target x86_64-unknown-linux-musl
+        cargo install --list | grep "xargo v$vers" || \
+            ( cd .. && cargo install xargo -f --vers $vers )
+
+        rustup component list | grep 'rust-src.*installed' || \
+            rustup component add rust-src
+    fi
 }
 
 main

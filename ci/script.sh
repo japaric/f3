@@ -1,8 +1,13 @@
 set -ex
 
 main() {
-    cross build --target $TARGET
-    cross build --target $TARGET --release
+    if [ $TARGET = x86_64-unknown-linux-gnu ]; then
+        cargo build --target $TARGET
+        return
+    fi
+
+    xargo build --target $TARGET
+    xargo test --target $TARGET --examples
 }
 
 main

@@ -1,7 +1,4 @@
-dist: trusty
 language: rust
-services: docker
-sudo: required
 
 matrix:
   include:
@@ -9,12 +6,17 @@ matrix:
       rust: nightly
     - env: TARGET=thumbv7em-none-eabihf
       rust: nightly
+      addons:
+        apt:
+          sources:
+            - debian-sid
+          packages:
+            - binutils-arm-none-eabi
 
 before_install: set -e
 
 install:
-  - sh ci/install.sh
-  - source ~/.cargo/env || true
+  - bash ci/install.sh
 
 script:
   - bash ci/script.sh
