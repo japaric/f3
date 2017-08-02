@@ -1,7 +1,7 @@
 set -euxo pipefail
 
 main() {
-    if [ $TARGET = thumbv7m-none-eabi ]; then
+    if [ $TARGET = thumbv7em-none-eabihf ]; then
         local vers=0.3.7
 
         cargo install --list | grep "xargo v$vers" || \
