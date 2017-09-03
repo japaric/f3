@@ -5,8 +5,6 @@ use core::u16;
 use cast::{u16, u32};
 use stm32f30x::{RCC, TIM7};
 
-use frequency;
-
 /// Specialized `Result` type
 pub type Result<T> = ::core::result::Result<T, Error>;
 
@@ -32,7 +30,7 @@ impl<'a> Timer<'a> {
         // Power up peripherals
         rcc.apb1enr.modify(|_, w| w.tim7en().enabled());
 
-        let ratio = frequency::APB1 / frequency;
+        let ratio = ::apb1::FREQUENCY / frequency;
         let psc = u16((ratio - 1) / u32(u16::MAX)).unwrap();
         tim7.psc.write(|w| w.psc().bits(psc));
         let arr = u16(ratio / u32(psc + 1)).unwrap();

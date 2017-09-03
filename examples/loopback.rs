@@ -7,11 +7,14 @@
 extern crate cortex_m_rtfm as rtfm;
 extern crate f3;
 
-use f3::serial::Serial;
+use f3::prelude::*;
+use f3::Serial;
+use f3::serial::Event;
+use f3::time::Hertz;
 use rtfm::{app, Threshold};
 
 // CONFIGURATION
-const BAUD_RATE: u32 = 115_200; // bits per second
+const BAUD_RATE: Hertz = Hertz(115_200);
 
 // TASKS & RESOURCES
 app! {
@@ -27,9 +30,10 @@ app! {
 
 // INITIALIZATION PHASE
 fn init(p: init::Peripherals) {
-    let serial = Serial(&p.USART1);
+    let serial = Serial(p.USART1);
 
-    serial.init(&p.GPIOA, &p.RCC, BAUD_RATE);
+    serial.init(BAUD_RATE.invert(), Some(p.DMA1), p.GPIOA, p.RCC);
+    serial.listen(Event::Rxne);
 }
 
 // IDLE LOOP
@@ -43,7 +47,7 @@ fn idle() -> ! {
 // TASKS
 // Send back the received byte
 fn loopback(_t: &mut Threshold, r: USART1_EXTI25::Resources) {
-    let serial = Serial(&r.USART1);
+    let serial = Serial(&**r.USART1);
 
     let byte = serial.read().unwrap();
     serial.write(byte).unwrap();

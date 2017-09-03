@@ -9,9 +9,19 @@ name = "f3"
 repository = "https://github.com/japaric/f3"
 version = "0.5.0"
 
+[dependencies]
+static-ref = "0.2.0"
+
 [dependencies.cast]
 default-features = false
-version = "0.2.0"
+version = "0.2.2"
+
+[dependencies.embedded-hal]
+git = "https://github.com/japaric/embedded-hal"
+rev = "7d904f515d15fd5fe7ea34e18820ea83e2651fa2"
+
+[dependencies.nb]
+git = "https://github.com/japaric/nb"
 
 [dependencies.stm32f30x]
 features = ["rt"]
