@@ -15,7 +15,7 @@ use f3::led::{self, LEDS};
 use rtfm::{app, Threshold};
 
 // CONFIGURATION
-const FREQUENCY: u32 = 4;
+const DIVISOR: u32 = 4;
 
 // TASKS & RESOURCES
 app! {
@@ -38,7 +38,7 @@ fn init(p: init::Peripherals, _r: init::Resources) {
     led::init(p.GPIOE, p.RCC);
 
     p.SYST.set_clock_source(SystClkSource::Core);
-    p.SYST.set_reload(8_000_000 / FREQUENCY);
+    p.SYST.set_reload(8_000_000 / DIVISOR);
     p.SYST.enable_interrupt();
     p.SYST.enable_counter();
 }

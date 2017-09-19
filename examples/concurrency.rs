@@ -9,15 +9,19 @@ extern crate cortex_m;
 extern crate cortex_m_rtfm as rtfm;
 extern crate f3;
 
-use cast::{usize, u8};
-use cortex_m::peripheral::SystClkSource;
+use f3::Serial;
 use f3::led::{self, LEDS};
-use f3::serial::Serial;
+use f3::prelude::*;
+use f3::serial::Event;
+use f3::time::Hertz;
+use cortex_m::peripheral::SystClkSource;
+use cast::{usize, u8};
 use rtfm::{app, Threshold};
 
 // CONFIGURATION
-const BAUD_RATE: u32 = 115_200; // bits per second
-const FREQUENCY: u32 = 4; // Hz
+const BAUD_RATE: Hertz = Hertz(115_200);
+const DIVISOR: u32 = 4;
+
 
 // TASKS & RESOURCES
 app! {
@@ -42,13 +46,14 @@ app! {
 
 // INITIALIZATION PHASE
 fn init(p: init::Peripherals, _r: init::Resources) {
-    let serial = Serial(&p.USART1);
+    led::init(p.GPIOE, p.RCC);
 
-    led::init(&p.GPIOE, &p.RCC);
-    serial.init(&p.GPIOA, &p.RCC, BAUD_RATE);
+    let serial = Serial(p.USART1);
+    serial.init(BAUD_RATE.invert(), Some(p.DMA1), p.GPIOA, p.RCC);
+    serial.listen(Event::Rxne);
 
     p.SYST.set_clock_source(SystClkSource::Core);
-    p.SYST.set_reload(8_000_000 / FREQUENCY);
+    p.SYST.set_reload(8_000_000 / DIVISOR);
     p.SYST.enable_interrupt();
     p.SYST.enable_counter();
 }
@@ -63,7 +68,7 @@ fn idle() -> ! {
 
 // TASKS
 fn loopback(_t: &mut Threshold, r: USART1_EXTI25::Resources) {
-    let serial = Serial(&r.USART1);
+    let serial = Serial(&**r.USART1);
 
     if let Ok(byte) = serial.read() {
         if serial.write(byte).is_err() {

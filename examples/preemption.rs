@@ -20,14 +20,17 @@ extern crate heapless;
 
 use cast::{usize, u8};
 use cortex_m::peripheral::SystClkSource;
+use f3::Serial;
 use f3::led::{self, LEDS};
-use f3::serial::Serial;
+use f3::prelude::*;
+use f3::serial::Event;
 use heapless::Vec;
 use rtfm::{app, Resource, Threshold};
+use f3::time::Hertz;
 
 // CONFIGURATION
-const BAUD_RATE: u32 = 115_200; // bits per second
-const FREQUENCY: u32 = 4; // Hz
+const BAUD_RATE: Hertz = Hertz(115_200);
+const DIVISOR: u32 = 4;
 
 // TASK & RESOURCES
 app!{
@@ -57,10 +60,13 @@ app!{
 // INITIALIZATION PHASE
 fn init(p: init::Peripherals, _r: init::Resources) {
     led::init(&p.GPIOE, &p.RCC);
-    Serial(&p.USART1).init(&p.GPIOA, &p.RCC, BAUD_RATE);
+
+    let serial = Serial(p.USART1);
+    serial.init(BAUD_RATE.invert(), Some(p.DMA1), p.GPIOA, p.RCC);
+    serial.listen(Event::Rxne);
 
     p.SYST.set_clock_source(SystClkSource::Core);
-    p.SYST.set_reload(8_000_000 / FREQUENCY);
+    p.SYST.set_reload(8_000_000 / DIVISOR);
     p.SYST.enable_interrupt();
     p.SYST.enable_counter();
 }
@@ -75,7 +81,7 @@ fn idle() -> ! {
 
 // TASKS
 fn receive(t: &mut Threshold, mut r: USART1_EXTI25::Resources) {
-    let serial = Serial(&r.USART1);
+    let serial = Serial(&**r.USART1);
 
     let byte = serial.read().unwrap();
     if serial.write(byte).is_err() {
