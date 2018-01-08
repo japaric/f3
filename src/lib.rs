@@ -8,6 +8,7 @@ extern crate nb;
 pub extern crate stm32f30x;
 
 pub mod gpio;
+pub mod i2c;
 pub mod led;
 pub mod prelude;
 pub mod rcc;

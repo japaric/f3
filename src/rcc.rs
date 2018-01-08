@@ -8,6 +8,7 @@ impl RccExt for RCC {
     fn split(self) -> Rcc {
         Rcc {
             AHB: AHB { _0: () },
+            APB1: APB1 { _0: () },
             APB2: APB2 { _0: () },
         }
     }
@@ -16,6 +17,7 @@ impl RccExt for RCC {
 #[allow(non_snake_case)]
 pub struct Rcc {
     pub AHB: AHB,
+    pub APB1: APB1,
     pub APB2: APB2,
 }
 
@@ -33,6 +35,19 @@ impl AHB {
     }
 }
 
+pub struct APB1 {
+    _0: (),
+}
+
+impl APB1 {
+    pub(crate) fn enr(&mut self) -> &rcc::APB1ENR {
+        unsafe { &(*RCC::ptr()).apb1enr }
+    }
+
+    pub(crate) fn rstr(&mut self) -> &rcc::APB1RSTR {
+        unsafe { &(*RCC::ptr()).apb1rstr }
+    }
+}
 pub struct APB2 {
     _0: (),
 }
