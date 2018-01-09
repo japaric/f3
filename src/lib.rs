@@ -3,10 +3,13 @@
 #![feature(never_type)]
 #![no_std]
 
+extern crate cast;
+extern crate cortex_m;
 extern crate embedded_hal as hal;
 extern crate nb;
 pub extern crate stm32f30x;
 
+pub mod delay;
 pub mod gpio;
 pub mod i2c;
 pub mod led;

@@ -16,7 +16,9 @@ fn main() {
     let mut gpioa = p.GPIOA.split(&mut rcc.AHB);
     let mut gpioe = p.GPIOE.split(&mut rcc.AHB);
 
-    let mut nss = gpioe.PE3.as_push_pull_output(&mut gpioe.MODER, &mut gpioe.OTYPER);
+    let mut nss = gpioe
+        .PE3
+        .as_push_pull_output(&mut gpioe.MODER, &mut gpioe.OTYPER);
     nss.set_high();
 
     let sck = gpioa.PA5.as_af5(&mut gpioa.MODER, &mut gpioa.AFRL);

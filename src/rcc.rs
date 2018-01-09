@@ -48,6 +48,7 @@ impl APB1 {
         unsafe { &(*RCC::ptr()).apb1rstr }
     }
 }
+
 pub struct APB2 {
     _0: (),
 }
