@@ -10,6 +10,7 @@ extern crate nb;
 pub extern crate stm32f30x;
 
 pub mod delay;
+pub mod flash;
 pub mod gpio;
 pub mod i2c;
 pub mod led;

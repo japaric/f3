@@ -1,21 +1,26 @@
-use cast::u32;
-
 use cortex_m::peripheral::SYST;
 use cortex_m::peripheral::syst::SystClkSource;
 
+use rcc::Clocks;
+
 pub struct Delay {
+    clocks: Clocks,
     syst: SYST,
 }
 
 impl Delay {
-    pub fn new(syst: SYST) -> Self {
+    pub fn new(syst: SYST, clocks: Clocks) -> Self {
         syst.set_clock_source(SystClkSource::Core);
 
-        Delay { syst }
+        Delay { syst, clocks }
     }
 
-    pub fn ms(&mut self, ms: u16) {
-        self.syst.set_reload(u32(ms) * 8_000);
+    pub fn ms(&mut self, ms: u32) {
+        let rvr = ms * (self.clocks.sysclk().0 / 1_000);
+
+        assert!(rvr < (1 << 24));
+
+        self.syst.set_reload(rvr);
         self.syst.clear_current();
         self.syst.enable_counter();
 
@@ -25,7 +30,11 @@ impl Delay {
     }
 
     pub fn us(&mut self, us: u32) {
-        self.syst.set_reload(us * 8);
+        let rvr = us * (self.clocks.sysclk().0 / 1_000_000);
+
+        assert!(rvr < (1 << 24));
+
+        self.syst.set_reload(rvr);
         self.syst.clear_current();
         self.syst.enable_counter();
 

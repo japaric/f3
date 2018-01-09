@@ -12,7 +12,7 @@ use f3::serial::Serial;
 fn main() {
     let p = stm32f30x::Peripherals::take().unwrap();
 
-    let mut rcc = p.RCC.split();
+    let mut rcc = p.RCC.constraint();
     let mut gpioa = p.GPIOA.split(&mut rcc.AHB);
     let tx = gpioa.PA9.as_af7(&mut gpioa.MODER, &mut gpioa.AFRH);
     let rx = gpioa.PA10.as_af7(&mut gpioa.MODER, &mut gpioa.AFRH);

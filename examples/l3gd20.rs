@@ -12,7 +12,7 @@ use f3::spi::Spi;
 fn main() {
     let p = stm32f30x::Peripherals::take().unwrap();
 
-    let mut rcc = p.RCC.split();
+    let mut rcc = p.RCC.constraint();
     let mut gpioa = p.GPIOA.split(&mut rcc.AHB);
     let mut gpioe = p.GPIOE.split(&mut rcc.AHB);
 

@@ -12,10 +12,16 @@ fn main() {
     let cp = cortex_m::peripheral::Peripherals::take().unwrap();
     let dp = stm32f30x::Peripherals::take().unwrap();
 
-    let mut rcc = dp.RCC.split();
+    let mut rcc = dp.RCC.constraint();
+    let mut flash = dp.FLASH.constraint();
+
+    // Try the other clock configuration
+    // let clocks = rcc.CFGR.freeze(&mut flash.ACR);
+    let clocks = rcc.CFGR.sysclk(16.mhz()).freeze(&mut flash.ACR);
+
     let mut gpioe = dp.GPIOE.split(&mut rcc.AHB);
 
-    let mut delay = Delay::new(cp.SYST);
+    let mut delay = Delay::new(cp.SYST, clocks);
     let mut led: Led = gpioe
         .PE9
         .as_push_pull_output(&mut gpioe.MODER, &mut gpioe.OTYPER)

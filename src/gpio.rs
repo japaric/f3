@@ -5,6 +5,7 @@ use rcc::AHB;
 pub trait GpioExt {
     type Parts;
 
+    /// Splits the GPIO block into independent pins
     fn split(self, ahb: &mut AHB) -> Self::Parts;
 }
 

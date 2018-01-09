@@ -1,6 +1,13 @@
+#[derive(Clone, Copy)]
 pub struct Bps(pub u32);
+
+#[derive(Clone, Copy)]
 pub struct Hertz(pub u32);
+
+#[derive(Clone, Copy)]
 pub struct KiloHertz(pub u32);
+
+#[derive(Clone, Copy)]
 pub struct MegaHertz(pub u32);
 
 pub trait U32Ext {
@@ -25,5 +32,23 @@ impl U32Ext for u32 {
 
     fn mhz(self) -> MegaHertz {
         MegaHertz(self)
+    }
+}
+
+impl Into<Hertz> for KiloHertz {
+    fn into(self) -> Hertz {
+        Hertz(self.0 * 1_000)
+    }
+}
+
+impl Into<Hertz> for MegaHertz {
+    fn into(self) -> Hertz {
+        Hertz(self.0 * 1_000_000)
+    }
+}
+
+impl Into<KiloHertz> for MegaHertz {
+    fn into(self) -> KiloHertz {
+        KiloHertz(self.0 * 1_000)
     }
 }

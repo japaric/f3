@@ -12,7 +12,7 @@ use lsm303dlhc::Lsm303dlhc;
 fn main() {
     let p = stm32f30x::Peripherals::take().unwrap();
 
-    let mut rcc = p.RCC.split();
+    let mut rcc = p.RCC.constraint();
     let mut gpiob = p.GPIOB.split(&mut rcc.AHB);
 
     let scl = gpiob.PB6.as_af4(&mut gpiob.MODER, &mut gpiob.AFRL);
