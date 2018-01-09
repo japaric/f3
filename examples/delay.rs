@@ -27,11 +27,11 @@ fn main() {
         .as_push_pull_output(&mut gpioe.MODER, &mut gpioe.OTYPER)
         .into();
 
-    let half_period = 1_000;
+    let half_period = 1_000_u32;
     loop {
         led.on();
-        delay.ms(half_period);
+        delay.delay_ms(half_period);
         led.off();
-        delay.ms(half_period);
+        delay.delay_ms(half_period);
     }
 }

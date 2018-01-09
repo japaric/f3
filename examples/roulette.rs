@@ -57,15 +57,15 @@ fn main() {
 
     let mut leds = [n, ne, e, se, s, sw, w, nw];
 
-    let ms = 50;
+    let ms = 50_u8;
     loop {
         for curr in 0..8 {
             let next = (curr + 1) % 8;
 
             leds[next].on();
-            delay.ms(ms);
+            delay.delay_ms(ms);
             leds[curr].off();
-            delay.ms(ms);
+            delay.delay_ms(ms);
         }
     }
 }
