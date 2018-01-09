@@ -16,13 +16,14 @@ fn main() {
     let mut rcc = dp.RCC.constraint();
     let mut flash = dp.FLASH.constraint();
 
-    // Try the other clock configuration
+    // TRY the other clock configuration
     // let clocks = rcc.CFGR.freeze(&mut flash.ACR);
     let clocks = rcc.CFGR.sysclk(16.mhz()).freeze(&mut flash.ACR);
 
     let mut gpioe = dp.GPIOE.split(&mut rcc.AHB);
 
-    let mut timer = Timer::new(dp.TIM6, 1.hz(), clocks, &mut rcc.APB1);
+    // TRY the other timers
+    let mut timer = Timer::tim4(dp.TIM4, 1.hz(), clocks, &mut rcc.APB1);
     let mut led: Led = gpioe
         .PE9
         .as_push_pull_output(&mut gpioe.MODER, &mut gpioe.OTYPER)
@@ -30,9 +31,9 @@ fn main() {
 
     timer.resume();
     loop {
+        block!(timer.wait()).unwrap();
         led.on();
         block!(timer.wait()).unwrap();
         led.off();
-        block!(timer.wait()).unwrap();
     }
 }
