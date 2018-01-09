@@ -46,8 +46,8 @@ pub struct AF14;
 pub struct AF15;
 
 macro_rules! gpio {
-    ($GPIOX:ident, $gpiox:ident, $iopxenr:ident, $iopxrst:ident, [
-        $($PXN:ident: ($i:expr, $MODE:ty, $AFR:ident),)+
+    ($GPIOX:ident, $gpiox:ident, $iopxenr:ident, $iopxrst:ident, $PXx:ident, [
+        $($PXi:ident: ($i:expr, $MODE:ty, $AFR:ident),)+
     ]) => {
         #[allow(non_snake_case)]
         pub mod $GPIOX {
@@ -70,7 +70,7 @@ macro_rules! gpio {
                 pub OTYPER: OTYPER,
                 pub PUPDR: PUPDR,
                 $(
-                    pub $PXN: $PXN<$MODE>,
+                    pub $PXi: $PXi<$MODE>,
                 )+
             }
 
@@ -92,7 +92,7 @@ macro_rules! gpio {
                         OTYPER: OTYPER { _0: () },
                         PUPDR: PUPDR { _0: () },
                         $(
-                            $PXN: $PXN { _mode: PhantomData },
+                            $PXi: $PXi { _mode: PhantomData },
                         )+
                     }
                 }
@@ -148,17 +148,43 @@ macro_rules! gpio {
                 }
             }
 
+            pub struct $PXx<MODE> {
+                i: u8,
+                _mode: PhantomData<MODE>,
+            }
+
+            impl<MODE> OutputPin for $PXx<Output<MODE>> {
+                fn is_high(&self) -> bool {
+                    !self.is_low()
+                }
+
+                fn is_low(&self) -> bool {
+                    // NOTE(unsafe) atomic read with no side effects
+                    unsafe { (*$GPIOX::ptr()).odr.read().bits() & (1 << self.i) == 0 }
+                }
+
+                fn set_high(&mut self) {
+                    // NOTE(unsafe) atomic write to a stateless register
+                    unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << self.i)) }
+                }
+
+                fn set_low(&mut self) {
+                    // NOTE(unsafe) atomic write to a stateless register
+                    unsafe { (*$GPIOX::ptr()).bsrr.write(|w| w.bits(1 << (16 + self.i))) }
+                }
+            }
+
             $(
-                pub struct $PXN<MODE> {
+                pub struct $PXi<MODE> {
                     _mode: PhantomData<MODE>,
                 }
 
-                impl<MODE> $PXN<MODE> {
+                impl<MODE> $PXi<MODE> {
                     pub fn as_af4(
                         self,
                         moder: &mut MODER,
                         afr: &mut $AFR,
-                    ) -> $PXN<Alternate<AF4>> {
+                    ) -> $PXi<Alternate<AF4>> {
                         let offset = 2 * $i;
 
                         // alternate function mode
@@ -173,14 +199,14 @@ macro_rules! gpio {
                             w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
                         });
 
-                        $PXN { _mode: PhantomData }
+                        $PXi { _mode: PhantomData }
                     }
 
                     pub fn as_af5(
                         self,
                         moder: &mut MODER,
                         afr: &mut $AFR,
-                    ) -> $PXN<Alternate<AF5>> {
+                    ) -> $PXi<Alternate<AF5>> {
                         let offset = 2 * $i;
 
                         // alternate function mode
@@ -195,14 +221,14 @@ macro_rules! gpio {
                             w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
                         });
 
-                        $PXN { _mode: PhantomData }
+                        $PXi { _mode: PhantomData }
                     }
 
                     pub fn as_af7(
                         self,
                         moder: &mut MODER,
                         afr: &mut $AFR,
-                    ) -> $PXN<Alternate<AF7>> {
+                    ) -> $PXi<Alternate<AF7>> {
                         let offset = 2 * $i;
 
                         // alternate function mode
@@ -218,14 +244,14 @@ macro_rules! gpio {
                             w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
                         });
 
-                        $PXN { _mode: PhantomData }
+                        $PXi { _mode: PhantomData }
                     }
 
                     pub fn as_floating_input(
                         self,
                         moder: &mut MODER,
                         pupdr: &mut PUPDR,
-                    ) -> $PXN<Input<Floating>> {
+                    ) -> $PXi<Input<Floating>> {
                         let offset = 2 * $i;
 
                         // input mode
@@ -238,14 +264,14 @@ macro_rules! gpio {
                             .pupdr()
                             .modify(|r, w| unsafe { w.bits(r.bits() & !(0b11 << offset)) });
 
-                        $PXN { _mode: PhantomData }
+                        $PXi { _mode: PhantomData }
                     }
 
                     pub fn as_pull_down_input(
                         self,
                         moder: &mut MODER,
                         pupdr: &mut PUPDR,
-                    ) -> $PXN<Input<PullDown>> {
+                    ) -> $PXi<Input<PullDown>> {
                         let offset = 2 * $i;
 
                         // input mode
@@ -258,14 +284,14 @@ macro_rules! gpio {
                             w.bits((r.bits() & !(0b11 << offset)) | (0b10 << offset))
                         });
 
-                        $PXN { _mode: PhantomData }
+                        $PXi { _mode: PhantomData }
                     }
 
                     pub fn as_pull_up_input(
                         self,
                         moder: &mut MODER,
                         pupdr: &mut PUPDR,
-                    ) -> $PXN<Input<PullUp>> {
+                    ) -> $PXi<Input<PullUp>> {
                         let offset = 2 * $i;
 
                         // input mode
@@ -278,14 +304,14 @@ macro_rules! gpio {
                             w.bits((r.bits() & !(0b11 << offset)) | (0b01 << offset))
                         });
 
-                        $PXN { _mode: PhantomData }
+                        $PXi { _mode: PhantomData }
                     }
 
                     pub fn as_open_drain_output(
                         self,
                         moder: &mut MODER,
                         otyper: &mut OTYPER,
-                    ) -> $PXN<Output<OpenDrain>> {
+                    ) -> $PXi<Output<OpenDrain>> {
                         let offset = 2 * $i;
 
                         // general purpose output mode
@@ -299,14 +325,14 @@ macro_rules! gpio {
                             .otyper()
                             .modify(|r, w| unsafe { w.bits(r.bits() | (0b1 << $i)) });
 
-                        $PXN { _mode: PhantomData }
+                        $PXi { _mode: PhantomData }
                     }
 
                     pub fn as_push_pull_output(
                         self,
                         moder: &mut MODER,
                         otyper: &mut OTYPER,
-                    ) -> $PXN<Output<PushPull>> {
+                    ) -> $PXi<Output<PushPull>> {
                         let offset = 2 * $i;
 
                         // general purpose output mode
@@ -320,11 +346,11 @@ macro_rules! gpio {
                             .otyper()
                             .modify(|r, w| unsafe { w.bits(r.bits() & !(0b1 << $i)) });
 
-                        $PXN { _mode: PhantomData }
+                        $PXi { _mode: PhantomData }
                     }
                 }
 
-                impl $PXN<Output<OpenDrain>> {
+                impl $PXi<Output<OpenDrain>> {
                     pub fn internal_pull_up(&mut self, pupdr: &mut PUPDR, on: bool) {
                         let offset = 2 * $i;
 
@@ -340,7 +366,20 @@ macro_rules! gpio {
                     }
                 }
 
-                impl<MODE> OutputPin for $PXN<Output<MODE>> {
+                impl<MODE> $PXi<Output<MODE>> {
+                    /// Erases the pin number from the type
+                    ///
+                    /// This is useful when you want to create an array of output pins where you
+                    /// need all the elements to have the same type
+                    pub fn downgrade(self) -> $PXx<Output<MODE>> {
+                        $PXx {
+                            i: $i,
+                            _mode: self._mode,
+                        }
+                    }
+                }
+
+                impl<MODE> OutputPin for $PXi<Output<MODE>> {
                     fn is_high(&self) -> bool {
                         !self.is_low()
                     }
@@ -365,7 +404,7 @@ macro_rules! gpio {
     }
 }
 
-gpio!(GPIOA, gpioa, iopaen, ioparst, [
+gpio!(GPIOA, gpioa, iopaen, ioparst, PAx, [
     PA0: (0, Input<Floating>, AFRL),
     PA1: (1, Input<Floating>, AFRL),
     PA2: (2, Input<Floating>, AFRL),
@@ -385,7 +424,7 @@ gpio!(GPIOA, gpioa, iopaen, ioparst, [
     // PA15: (15, Input<Floating>),
 ]);
 
-gpio!(GPIOB, gpiob, iopben, iopbrst, [
+gpio!(GPIOB, gpiob, iopben, iopbrst, PBx, [
     PB0: (0, Input<Floating>, AFRL),
     PB1: (1, Input<Floating>, AFRL),
     PB2: (2, Input<Floating>, AFRL),
@@ -405,7 +444,7 @@ gpio!(GPIOB, gpiob, iopben, iopbrst, [
     PB15: (15, Input<Floating>, AFRH),
 ]);
 
-gpio!(GPIOC, gpioc, iopcen, iopcrst, [
+gpio!(GPIOC, gpioc, iopcen, iopcrst, PCx, [
     PC0: (0, Input<Floating>, AFRL),
     PC1: (1, Input<Floating>, AFRL),
     PC2: (2, Input<Floating>, AFRL),
@@ -424,7 +463,7 @@ gpio!(GPIOC, gpioc, iopcen, iopcrst, [
     PC15: (15, Input<Floating>, AFRH),
 ]);
 
-gpio!(GPIOD, gpioc, iopden, iopdrst, [
+gpio!(GPIOD, gpioc, iopden, iopdrst, PDx, [
     PD0: (0, Input<Floating>, AFRL),
     PD1: (1, Input<Floating>, AFRL),
     PD2: (2, Input<Floating>, AFRL),
@@ -443,7 +482,7 @@ gpio!(GPIOD, gpioc, iopden, iopdrst, [
     PD15: (15, Input<Floating>, AFRH),
 ]);
 
-gpio!(GPIOE, gpioc, iopeen, ioperst, [
+gpio!(GPIOE, gpioc, iopeen, ioperst, PEx, [
     PE0: (0, Input<Floating>, AFRL),
     PE1: (1, Input<Floating>, AFRL),
     PE2: (2, Input<Floating>, AFRL),
@@ -462,7 +501,7 @@ gpio!(GPIOE, gpioc, iopeen, ioperst, [
     PE15: (15, Input<Floating>, AFRH),
 ]);
 
-gpio!(GPIOF, gpioc, iopfen, iopfrst, [
+gpio!(GPIOF, gpioc, iopfen, iopfrst, PFx, [
     PF0: (0, Input<Floating>, AFRL),
     PF1: (1, Input<Floating>, AFRL),
     PF2: (2, Input<Floating>, AFRL),

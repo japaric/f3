@@ -15,6 +15,7 @@ pub enum Error {
     // Pec, // SMBUS mode only
     // Timeout, // SMBUS mode only
     // Alert, // SMBUS mode only
+    #[doc(hidden)] _Extensible,
 }
 
 pub struct I2c {

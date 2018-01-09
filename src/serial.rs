@@ -18,6 +18,7 @@ pub enum Error {
     Noise,
     Overrun,
     Parity,
+    #[doc(hidden)] _Extensible,
 }
 
 pub trait Pins {}
@@ -73,7 +74,7 @@ impl<PINS> Serial<PINS> {
         (Tx { _0: () }, Rx { _0: () })
     }
 
-    pub fn unwrap(self) -> (USART1, PINS) {
+    pub fn free(self) -> (USART1, PINS) {
         (self.usart, self.pins)
     }
 }
