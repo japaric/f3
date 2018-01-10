@@ -78,11 +78,14 @@ macro_rules! hal {
                     apb2.rstr().modify(|_, w| w.$spiXrst().set_bit());
                     apb2.rstr().modify(|_, w| w.$spiXrst().clear_bit());
 
-                    // FRXTH: RXNE event is generated if the FIFO level is greater than or equal to 8-bit
+                    // FRXTH: RXNE event is generated if the FIFO level is greater than or equal to
+                    //        8-bit
                     // DS: 8-bit data size
                     // SSOE: Slave Select output disabled
                     spi.cr2
-                        .write(|w| unsafe { w.frxth().set_bit().ds().bits(0b111).ssoe().clear_bit() });
+                        .write(|w| unsafe {
+                            w.frxth().set_bit().ds().bits(0b111).ssoe().clear_bit()
+                        });
 
                     let br = match clocks.$pclkX().0 / freq.into().0 {
                         0 => unreachable!(),
@@ -150,8 +153,11 @@ macro_rules! hal {
                     } else if sr.crcerr().bit_is_set() {
                         nb::Error::Other(Error::Crc)
                     } else if sr.rxne().bit_is_set() {
-                        // NOTE(read_volatile) read only 1 byte (the svd2rust API only allows reading a half-word)
-                        return Ok(unsafe { ptr::read_volatile(&self.spi.dr as *const _ as *const u8) });
+                        // NOTE(read_volatile) read only 1 byte (the svd2rust API only allows
+                        // reading a half-word)
+                        return Ok(unsafe {
+                            ptr::read_volatile(&self.spi.dr as *const _ as *const u8)
+                        });
                     } else {
                         nb::Error::WouldBlock
                     })

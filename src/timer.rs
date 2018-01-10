@@ -6,12 +6,6 @@ use stm32f30x::{TIM2, TIM3, TIM4, TIM6, TIM7};
 use rcc::{APB1, Clocks};
 use time::Hertz;
 
-pub type Timer2 = Timer<TIM2>;
-pub type Timer3 = Timer<TIM3>;
-pub type Timer4 = Timer<TIM4>;
-pub type Timer6 = Timer<TIM6>;
-pub type Timer7 = Timer<TIM7>;
-
 pub struct Timer<TIM> {
     clocks: Clocks,
     tim: TIM,

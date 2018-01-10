@@ -254,8 +254,7 @@ pub struct Clocks {
     hclk: Hertz,
     pclk1: Hertz,
     pclk2: Hertz,
-    // TODO remove `allow`
-    #[allow(dead_code)] ppre1: u8,
+    ppre1: u8,
     // TODO remove `allow`
     #[allow(dead_code)] ppre2: u8,
     sysclk: Hertz,
@@ -274,8 +273,6 @@ impl Clocks {
         self.pclk2
     }
 
-    // TODO remove `allow`
-    #[allow(dead_code)]
     pub(crate) fn ppre1(&self) -> u8 {
         self.ppre1
     }
