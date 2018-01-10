@@ -12,7 +12,13 @@ use f3::spi::Spi;
 fn main() {
     let p = stm32f30x::Peripherals::take().unwrap();
 
+    let mut flash = p.FLASH.constraint();
     let mut rcc = p.RCC.constraint();
+
+    // Try the other clock configuration
+    let clocks = rcc.CFGR.freeze(&mut flash.ACR);
+    // let clocks = rcc.CFGR.sysclk(64.mhz()).pclk1(32.mhz()).freeze(&mut flash.ACR);
+
     let mut gpioa = p.GPIOA.split(&mut rcc.AHB);
     let mut gpioe = p.GPIOE.split(&mut rcc.AHB);
 
@@ -25,7 +31,14 @@ fn main() {
     let miso = gpioa.PA6.as_af5(&mut gpioa.MODER, &mut gpioa.AFRL);
     let mosi = gpioa.PA7.as_af5(&mut gpioa.MODER, &mut gpioa.AFRL);
 
-    let spi = Spi::new(p.SPI1, (sck, miso, mosi), l3gd20::MODE, &mut rcc.APB2);
+    let spi = Spi::spi1(
+        p.SPI1,
+        (sck, miso, mosi),
+        l3gd20::MODE,
+        1.mhz(),
+        clocks,
+        &mut rcc.APB2,
+    );
 
     let mut l3gd20 = L3gd20::new(spi, nss).unwrap();
 

@@ -28,12 +28,9 @@ impl I2c {
         (_scl, _sda): (PB6<Alternate<AF4>>, PB7<Alternate<AF4>>),
         apb1: &mut APB1,
     ) -> Self {
-        if apb1.enr().read().i2c1en().bit_is_set() {
-            apb1.rstr().modify(|_, w| w.i2c1rst().set_bit());
-            apb1.rstr().modify(|_, w| w.i2c1rst().clear_bit());
-        } else {
-            apb1.enr().modify(|_, w| w.i2c1en().enabled());
-        }
+        apb1.enr().modify(|_, w| w.i2c1en().enabled());
+        apb1.rstr().modify(|_, w| w.i2c1rst().set_bit());
+        apb1.rstr().modify(|_, w| w.i2c1rst().clear_bit());
 
         // Configure for "fast mode" (400 KHz)
         // PRESC:  t_I2CCLK = (0 + 1) / 8 MHz = 125 ns

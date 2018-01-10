@@ -59,8 +59,8 @@ macro_rules! gpio {
 
             use rcc::AHB;
             use super::{
-                AF4, AF5, AF7, Alternate, Floating, GpioExt, Input, OpenDrain, Output, PullDown,
-                PullUp, PushPull,
+                AF4, AF5, AF6, AF7, Alternate, Floating, GpioExt, Input, OpenDrain, Output,
+                PullDown, PullUp, PushPull,
             };
 
             #[allow(non_snake_case)]
@@ -79,12 +79,9 @@ macro_rules! gpio {
                 type Parts = Parts;
 
                 fn split(self, ahb: &mut AHB) -> Parts {
-                    if ahb.enr().read().$iopxenr().bit_is_set() {
-                        ahb.rstr().modify(|_, w| w.$iopxrst().set_bit());
-                        ahb.rstr().modify(|_, w| w.$iopxrst().clear_bit());
-                    } else {
-                        ahb.enr().modify(|_, w| w.$iopxenr().enabled());
-                    }
+                    ahb.enr().modify(|_, w| w.$iopxenr().enabled());
+                    ahb.rstr().modify(|_, w| w.$iopxrst().set_bit());
+                    ahb.rstr().modify(|_, w| w.$iopxrst().clear_bit());
 
                     Parts {
                         AFRH: AFRH { _0: () },
@@ -217,6 +214,28 @@ macro_rules! gpio {
                         });
 
                         let af = 5;
+                        let offset = 4 * ($i % 8);
+                        afr.afr().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))
+                        });
+
+                        $PXi { _mode: PhantomData }
+                    }
+
+                    pub fn as_af6(
+                        self,
+                        moder: &mut MODER,
+                        afr: &mut $AFR,
+                    ) -> $PXi<Alternate<AF6>> {
+                        let offset = 2 * $i;
+
+                        // alternate function mode
+                        let mode = 0b10;
+                        moder.moder().modify(|r, w| unsafe {
+                            w.bits((r.bits() & !(0b11 << offset)) | (mode << offset))
+                        });
+
+                        let af = 6;
                         let offset = 4 * ($i % 8);
                         afr.afr().modify(|r, w| unsafe {
                             w.bits((r.bits() & !(0b1111 << offset)) | (af << offset))

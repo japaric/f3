@@ -1,3 +1,5 @@
+// NOTE you MUST short the TX and RX pins to successfully run this program
+
 #![no_std]
 
 extern crate cortex_m;
@@ -12,12 +14,26 @@ use f3::serial::Serial;
 fn main() {
     let p = stm32f30x::Peripherals::take().unwrap();
 
+    let mut flash = p.FLASH.constraint();
     let mut rcc = p.RCC.constraint();
-    let mut gpioa = p.GPIOA.split(&mut rcc.AHB);
-    let tx = gpioa.PA9.as_af7(&mut gpioa.MODER, &mut gpioa.AFRH);
-    let rx = gpioa.PA10.as_af7(&mut gpioa.MODER, &mut gpioa.AFRH);
 
-    let serial = Serial::new(p.USART1, (tx, rx), &mut rcc.APB2, 9_600.bps());
+    // TRY the other clock configuration
+    let clocks = rcc.CFGR.freeze(&mut flash.ACR);
+    // let clocks = rcc.CFGR.sysclk(64.mhz()).pclk1(32.mhz()).freeze(&mut flash.ACR);
+
+    let mut gpioa = p.GPIOA.split(&mut rcc.AHB);
+    let mut gpiob = p.GPIOB.split(&mut rcc.AHB);
+
+    // TRY any of these TX pins
+    let tx = gpioa.PA9.as_af7(&mut gpioa.MODER, &mut gpioa.AFRH);
+    // let tx = gpiob.PB6.as_af7(&mut gpiob.MODER, &mut gpiob.AFRL);
+
+    // TRY any of these RX pins
+    // let rx = gpioa.PA10.as_af7(&mut gpioa.MODER, &mut gpioa.AFRH);
+    let rx = gpiob.PB7.as_af7(&mut gpiob.MODER, &mut gpiob.AFRL);
+
+    // TRY using a different USART
+    let serial = Serial::usart1(p.USART1, 9_600.bps(), (tx, rx), &mut rcc.APB2, clocks);
     let (mut tx, mut rx) = serial.split();
 
     cortex_m::asm::bkpt();
