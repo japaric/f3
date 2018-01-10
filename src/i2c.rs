@@ -1,9 +1,13 @@
-use stm32f30x::I2C1;
+use cast::u8;
+use stm32f30x::{I2C1, I2C2};
 
-use gpio::GPIOB::{PB6, PB7};
+use gpio::GPIOA::{PA10, PA9};
+use gpio::GPIOB::{PB6, PB7, PB8, PB9};
+use gpio::GPIOF::{PF0, PF1, PF6};
 use gpio::{AF4, Alternate};
 use hal::blocking::i2c::{Write, WriteRead};
-use rcc::APB1;
+use rcc::{APB1, Clocks};
+use time::Hertz;
 
 #[derive(Debug)]
 pub enum Error {
@@ -18,45 +22,27 @@ pub enum Error {
     #[doc(hidden)] _Extensible,
 }
 
-pub struct I2c {
-    i2c: I2C1,
-}
+pub unsafe trait Scl<I2C> {}
+pub unsafe trait Sda<I2C> {}
 
-impl I2c {
-    pub fn new(
-        i2c: I2C1,
-        (_scl, _sda): (PB6<Alternate<AF4>>, PB7<Alternate<AF4>>),
-        apb1: &mut APB1,
-    ) -> Self {
-        apb1.enr().modify(|_, w| w.i2c1en().enabled());
-        apb1.rstr().modify(|_, w| w.i2c1rst().set_bit());
-        apb1.rstr().modify(|_, w| w.i2c1rst().clear_bit());
+// unsafe impl Scl<I2C1> for PA15<Alternate<AF4>> {}
+unsafe impl Scl<I2C1> for PB6<Alternate<AF4>> {}
+unsafe impl Scl<I2C1> for PB8<Alternate<AF4>> {}
 
-        // Configure for "fast mode" (400 KHz)
-        // PRESC:  t_I2CCLK = (0 + 1) / 8 MHz = 125 ns
-        // SCLL:   t_SCLL   = (9 + 1) * t_I2CCLK = 1.25 us
-        // SCLH:   t_SCLH   = (3 + 1) * t_I2CCLK = 0.5 us
-        //
-        // t_SYNC1 + t_SYNC2 > 4 * t_I2CCLK = 0.5 us
-        // t_SCL = t_SYNC1 + t_SYNC2 t_SCLL + t_SCLH ~= 2.5 us
-        i2c.timingr.write(|w| unsafe {
-            w.presc()
-                .bits(0)
-                .scll()
-                .bits(9)
-                .sclh()
-                .bits(3)
-                .sdadel()
-                .bits(1)
-                .scldel()
-                .bits(3)
-        });
+unsafe impl Scl<I2C2> for PA9<Alternate<AF4>> {}
+unsafe impl Scl<I2C2> for PF1<Alternate<AF4>> {}
+unsafe impl Scl<I2C2> for PF6<Alternate<AF4>> {}
 
-        // Enable the peripheral
-        i2c.cr1.write(|w| w.pe().set_bit());
+// unsafe impl Sda<I2C1> for PA14<Alternate<AF4>> {}
+unsafe impl Sda<I2C1> for PB7<Alternate<AF4>> {}
+unsafe impl Sda<I2C1> for PB9<Alternate<AF4>> {}
 
-        I2c { i2c }
-    }
+unsafe impl Sda<I2C2> for PA10<Alternate<AF4>> {}
+unsafe impl Sda<I2C2> for PF0<Alternate<AF4>> {}
+
+pub struct I2c<I2C, PINS> {
+    i2c: I2C,
+    pins: PINS,
 }
 
 macro_rules! busy_wait {
@@ -77,103 +63,222 @@ macro_rules! busy_wait {
     }
 }
 
-impl Write for I2c {
-    type Error = Error;
+macro_rules! hal {
+    ($($I2CX:ident: ($i2cX:ident, $i2cXen:ident, $i2cXrst:ident),)+) => {
+        $(
+            impl<SCL, SDA> I2c<$I2CX, (SCL, SDA)> {
+                pub fn $i2cX<F>(
+                    i2c: $I2CX,
+                    pins: (SCL, SDA),
+                    freq: F,
+                    clocks: Clocks,
+                    apb1: &mut APB1,
+                ) -> Self where
+                    F: Into<Hertz>,
+                    SCL: Scl<$I2CX>,
+                    SDA: Sda<$I2CX>,
+                {
+                    apb1.enr().modify(|_, w| w.$i2cXen().enabled());
+                    apb1.rstr().modify(|_, w| w.$i2cXrst().set_bit());
+                    apb1.rstr().modify(|_, w| w.$i2cXrst().clear_bit());
 
-    fn write(&mut self, addr: u8, bytes: &[u8]) -> Result<(), Error> {
-        // TODO support transfers of more than 255 bytes
-        assert!(bytes.len() < 256 && bytes.len() > 0);
+                    let freq = freq.into().0;
 
-        // START and prepare to send `bytes`
-        self.i2c.cr2.write(|w| unsafe {
-            w.sadd1()
-                .bits(addr)
-                .rd_wrn()
-                .clear_bit()
-                .nbytes()
-                .bits(bytes.len() as u8)
-                .start()
-                .set_bit()
-                .autoend()
-                .set_bit()
-        });
+                    assert!(freq <= 1_000_000);
 
-        for byte in bytes {
-            // Wait until we are allowed to send data (START has been ACKed or last byte when through)
-            busy_wait!(self.i2c, txis);
+                    // TODO review compliance with the timing requirements of I2C
+                    // t_I2CCLK = 1 / PCLK1
+                    // t_PRESC  = (PRESC + 1) * t_I2CCLK
+                    // t_SCLL   = (SCLL + 1) * t_PRESC
+                    // t_SCLH   = (SCLH + 1) * t_PRESC
+                    //
+                    // t_SYNC1 + t_SYNC2 > 4 * t_I2CCLK
+                    // t_SCL ~= t_SYNC1 + t_SYNC2 + t_SCLL + t_SCLH
+                    let i2cclk = clocks.pclk1().0;
+                    let ratio = i2cclk / freq - 4;
+                    let (presc, scll, sclh, sdadel, scldel) = if freq >= 100_000 {
+                        // fast-mode or fast-mode plus
+                        // here we pick SCLL + 1 = 2 * (SCLH + 1)
+                        let presc = ratio / 387;
 
-            // put byte on the wire
-            self.i2c.txdr.write(|w| unsafe { w.txdata().bits(*byte) });
-        }
+                        let sclh = ((ratio / (presc + 1)) - 3) / 3;
+                        let scll = 2 * (sclh + 1) - 1;
 
-        // Wait until the last transmission is finished ???
-        // busy_wait!(self.i2c, busy);
+                        let (sdadel, scldel) = if freq > 400_000 {
+                            // fast-mode plus
+                            let sdadel = 0;
+                            let scldel = i2cclk / 4_000_000 / (presc + 1) - 1;
 
-        // automatic STOP
+                            (sdadel, scldel)
+                        } else {
+                            // fast-mode
+                            let sdadel = i2cclk / 8_000_000 / (presc + 1);
+                            let scldel = i2cclk / 2_000_000 / (presc + 1) - 1;
 
-        Ok(())
+                            (sdadel, scldel)
+                        };
+
+                        (presc, scll, sclh, sdadel, scldel)
+                    } else {
+                        // standard-mode
+                        // here we pick SCLL = SCLH
+                        let presc = ratio / 514;
+
+                        let sclh = ((ratio / (presc + 1)) - 2) / 2;
+                        let scll = sclh;
+
+                        let sdadel = i2cclk / 2_000_000 / (presc + 1);
+                        let scldel = i2cclk / 800_000 / (presc + 1) - 1;
+
+                        (presc, scll, sclh, sdadel, scldel)
+                    };
+
+                    let presc = u8(presc).unwrap();
+                    assert!(presc < 16);
+                    let scldel = u8(scldel).unwrap();
+                    assert!(scldel < 16);
+                    let sdadel = u8(sdadel).unwrap();
+                    assert!(sdadel < 16);
+                    let sclh = u8(sclh).unwrap();
+                    let scll = u8(scll).unwrap();
+
+                    // Configure for "fast mode" (400 KHz)
+                    i2c.timingr.write(|w| unsafe {
+                        w.presc()
+                            .bits(presc)
+                            .scll()
+                            .bits(scll)
+                            .sclh()
+                            .bits(sclh)
+                            .sdadel()
+                            .bits(sdadel)
+                            .scldel()
+                            .bits(scldel)
+                    });
+
+                    // Enable the peripheral
+                    i2c.cr1.write(|w| w.pe().set_bit());
+
+                    I2c { i2c, pins }
+                }
+
+                pub fn free(self) -> ($I2CX, (SCL, SDA)) {
+                    (self.i2c, self.pins)
+                }
+            }
+
+            impl<PINS> Write for I2c<$I2CX, PINS> {
+                type Error = Error;
+
+                fn write(&mut self, addr: u8, bytes: &[u8]) -> Result<(), Error> {
+                    // TODO support transfers of more than 255 bytes
+                    assert!(bytes.len() < 256 && bytes.len() > 0);
+
+                    // START and prepare to send `bytes`
+                    self.i2c.cr2.write(|w| unsafe {
+                        w.sadd1()
+                            .bits(addr)
+                            .rd_wrn()
+                            .clear_bit()
+                            .nbytes()
+                            .bits(bytes.len() as u8)
+                            .start()
+                            .set_bit()
+                            .autoend()
+                            .set_bit()
+                    });
+
+                    for byte in bytes {
+                        // Wait until we are allowed to send data (START has been ACKed or last byte
+                        // when through)
+                        busy_wait!(self.i2c, txis);
+
+                        // put byte on the wire
+                        self.i2c.txdr.write(|w| unsafe { w.txdata().bits(*byte) });
+                    }
+
+                    // Wait until the last transmission is finished ???
+                    // busy_wait!(self.i2c, busy);
+
+                    // automatic STOP
+
+                    Ok(())
+                }
+            }
+
+            impl<PINS> WriteRead for I2c<$I2CX, PINS> {
+                type Error = Error;
+
+                fn write_read(
+                    &mut self,
+                    addr: u8,
+                    bytes: &[u8],
+                    buffer: &mut [u8],
+                ) -> Result<(), Error> {
+                    // TODO support transfers of more than 255 bytes
+                    assert!(bytes.len() < 256 && bytes.len() > 0);
+                    assert!(buffer.len() < 256 && buffer.len() > 0);
+
+                    // TODO do we have to explicitly wait here if the bus is busy (e.g. another
+                    // master is communicating)?
+
+                    // START and prepare to send `bytes`
+                    self.i2c.cr2.write(|w| unsafe {
+                        w.sadd1()
+                            .bits(addr)
+                            .rd_wrn()
+                            .clear_bit()
+                            .nbytes()
+                            .bits(bytes.len() as u8)
+                            .start()
+                            .set_bit()
+                            .autoend()
+                            .clear_bit()
+                    });
+
+                    for byte in bytes {
+                        // Wait until we are allowed to send data (START has been ACKed or last byte
+                        // when through)
+                        busy_wait!(self.i2c, txis);
+
+                        // put byte on the wire
+                        self.i2c.txdr.write(|w| unsafe { w.txdata().bits(*byte) });
+                    }
+
+                    // Wait until the last transmission is finished
+                    busy_wait!(self.i2c, tc);
+
+                    // reSTART and prepare to receive bytes into `buffer`
+                    self.i2c.cr2.write(|w| unsafe {
+                        w.sadd1()
+                            .bits(addr)
+                            .rd_wrn()
+                            .set_bit()
+                            .nbytes()
+                            .bits(buffer.len() as u8)
+                            .start()
+                            .set_bit()
+                            .autoend()
+                            .set_bit()
+                    });
+
+                    for byte in buffer {
+                        // Wait until we have received something
+                        busy_wait!(self.i2c, rxne);
+
+                        *byte = self.i2c.rxdr.read().rxdata().bits();
+                    }
+
+                    // automatic STOP
+
+                    Ok(())
+                }
+            }
+        )+
     }
 }
 
-impl WriteRead for I2c {
-    type Error = Error;
-
-    fn write_read(&mut self, addr: u8, bytes: &[u8], buffer: &mut [u8]) -> Result<(), Error> {
-        // TODO support transfers of more than 255 bytes
-        assert!(bytes.len() < 256 && bytes.len() > 0);
-        assert!(buffer.len() < 256 && buffer.len() > 0);
-
-        // TODO do we have to explicitly wait if the bus is busy (e.g. another master is
-        // communicating)?
-
-        // START and prepare to send `bytes`
-        self.i2c.cr2.write(|w| unsafe {
-            w.sadd1()
-                .bits(addr)
-                .rd_wrn()
-                .clear_bit()
-                .nbytes()
-                .bits(bytes.len() as u8)
-                .start()
-                .set_bit()
-                .autoend()
-                .clear_bit()
-        });
-
-        for byte in bytes {
-            // Wait until we are allowed to send data (START has been ACKed or last byte when through)
-            busy_wait!(self.i2c, txis);
-
-            // put byte on the wire
-            self.i2c.txdr.write(|w| unsafe { w.txdata().bits(*byte) });
-        }
-
-        // Wait until the last transmission is finished
-        busy_wait!(self.i2c, tc);
-
-        // reSTART and prepare to receive bytes into `buffer`
-        self.i2c.cr2.write(|w| unsafe {
-            w.sadd1()
-                .bits(addr)
-                .rd_wrn()
-                .set_bit()
-                .nbytes()
-                .bits(buffer.len() as u8)
-                .start()
-                .set_bit()
-                .autoend()
-                .set_bit()
-        });
-
-        for byte in buffer {
-            // Wait until we have received something
-            busy_wait!(self.i2c, rxne);
-
-            *byte = self.i2c.rxdr.read().rxdata().bits();
-        }
-
-        // automatic STOP
-
-        Ok(())
-    }
+hal! {
+    I2C1: (i2c1, i2c1en, i2c1rst),
+    I2C2: (i2c2, i2c2en, i2c2rst),
 }
