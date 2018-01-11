@@ -3,10 +3,10 @@
 extern crate cortex_m;
 extern crate f3;
 
-use f3::delay::Delay;
+use f3::hal::delay::Delay;
 use f3::led::Led;
-use f3::prelude::*;
-use f3::stm32f30x;
+use f3::hal::prelude::*;
+use f3::hal::stm32f30x;
 
 fn main() {
     let cp = cortex_m::peripheral::Peripherals::take().unwrap();

@@ -1,7 +1,7 @@
-use hal::digital::OutputPin;
+use hal::prelude::*;
 
-use gpio::GPIOE::{PE10, PE11, PE12, PE13, PE14, PE15, PE8, PE9, PEx};
-use gpio::{Output, PushPull};
+use hal::gpio::GPIOE::{PE10, PE11, PE12, PE13, PE14, PE15, PE8, PE9, PEx};
+use hal::gpio::{Output, PushPull};
 
 pub type LD3 = PE9<Output<PushPull>>;
 pub type LD4 = PE8<Output<PushPull>>;

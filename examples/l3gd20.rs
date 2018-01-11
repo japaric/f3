@@ -2,12 +2,11 @@
 
 extern crate cortex_m;
 extern crate f3;
-extern crate l3gd20;
 
-use l3gd20::L3gd20;
-use f3::prelude::*;
-use f3::stm32f30x;
-use f3::spi::Spi;
+use f3::{L3gd20, l3gd20};
+use f3::hal::prelude::*;
+use f3::hal::stm32f30x;
+use f3::hal::spi::Spi;
 
 fn main() {
     let p = stm32f30x::Peripherals::take().unwrap();

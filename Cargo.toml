@@ -4,19 +4,14 @@ name = "f3"
 version = "0.1.0"
 
 [dependencies]
-cortex-m = { git = "https://github.com/japaric/cortex-m" }
-embedded-hal = { git = "https://github.com/japaric/embedded-hal", branch = "v1" }
 l3gd20 = { git = "https://github.com/japaric/l3gd20" }
 lsm303dlhc = { git = "https://github.com/japaric/lsm303dlhc" }
-nb = { git = "https://github.com/japaric/nb" }
-stm32f30x = { git = "https://github.com/japaric/stm32f30x" }
-
-[dependencies.cast]
-default-features = false
-version = "0.2.2"
+stm32f30x-hal = { git = "https://github.com/japaric/stm32f30x-hal" }
 
 [dev-dependencies]
+cortex-m = { git = "https://github.com/japaric/cortex-m" }
 cortex-m-rt = { version = "0.3.9", features = ["abort-on-panic"] }
+nb = "0.1.1"
 stm32f30x = { git = "https://github.com/japaric/stm32f30x", features = ["rt"] }
 
 [profile.dev]

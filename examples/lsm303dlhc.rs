@@ -4,10 +4,10 @@ extern crate cortex_m;
 extern crate f3;
 extern crate lsm303dlhc;
 
-use f3::i2c::I2c;
-use f3::prelude::*;
-use f3::stm32f30x;
-use lsm303dlhc::Lsm303dlhc;
+use f3::hal::i2c::I2c;
+use f3::hal::prelude::*;
+use f3::hal::stm32f30x;
+use f3::Lsm303dlhc;
 
 fn main() {
     let p = stm32f30x::Peripherals::take().unwrap();

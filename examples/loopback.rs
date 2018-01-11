@@ -7,9 +7,9 @@ extern crate f3;
 #[macro_use(block)]
 extern crate nb;
 
-use f3::prelude::*;
-use f3::stm32f30x;
-use f3::serial::Serial;
+use f3::hal::prelude::*;
+use f3::hal::serial::Serial;
+use f3::hal::stm32f30x;
 
 fn main() {
     let p = stm32f30x::Peripherals::take().unwrap();
