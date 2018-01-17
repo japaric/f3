@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.5.0] - 2018-01-17
+
+### Added
+
+- Board specific APIs for the user LEDs.
+- More concrete re-export of the `L3gd20` driver.
+- More concrete re-export of the `Lsm303dlhc` driver.
+- Re-export of the HAL provided by the `stm32f30x-hal` crate.
+
+### Removed
+
+- [breaking-change] All non-board specific APIs.
+
 ## [v0.4.1] - 2017-05-09
 
 ### Changed
@@ -86,7 +99,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Low level access to some peripherals: DBGMCU, GPIO, RCC and TIM
 
-[Unreleased]: https://github.com/japaric/f3/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/japaric/f3/compare/v0.5.0...HEAD
+[v0.5.0]: https://github.com/japaric/f3/compare/v0.4.1...v0.5.0
 [v0.4.1]: https://github.com/japaric/f3/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/japaric/f3/compare/v0.3.1...v0.4.0
 [v0.3.1]: https://github.com/japaric/f3/compare/v0.3.0...v0.3.1

@@ -1,6 +1,6 @@
 [package]
 authors = ["Jorge Aparicio <jorge@japaric.io>"]
-categories = ["asynchronous", "embedded", "hardware-support", "no-std"]
+categories = ["embedded", "hardware-support", "no-std"]
 description = "Board Support Crate for the STM32F3DISCOVERY"
 documentation = "https://docs.rs/f3"
 keywords = ["arm", "cortex-m", "stm32"]
@@ -10,32 +10,30 @@ repository = "https://github.com/japaric/f3"
 version = "0.5.0"
 
 [dependencies]
-static-ref = "0.2.0"
-
-[dependencies.cast]
-default-features = false
-version = "0.2.2"
-
-[dependencies.embedded-hal]
-git = "https://github.com/japaric/embedded-hal"
-rev = "7d904f515d15fd5fe7ea34e18820ea83e2651fa2"
-
-[dependencies.nb]
-git = "https://github.com/japaric/nb"
-
-[dependencies.stm32f30x]
-features = ["rt"]
-version = "0.5.0"
+l3gd20 = "0.1.0"
+lsm303dlhc = "0.1.0"
+stm32f30x-hal = "0.1.0"
 
 [dev-dependencies]
-cortex-m = "0.3.0"
-cortex-m-rtfm = "0.2.0"
+cortex-m = "0.4.1"
 cortex-m-semihosting = "0.2.0"
-heapless = "0.1.0"
+cortex-m-rtfm = "0.3.1"
+
+[dev-dependencies.nb]
+features = ["unstable"]
+version = "0.1.1"
 
 [dev-dependencies.cortex-m-rt]
 features = ["abort-on-panic"]
-version = "0.3.5"
+version = "0.3.9"
+
+[dev-dependencies.stm32f30x]
+features = ["rt"]
+version = "0.6.0"
+
+[profile.dev]
+codegen-units = 1
+incremental = false
 
 [profile.release]
 debug = true

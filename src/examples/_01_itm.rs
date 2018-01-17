@@ -11,17 +11,21 @@
 //! Read the documentation of the [`itm`] crate, which provides the `itmdump` tool,  for details.
 //!
 //! [`itm`]: https://docs.rs/itm/0.2.0/itm/
-#![deny(unsafe_code)]
-#![deny(warnings)]
-#![no_std]
-
-#[macro_use]
-extern crate cortex_m;
-extern crate f3;
-
-fn main() {
-    let p = cortex_m::Peripherals::take().unwrap();
-    let mut itm = p.ITM;
-
-    iprintln!(&mut itm.stim[0], "Hello, world!");
-}
+//!
+//! ```
+//! #![deny(unsafe_code)]
+//! #![deny(warnings)]
+//! #![no_std]
+//! 
+//! #[macro_use]
+//! extern crate cortex_m;
+//! extern crate f3;
+//! 
+//! fn main() {
+//!     let p = cortex_m::Peripherals::take().unwrap();
+//!     let mut itm = p.ITM;
+//! 
+//!     iprintln!(&mut itm.stim[0], "Hello, world!");
+//! }
+//! ```
+// Auto-generated. Do not modify.

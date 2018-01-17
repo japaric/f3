@@ -1,19 +1,23 @@
 # Converts the examples in the `examples` directory into documentation in the
 # `examples` module (`src/examples/*.rs`)
 
-set -ex
+set -euxo pipefail
 
 main() {
     local examples=(
         hello
         itm
-        led
+        leds
         blinky
         roulette
-        loopback
-        concurrency
-        resource
-        preemption
+        serial
+        serial-echo
+        l3gd20
+        lsm303dlhc
+        cooperative
+        reactive-serial-echo
+        reactive-roulette
+        preemptive
     )
 
     rm -rf src/examples
@@ -22,12 +26,14 @@ main() {
 
     cat >src/examples/mod.rs <<'EOF'
 //! Examples
+//!
+//! In order of increasing complexity
 // Auto-generated. Do not modify.
 EOF
 
     local i=0 out=
     for ex in ${examples[@]}; do
-        name=_${i}_${ex//-/_}
+        name=_$(printf "%02d" $i)_${ex//-/_}
         out=src/examples/${name}.rs
 
         echo "pub mod $name;" >> src/examples/mod.rs

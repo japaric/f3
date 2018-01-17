@@ -1,63 +1,40 @@
 //! A LED roulette!
 #![deny(unsafe_code)]
 #![deny(warnings)]
-#![feature(proc_macro)]
 #![no_std]
 
-extern crate cast;
-extern crate f3;
 extern crate cortex_m;
-extern crate cortex_m_rtfm as rtfm;
+extern crate f3;
 
-use cast::{usize, u8};
-use cortex_m::peripheral::SystClkSource;
-use f3::led::{self, LEDS};
-use rtfm::{app, Threshold};
+use f3::hal::delay::Delay;
+use f3::hal::prelude::*;
+use f3::hal::stm32f30x;
+use f3::led::Leds;
 
-// CONFIGURATION
-const DIVISOR: u32 = 4;
+fn main() {
+    let cp = cortex_m::Peripherals::take().unwrap();
+    let dp = stm32f30x::Peripherals::take().unwrap();
 
-// TASKS & RESOURCES
-app! {
-    device: f3::stm32f30x,
+    let mut flash = dp.FLASH.constrain();
+    let mut rcc = dp.RCC.constrain();
+    let gpioe = dp.GPIOE.split(&mut rcc.ahb);
 
-    resources: {
-        static STATE: u8 = 0;
-    },
+    // clock configuration using the default settings (all clocks run at 8 MHz)
+    let clocks = rcc.cfgr.freeze(&mut flash.acr);
+    // TRY this alternate clock configuration (all clocks run at 16 MHz)
+    // let clocks = rcc.cfgr.sysclk(16.mhz()).freeze(&mut flash.acr);
 
-    tasks: {
-        SYS_TICK: {
-            path: roulette,
-            resources: [STATE],
-        },
-    },
-}
+    let mut leds = Leds::new(gpioe);
+    let mut delay = Delay::new(cp.SYST, clocks);
 
-// INITIALIZATION PHASE
-fn init(p: init::Peripherals, _r: init::Resources) {
-    led::init(p.GPIOE, p.RCC);
-
-    p.SYST.set_clock_source(SystClkSource::Core);
-    p.SYST.set_reload(8_000_000 / DIVISOR);
-    p.SYST.enable_interrupt();
-    p.SYST.enable_counter();
-}
-
-// IDLE LOOP
-fn idle() -> ! {
-    // Sleep
+    let n = leds.len();
     loop {
-        rtfm::wfi();
+        for curr in 0..n {
+            let next = (curr + 1) % n;
+            leds[curr].off();
+            leds[next].on();
+
+            delay.delay_ms(100_u8);
+        }
     }
-}
-
-// TASKS
-fn roulette(_t: &mut Threshold, r: SYS_TICK::Resources) {
-    let curr = **r.STATE;
-    let next = (curr + 1) % u8(LEDS.len()).unwrap();
-
-    LEDS[usize(curr)].off();
-    LEDS[usize(next)].on();
-
-    **r.STATE = next;
 }
