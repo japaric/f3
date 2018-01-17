@@ -6,7 +6,7 @@
 //! $ # if you don't have the clone subcommand
 //! $ cargo install cargo-clone
 //!
-//! $ cargo clone f3 --vers 0.5.0
+//! $ cargo clone f3 --vers 0.5.1
 //!
 //! # on another terminal
 //! $ openocd -f interface/stlink-v2-1.cfg -f target/stm32f3x.cfg

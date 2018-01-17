@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.5.1] - 2018-01-17
+
+### Changed
+
+- Bumped the version of the cortex-m-rt dependency to 0.3.12
+
 ## [v0.5.0] - 2018-01-17
 
 ### Added
@@ -99,7 +105,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Low level access to some peripherals: DBGMCU, GPIO, RCC and TIM
 
-[Unreleased]: https://github.com/japaric/f3/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/japaric/f3/compare/v0.5.1...HEAD
+[v0.5.1]: https://github.com/japaric/f3/compare/v0.5.0...v0.5.1
 [v0.5.0]: https://github.com/japaric/f3/compare/v0.4.1...v0.5.0
 [v0.4.1]: https://github.com/japaric/f3/compare/v0.4.0...v0.4.1
 [v0.4.0]: https://github.com/japaric/f3/compare/v0.3.1...v0.4.0
