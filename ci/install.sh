@@ -1,15 +1,21 @@
 set -euxo pipefail
 
 main() {
-    if [ $TARGET = thumbv7em-none-eabihf ]; then
-        local vers=0.3.7
+    # This fetches latest stable release of Xargo
+    local tag=$(git ls-remote --tags --refs --exit-code https://github.com/japaric/xargo \
+                    | cut -d/ -f3 \
+                    | grep -E '^v[0.1.0-9.]+$' \
+                    | sort --version-sort \
+                    | tail -n1)
 
-        cargo install --list | grep "xargo v$vers" || \
-            ( cd .. && cargo install xargo -f --vers $vers )
+    curl -LSfs https://japaric.github.io/trust/install.sh | \
+        sh -s -- \
+           --force \
+           --git japaric/xargo \
+           --tag $tag \
+           --target x86_64-unknown-linux-musl
 
-        rustup component list | grep 'rust-src.*installed' || \
-            rustup component add rust-src
-    fi
+    rustup component add rust-src
 }
 
 main
