@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.5.2] - 2018-01-20
+
+### Added
+
+- A "rt" Cargo feature that enables the "rt" feature of the stm32f30x-hal dependency.
+
 ## [v0.5.1] - 2018-01-17
 
 ### Changed
@@ -105,7 +111,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Low level access to some peripherals: DBGMCU, GPIO, RCC and TIM
 
-[Unreleased]: https://github.com/japaric/f3/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/japaric/f3/compare/v0.5.2...HEAD
+[v0.5.2]: https://github.com/japaric/f3/compare/v0.5.1...v0.5.2
 [v0.5.1]: https://github.com/japaric/f3/compare/v0.5.0...v0.5.1
 [v0.5.0]: https://github.com/japaric/f3/compare/v0.4.1...v0.5.0
 [v0.4.1]: https://github.com/japaric/f3/compare/v0.4.0...v0.4.1
