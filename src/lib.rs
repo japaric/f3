@@ -2,11 +2,13 @@
 //!
 //! # Usage
 //!
+//! - Trying out the examples
+//!
 //! ``` text
 //! $ # if you don't have the clone subcommand
 //! $ cargo install cargo-clone
 //!
-//! $ cargo clone f3 --vers 0.5.1
+//! $ cargo clone f3 --vers 0.5.2
 //!
 //! # on another terminal
 //! $ openocd -f interface/stlink-v2-1.cfg -f target/stm32f3x.cfg
@@ -17,6 +19,15 @@
 //! ```
 //!
 //! You'll need to have both OpenOCD and arm-none-eabi-ld installed.
+//!
+//! - Building an application that depends on this crate
+//!
+//! To build applications (binary crates) using this crate follow [cortex-m-quickstart] instructions
+//! and add this crate as a dependency in step number 5 and make sure you enable the "rt" Cargo
+//! feature of this crate. Also, instead of step number 3 remove *both* the build.rs and memory.x
+//! files.
+//!
+//! [cortex-m-quickstart]: https://docs.rs/cortex-m-quickstart/~0.2.3
 //!
 //! # Examples
 //!
