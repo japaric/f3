@@ -7,12 +7,12 @@ keywords = ["arm", "cortex-m", "stm32"]
 license = "MIT OR Apache-2.0"
 name = "f3"
 repository = "https://github.com/japaric/f3"
-version = "0.5.1"
+version = "0.5.2"
 
 [dependencies]
 l3gd20 = "0.1.0"
 lsm303dlhc = "0.1.0"
-stm32f30x-hal = "0.1.0"
+stm32f30x-hal = "0.1.1"
 
 [dev-dependencies]
 cortex-m = "0.4.1"
@@ -27,9 +27,12 @@ version = "0.1.1"
 features = ["abort-on-panic"]
 version = "0.3.12"
 
-[dev-dependencies.stm32f30x]
+[dev-dependencies.stm32f30x-hal]
 features = ["rt"]
-version = "0.6.0"
+version = "0.1.1"
+
+[features]
+rt = ["stm32f30x-hal/rt"]
 
 [profile.dev]
 codegen-units = 1
