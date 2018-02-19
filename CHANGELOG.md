@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.5.3] - 2018-02-19
+
+### Added
+
+- Example: Madgwick's orientation filter
+- Example: Logging sensor data over the ITM
+
 ## [v0.5.2] - 2018-01-20
 
 ### Added
@@ -111,7 +118,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Low level access to some peripherals: DBGMCU, GPIO, RCC and TIM
 
-[Unreleased]: https://github.com/japaric/f3/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/japaric/f3/compare/v0.5.3...HEAD
+[v0.5.3]: https://github.com/japaric/f3/compare/v0.5.2...v0.5.3
 [v0.5.2]: https://github.com/japaric/f3/compare/v0.5.1...v0.5.2
 [v0.5.1]: https://github.com/japaric/f3/compare/v0.5.0...v0.5.1
 [v0.5.0]: https://github.com/japaric/f3/compare/v0.4.1...v0.5.0
