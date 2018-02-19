@@ -1,0 +1,11 @@
+[package]
+authors = ["Jorge Aparicio <jorge@japaric.io>"]
+name = "viz"
+publish = false
+version = "0.1.0"
+
+[dependencies]
+byteorder = "1.2.1"
+cobs = "0.1.3"
+kiss3d = "0.13.0"
+nalgebra = "0.14.0"
