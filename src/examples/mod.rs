@@ -15,3 +15,5 @@ pub mod _09_cooperative;
 pub mod _10_reactive_serial_echo;
 pub mod _11_reactive_roulette;
 pub mod _12_preemptive;
+pub mod _13_log_sensors;
+pub mod _14_madgwick;

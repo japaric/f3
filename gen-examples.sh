@@ -18,6 +18,8 @@ main() {
         reactive-serial-echo
         reactive-roulette
         preemptive
+        log-sensors
+        madgwick
     )
 
     rm -rf src/examples
