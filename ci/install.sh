@@ -1,7 +1,7 @@
 set -euxo pipefail
 
 main() {
-    if [ $TARGET = thumbv7em-none-eabihf ]; then
+    if [ $TARGET != x86_64-unknown-linux-gnu ]; then
         rustup target add $TARGET
     fi
 }
