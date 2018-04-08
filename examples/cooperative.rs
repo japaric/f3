@@ -66,7 +66,14 @@ fn main() {
     // Run tasks cooperatively
     // When a task can't do any more progress it suspends it execution and the next task is resumed
     loop {
-        roulette.resume();
-        echo.resume();
+        #![allow(unsafe_code)]
+        // generators are unsafe to use until Pin<Self> is a thing
+
+        unsafe {
+            roulette.resume();
+        }
+        unsafe {
+            echo.resume();
+        }
     }
 }

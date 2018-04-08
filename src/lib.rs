@@ -15,7 +15,8 @@
 //!
 //! # flash and debug the "Hello, world" example
 //! $ cd f3
-//! $ xargo run --example hello
+//! $ rustup target add thumbv7em-none-eabihf
+//! $ cargo run --example hello
 //! ```
 //!
 //! You'll need to have both OpenOCD and arm-none-eabi-ld installed.

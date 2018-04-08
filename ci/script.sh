@@ -1,16 +1,16 @@
 set -euxo pipefail
 
 main() {
+    cargo check --target $TARGET
+
     if [ $TARGET = x86_64-unknown-linux-gnu ]; then
         bash gen-examples.sh
         git diff --exit-code
 
-        cargo check --target $TARGET
         return
     fi
 
-    xargo check --target $TARGET
-    xargo check --target $TARGET --examples
+    cargo check --target $TARGET --examples
 }
 
 main
