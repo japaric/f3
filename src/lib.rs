@@ -8,7 +8,7 @@
 //! $ # if you don't have the clone subcommand
 //! $ cargo install cargo-clone
 //!
-//! $ cargo clone f3 --vers 0.5.2
+//! $ cargo clone f3 --vers 0.6.0
 //!
 //! # on another terminal
 //! $ openocd -f interface/stlink-v2-1.cfg -f target/stm32f3x.cfg
@@ -19,16 +19,16 @@
 //! $ cargo run --example hello
 //! ```
 //!
-//! You'll need to have both OpenOCD and arm-none-eabi-ld installed.
+//! You'll need to have both OpenOCD and arm-none-eabi-gcc installed.
 //!
 //! - Building an application that depends on this crate
 //!
 //! To build applications (binary crates) using this crate follow [cortex-m-quickstart] instructions
-//! and add this crate as a dependency in step number 5 and make sure you enable the "rt" Cargo
-//! feature of this crate. Also, instead of step number 3 remove *both* the build.rs and memory.x
+//! and add this crate as a dependency in step number 6 and make sure you enable the "rt" Cargo
+//! feature of this crate. Also, instead of step number 4 remove *both* the build.rs and memory.x
 //! files.
 //!
-//! [cortex-m-quickstart]: https://docs.rs/cortex-m-quickstart/~0.2.3
+//! [cortex-m-quickstart]: https://docs.rs/cortex-m-quickstart/~0.3
 //!
 //! # Examples
 //!
@@ -44,13 +44,13 @@ pub extern crate l3gd20;
 pub extern crate lsm303dlhc;
 pub extern crate stm32f30x_hal as hal;
 
-use hal::i2c::I2c;
-use hal::spi::Spi;
-use hal::stm32f30x::{I2C1, SPI1};
-use hal::gpio::{AF4, AF5, Output, PushPull};
 use hal::gpio::gpioa::{PA5, PA6, PA7};
 use hal::gpio::gpiob::{PB6, PB7};
 use hal::gpio::gpioe::PE3;
+use hal::gpio::{AF4, AF5, Output, PushPull};
+use hal::i2c::I2c;
+use hal::spi::Spi;
+use hal::stm32f30x::{I2C1, SPI1};
 
 pub mod examples;
 pub mod led;

@@ -1,18 +1,25 @@
 //! Interfacing the on-board L3GD20 (gyroscope)
 #![deny(unsafe_code)]
 #![deny(warnings)]
+#![no_main]
 #![no_std]
 
+#[macro_use(entry, exception)]
+extern crate cortex_m_rt as rt;
 extern crate cortex_m;
 extern crate f3;
+extern crate panic_semihosting;
 
 use cortex_m::asm;
-use f3::{L3gd20, l3gd20};
 use f3::hal::prelude::*;
-use f3::hal::stm32f30x;
 use f3::hal::spi::Spi;
+use f3::hal::stm32f30x;
+use f3::{l3gd20, L3gd20};
+use rt::ExceptionFrame;
 
-fn main() {
+entry!(main);
+
+fn main() -> ! {
     let p = stm32f30x::Peripherals::take().unwrap();
 
     let mut flash = p.FLASH.constrain();
@@ -56,4 +63,18 @@ fn main() {
     // when you reach this breakpoint you'll be able to inspect the variable `_m` which contains the
     // gyroscope and the temperature sensor readings
     asm::bkpt();
+
+    loop {}
+}
+
+exception!(HardFault, hard_fault);
+
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("{:#?}", ef);
+}
+
+exception!(*, default_handler);
+
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
 }

@@ -10,7 +10,8 @@ main() {
         return
     fi
 
-    cargo check --target $TARGET --examples
+    cargo build --target $TARGET --examples
+    cargo build --target $TARGET --examples --release
 }
 
 main

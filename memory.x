@@ -1,3 +1,4 @@
+/* Linker script for the STM32F303VCT6 */
 MEMORY
 {
   CCRAM : ORIGIN = 0x10000000, LENGTH = 8K
