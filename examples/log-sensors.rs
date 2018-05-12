@@ -30,15 +30,19 @@
 //!
 //! You can plot this data using the `plot.py` script in the root of this crate.
 #![deny(warnings)]
+#![no_main]
 #![no_std]
 
 extern crate aligned;
 extern crate byteorder;
 extern crate cobs;
 extern crate cortex_m;
+#[macro_use(entry, exception)]
+extern crate cortex_m_rt as rt;
 extern crate f3;
 #[macro_use(block)]
 extern crate nb;
+extern crate panic_semihosting;
 
 use core::ptr;
 
@@ -53,13 +57,16 @@ use f3::hal::timer::Timer;
 use f3::l3gd20::{self, Odr};
 use f3::lsm303dlhc::{AccelOdr, MagOdr};
 use f3::{L3gd20, Lsm303dlhc};
+use rt::ExceptionFrame;
 
 // TRY changing the sampling frequency
 const FREQUENCY: u32 = 220;
 // TRY changing the number of samples
 const NSAMPLES: u32 = 32 * FREQUENCY; // = 32 seconds
 
-fn main() {
+entry!(main);
+
+fn main() -> ! {
     let mut cp = cortex_m::Peripherals::take().unwrap();
     let dp = stm32f30x::Peripherals::take().unwrap();
 
@@ -189,4 +196,18 @@ fn main() {
 
     // Done
     asm::bkpt();
+
+    loop {}
+}
+
+exception!(HardFault, hard_fault);
+
+fn hard_fault(ef: &ExceptionFrame) -> ! {
+    panic!("{:#?}", ef);
+}
+
+exception!(*, default_handler);
+
+fn default_handler(irqn: i16) {
+    panic!("Unhandled exception (IRQn = {})", irqn);
 }

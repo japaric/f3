@@ -33,8 +33,11 @@
 //! ```
 //! // #![deny(unsafe_code)]
 //! #![deny(warnings)]
+//! #![no_main]
 //! #![no_std]
 //! 
+//! #[macro_use(entry, exception)]
+//! extern crate cortex_m_rt as rt;
 //! extern crate aligned;
 //! extern crate byteorder;
 //! extern crate cast;
@@ -44,9 +47,10 @@
 //! extern crate madgwick;
 //! #[macro_use(block)]
 //! extern crate nb;
+//! extern crate panic_semihosting;
 //! 
-//! use core::ptr;
 //! use core::f32::consts::PI;
+//! use core::ptr;
 //! 
 //! use aligned::Aligned;
 //! use byteorder::{ByteOrder, LE};
@@ -61,6 +65,7 @@
 //! use f3::lsm303dlhc::{AccelOdr, MagOdr};
 //! use f3::{L3gd20, Lsm303dlhc};
 //! use madgwick::{F32x3, Marg};
+//! use rt::ExceptionFrame;
 //! 
 //! // Number of samples to use for gyroscope calibration
 //! const NSAMPLES: i32 = 256;
@@ -86,7 +91,9 @@
 //! const SAMPLE_FREQ: u32 = 220;
 //! const BETA: f32 = 1e-3;
 //! 
-//! fn main() {
+//! entry!(main);
+//! 
+//! fn main() -> ! {
 //!     let mut cp = cortex_m::Peripherals::take().unwrap();
 //!     let dp = stm32f30x::Peripherals::take().unwrap();
 //! 
@@ -253,6 +260,18 @@
 //! 
 //!         itm::write_aligned(&mut cp.ITM.stim[0], &tx_buf);
 //!     }
+//! }
+//! 
+//! exception!(HardFault, hard_fault);
+//! 
+//! fn hard_fault(ef: &ExceptionFrame) -> ! {
+//!     panic!("{:#?}", ef);
+//! }
+//! 
+//! exception!(*, default_handler);
+//! 
+//! fn default_handler(irqn: i16) {
+//!     panic!("Unhandled exception (IRQn = {})", irqn);
 //! }
 //! ```
 // Auto-generated. Do not modify.

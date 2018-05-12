@@ -14,10 +14,6 @@ main() {
         serial-echo
         l3gd20
         lsm303dlhc
-        cooperative
-        reactive-serial-echo
-        reactive-roulette
-        preemptive
         log-sensors
         madgwick
     )
@@ -27,9 +23,7 @@ main() {
     mkdir src/examples
 
     cat >src/examples/mod.rs <<'EOF'
-//! Examples
-//!
-//! In order of increasing complexity
+//! Examples in order of increasing complexity
 // Auto-generated. Do not modify.
 EOF
 

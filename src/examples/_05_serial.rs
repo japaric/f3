@@ -5,19 +5,26 @@
 //! ```
 //! #![deny(unsafe_code)]
 //! #![deny(warnings)]
+//! #![no_main]
 //! #![no_std]
 //! 
 //! extern crate cortex_m;
+//! #[macro_use(entry, exception)]
+//! extern crate cortex_m_rt as rt;
 //! extern crate f3;
 //! #[macro_use(block)]
 //! extern crate nb;
+//! extern crate panic_semihosting;
 //! 
 //! use cortex_m::asm;
 //! use f3::hal::prelude::*;
 //! use f3::hal::serial::Serial;
 //! use f3::hal::stm32f30x;
+//! use rt::ExceptionFrame;
 //! 
-//! fn main() {
+//! entry!(main);
+//! 
+//! fn main() -> ! {
 //!     let p = stm32f30x::Peripherals::take().unwrap();
 //! 
 //!     let mut flash = p.FLASH.constrain();
@@ -54,6 +61,20 @@
 //! 
 //!     // if all goes well you should reach this breakpoint
 //!     asm::bkpt();
+//! 
+//!     loop {}
+//! }
+//! 
+//! exception!(HardFault, hard_fault);
+//! 
+//! fn hard_fault(ef: &ExceptionFrame) -> ! {
+//!     panic!("{:#?}", ef);
+//! }
+//! 
+//! exception!(*, default_handler);
+//! 
+//! fn default_handler(irqn: i16) {
+//!     panic!("Unhandled exception (IRQn = {})", irqn);
 //! }
 //! ```
 // Auto-generated. Do not modify.
