@@ -5,14 +5,14 @@ matrix:
     - env: TARGET=x86_64-unknown-linux-gnu
 
     - env: TARGET=thumbv7em-none-eabi
-      rust: nightly
+      rust: nightly-2018-06-20
       addons:
         apt:
           packages:
             - gcc-arm-none-eabi
 
     - env: TARGET=thumbv7em-none-eabihf
-      rust: nightly
+      rust: nightly-2018-06-20
       addons:
         apt:
           packages:
