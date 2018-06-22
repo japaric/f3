@@ -7,7 +7,7 @@ keywords = ["arm", "cortex-m", "stm32"]
 license = "MIT OR Apache-2.0"
 name = "f3"
 repository = "https://github.com/japaric/f3"
-version = "0.6.0"
+version = "0.6.1"
 
 [dependencies]
 l3gd20 = "0.2.0"
