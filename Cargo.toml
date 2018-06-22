@@ -41,6 +41,9 @@ version = "0.1.1"
 version = "0.2.0"
 features = ["rt"]
 
+[features]
+rt = ["stm32f30x-hal/rt"]
+
 [profile.release]
 codegen-units = 1
 debug = true
