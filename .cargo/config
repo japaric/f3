@@ -1,5 +1,6 @@
 [target.thumbv7em-none-eabi]
 runner = 'arm-none-eabi-gdb'
+linker = 'arm-none-eabi-gcc'
 rustflags = [
   "-C", "link-arg=-Wl,-Tlink.x",
   "-C", "link-arg=-nostartfiles",
@@ -7,6 +8,7 @@ rustflags = [
 
 [target.thumbv7em-none-eabihf]
 runner = 'arm-none-eabi-gdb'
+linker = 'arm-none-eabi-gcc'
 rustflags = [
   "-C", "link-arg=-Wl,-Tlink.x",
   "-C", "link-arg=-nostartfiles",
