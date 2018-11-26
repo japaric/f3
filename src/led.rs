@@ -4,7 +4,7 @@ use core::ops;
 
 use hal::prelude::*;
 
-use hal::gpio::gpioe::{self, PE10, PE11, PE12, PE13, PE14, PE15, PE8, PE9, PEx};
+use hal::gpio::gpioe::{self, PEx, PE10, PE11, PE12, PE13, PE14, PE15, PE8, PE9};
 use hal::gpio::{Output, PushPull};
 
 ///  North LED
