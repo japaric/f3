@@ -61,14 +61,14 @@
 //! // NOTE you need to use the right parameters for *your* magnetometer
 //! // You can use the `log-sensors` example to calibrate your magnetometer. The producer is explained
 //! // in https://github.com/kriswiner/MPU6050/wiki/Simple-and-Effective-Magnetometer-Calibration
-//! const M_BIAS_X: f32 = -34.;
-//! const M_SCALE_X: f32 = 650.;
+//! const M_BIAS_X: f32 = -183.;
+//! const M_SCALE_X: f32 = 435.;
 //! 
-//! const M_BIAS_Y: f32 = -70.;
-//! const M_SCALE_Y: f32 = 636.;
+//! const M_BIAS_Y: f32 = -172.;
+//! const M_SCALE_Y: f32 = 507.;
 //! 
-//! const M_BIAS_Z: f32 = -37.5;
-//! const M_SCALE_Z: f32 = 589.5;
+//! const M_BIAS_Z: f32 = -136.;
+//! const M_SCALE_Z: f32 = 632.;
 //! 
 //! // Sensitivities of the accelerometer and gyroscope, respectively
 //! const K_G: f32 = 2. / (1 << 15) as f32; // LSB -> g
