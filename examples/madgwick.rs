@@ -171,7 +171,7 @@ fn main() -> ! {
     for _ in 0..NSAMPLES {
         block!(timer.wait()).unwrap();
 
-        let ar = l3gd20.gyro().unwrap();
+        let ar = l3gd20.all().unwrap().gyro;
 
         ar_bias_x += i32(ar.x);
         ar_bias_y += i32(ar.y);
@@ -192,7 +192,7 @@ fn main() -> ! {
         block!(timer.wait()).unwrap();
 
         let m = lsm303dlhc.mag().unwrap();
-        let ar = l3gd20.gyro().unwrap();
+        let ar = l3gd20.all().unwrap().gyro;
         let g = lsm303dlhc.accel().unwrap();
 
         let m_x = (f32(m.x) - M_BIAS_X) / M_SCALE_X;
