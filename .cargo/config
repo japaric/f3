@@ -1,15 +1,19 @@
 [target.thumbv7em-none-eabi]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Wl,-Tlink.x",
-  "-C", "link-arg=-nostartfiles",
+  "-C", "link-arg=-Tlink.x",
+  "-C", "linker=rust-lld",
+  "-Z", "linker-flavor=ld.lld",
+  "-Z", "thinlto=no",
 ]
 
 [target.thumbv7em-none-eabihf]
 runner = 'arm-none-eabi-gdb'
 rustflags = [
-  "-C", "link-arg=-Wl,-Tlink.x",
-  "-C", "link-arg=-nostartfiles",
+  "-C", "link-arg=-Tlink.x",
+  "-C", "linker=rust-lld",
+  "-Z", "linker-flavor=ld.lld",
+  "-Z", "thinlto=no",
 ]
 
 [build]
