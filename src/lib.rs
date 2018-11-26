@@ -47,7 +47,7 @@ pub extern crate stm32f30x_hal as hal;
 use hal::gpio::gpioa::{PA5, PA6, PA7};
 use hal::gpio::gpiob::{PB6, PB7};
 use hal::gpio::gpioe::PE3;
-use hal::gpio::{AF4, AF5, Output, PushPull};
+use hal::gpio::{Output, PushPull, AF4, AF5};
 use hal::i2c::I2c;
 use hal::spi::Spi;
 use hal::stm32f30x::{I2C1, SPI1};
