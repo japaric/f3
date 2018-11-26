@@ -5,18 +5,10 @@ matrix:
     - env: TARGET=x86_64-unknown-linux-gnu
 
     - env: TARGET=thumbv7em-none-eabi
-      rust: nightly-2018-06-20
-      addons:
-        apt:
-          packages:
-            - gcc-arm-none-eabi
+      rust: beta
 
     - env: TARGET=thumbv7em-none-eabihf
-      rust: nightly-2018-06-20
-      addons:
-        apt:
-          packages:
-            - gcc-arm-none-eabi
+      rust: beta
 
 before_install: set -e
 

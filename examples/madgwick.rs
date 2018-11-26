@@ -34,36 +34,23 @@
 #![no_main]
 #![no_std]
 
-#[macro_use(entry, exception)]
-extern crate cortex_m_rt as rt;
-extern crate aligned;
-extern crate byteorder;
-extern crate cast;
-extern crate cobs;
-extern crate cortex_m;
-extern crate f3;
-extern crate madgwick;
-#[macro_use(block)]
-extern crate nb;
 extern crate panic_semihosting;
 
-use core::f32::consts::PI;
-use core::ptr;
+use core::{f32::consts::PI, ptr};
 
 use aligned::Aligned;
 use byteorder::{ByteOrder, LE};
 use cast::{f32, i32};
 use cortex_m::itm;
-use f3::hal::i2c::I2c;
-use f3::hal::prelude::*;
-use f3::hal::spi::Spi;
-use f3::hal::stm32f30x;
-use f3::hal::timer::Timer;
-use f3::l3gd20::{self, Odr};
-use f3::lsm303dlhc::{AccelOdr, MagOdr};
-use f3::{L3gd20, Lsm303dlhc};
+use cortex_m_rt::entry;
+use f3::{
+    hal::{i2c::I2c, prelude::*, spi::Spi, stm32f30x, timer::Timer},
+    l3gd20::{self, Odr},
+    lsm303dlhc::{AccelOdr, MagOdr},
+    L3gd20, Lsm303dlhc,
+};
 use madgwick::{F32x3, Marg};
-use rt::ExceptionFrame;
+use nb::block;
 
 // Number of samples to use for gyroscope calibration
 const NSAMPLES: i32 = 256;
@@ -89,8 +76,7 @@ const K_AR: f32 = 8.75e-3 * PI / 180.; // LSB -> rad/s
 const SAMPLE_FREQ: u32 = 220;
 const BETA: f32 = 1e-3;
 
-entry!(main);
-
+#[entry]
 fn main() -> ! {
     let mut cp = cortex_m::Peripherals::take().unwrap();
     let dp = stm32f30x::Peripherals::take().unwrap();
@@ -98,7 +84,8 @@ fn main() -> ! {
     let mut flash = dp.FLASH.constrain();
     let mut rcc = dp.RCC.constrain();
 
-    let clocks = rcc.cfgr
+    let clocks = rcc
+        .cfgr
         .sysclk(64.mhz())
         .pclk1(32.mhz())
         .freeze(&mut flash.acr);
@@ -258,16 +245,4 @@ fn main() -> ! {
 
         itm::write_aligned(&mut cp.ITM.stim[0], &tx_buf);
     }
-}
-
-exception!(HardFault, hard_fault);
-
-fn hard_fault(ef: &ExceptionFrame) -> ! {
-    panic!("{:#?}", ef);
-}
-
-exception!(*, default_handler);
-
-fn default_handler(irqn: i16) {
-    panic!("Unhandled exception (IRQn = {})", irqn);
 }

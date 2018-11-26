@@ -6,20 +6,16 @@
 //! #![no_std]
 //! #![no_main]
 //! 
-//! extern crate cortex_m;
-//! #[macro_use(entry, exception)]
-//! extern crate cortex_m_rt as rt;
-//! extern crate f3;
+//! // Panic handler
 //! extern crate panic_semihosting;
 //! 
-//! use f3::hal::delay::Delay;
-//! use f3::hal::prelude::*;
-//! use f3::hal::stm32f30x;
-//! use f3::led::Led;
-//! use rt::ExceptionFrame;
+//! use cortex_m_rt::entry;
+//! use f3::{
+//!     hal::{delay::Delay, prelude::*, stm32f30x},
+//!     led::Led,
+//! };
 //! 
-//! entry!(main);
-//! 
+//! #[entry]
 //! fn main() -> ! {
 //!     let cp = cortex_m::Peripherals::take().unwrap();
 //!     let dp = stm32f30x::Peripherals::take().unwrap();
@@ -45,18 +41,6 @@
 //!         led.off();
 //!         delay.delay_ms(1_000_u16);
 //!     }
-//! }
-//! 
-//! exception!(HardFault, hard_fault);
-//! 
-//! fn hard_fault(ef: &ExceptionFrame) -> ! {
-//!     panic!("{:#?}", ef);
-//! }
-//! 
-//! exception!(*, default_handler);
-//! 
-//! fn default_handler(irqn: i16) {
-//!     panic!("Unhandled exception (IRQn = {})", irqn);
 //! }
 //! ```
 // Auto-generated. Do not modify.
