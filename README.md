@@ -9,7 +9,9 @@
 [STM32F3DISCOVERY]: http://www.st.com/en/evaluation-tools/stm32f3discovery.html
 
 <p align="center">
-  <img src="assets/madgwick.png"/>
+  <a href="https://japaric.github.io/f3">
+    <img src="assets/madgwick.png"/>
+  </a>
 
   Implementation of Madgwick's algorithm. Click to see video. Source in examples/madgwick.rs
 </p>
