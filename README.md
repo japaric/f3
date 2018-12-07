@@ -8,6 +8,12 @@
 
 [STM32F3DISCOVERY]: http://www.st.com/en/evaluation-tools/stm32f3discovery.html
 
+<p align="center">
+  <img src="assets/madgwick.png"/>
+
+  Implementation of Madgwick's algorithm. Click to see video. Source in examples/madgwick.rs
+</p>
+
 ## [Documentation](https://docs.rs/f3)
 
 ## [Change log](CHANGELOG.md)
