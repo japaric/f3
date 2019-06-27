@@ -37,12 +37,12 @@
 //! [examples]: examples/index.html
 
 #![deny(missing_docs)]
-#![deny(warnings)]
+//#![deny(warnings)]
 #![no_std]
 
 pub extern crate l3gd20;
 pub extern crate lsm303dlhc;
-pub extern crate stm32f30x_hal as hal;
+pub extern crate stm32f3xx_hal as hal;
 
 use hal::gpio::gpioa::{PA5, PA6, PA7};
 use hal::gpio::gpiob::{PB6, PB7};
@@ -50,7 +50,7 @@ use hal::gpio::gpioe::PE3;
 use hal::gpio::{Output, PushPull, AF4, AF5};
 use hal::i2c::I2c;
 use hal::spi::Spi;
-use hal::stm32f30x::{I2C1, SPI1};
+use hal::stm32::{I2C1, SPI1};
 
 pub mod examples;
 pub mod led;
