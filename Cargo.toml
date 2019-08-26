@@ -1,5 +1,5 @@
 [package]
-authors = ["cmoran <cmoran@eri.ucsb.edu>"]
+authors = ["Jorge Aparicio <jorge@japaric.io>"]
 categories = ["embedded", "hardware-support", "no-std"]
 description = "Board Support Crate for the STM32F3DISCOVERY"
 documentation = "https://docs.rs/f3"
@@ -7,7 +7,7 @@ edition = "2018"
 keywords = ["arm", "cortex-m", "stm32"]
 license = "MIT OR Apache-2.0"
 name = "f3"
-repository = "https://github.com/quietlychris/f3"
+repository = "https://github.com/japaric/f3"
 version = "0.6.1"
 
 [dependencies]
