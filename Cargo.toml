@@ -14,6 +14,7 @@ version = "0.6.1"
 l3gd20 = "0.2.0"
 lsm303dlhc = "0.2.0"
 stm32f30x-hal = "0.2.0"
+embedded-hal = "0.2.0"
 
 [dev-dependencies]
 aligned = "0.2.0"
