@@ -34,9 +34,11 @@ fn main() -> ! {
     let mut delay = Delay::new(cp.SYST, clocks);
 
     loop {
-        led.on();
+        let mut result = led.on();
+        assert_eq!(result.is_err(), false);
         delay.delay_ms(1_000_u16);
-        led.off();
+        result = led.off();
+        assert_eq!(result.is_err(), false);
         delay.delay_ms(1_000_u16);
     }
 }
