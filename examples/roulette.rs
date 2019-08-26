@@ -33,8 +33,10 @@ fn main() -> ! {
     loop {
         for curr in 0..n {
             let next = (curr + 1) % n;
-            leds[curr].off();
-            leds[next].on();
+            let mut result = leds[curr].off();
+            assert_eq!(result.is_err(),false);
+            result = leds[next].on();
+            assert_eq!(result.is_err(),false);
 
             delay.delay_ms(100_u8);
         }

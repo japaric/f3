@@ -22,7 +22,8 @@ fn main() -> ! {
     let mut leds = Leds::new(gpioe);
 
     for led in leds.iter_mut() {
-        led.on();
+        let result = led.on();
+        assert_eq!(result.is_err(),false);
     }
 
     loop {}
