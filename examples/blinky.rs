@@ -9,14 +9,14 @@ extern crate panic_semihosting;
 
 use cortex_m_rt::entry;
 use f3::{
-    hal::{delay::Delay, prelude::*, stm32f30x},
+    hal::{delay::Delay, prelude::*, stm32},
     led::Led,
 };
 
 #[entry]
 fn main() -> ! {
     let cp = cortex_m::Peripherals::take().unwrap();
-    let dp = stm32f30x::Peripherals::take().unwrap();
+    let dp = stm32::Peripherals::take().unwrap();
 
     let mut flash = dp.FLASH.constrain();
     let mut rcc = dp.RCC.constrain();

@@ -11,6 +11,7 @@ repository = "https://github.com/japaric/f3"
 version = "0.6.2"
 
 [dependencies]
+embedded-hal = "0.2.3"
 l3gd20 = "0.2.0"
 lsm303dlhc = "0.2.0"
 

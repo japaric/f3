@@ -9,13 +9,13 @@ extern crate panic_semihosting;
 use cortex_m::asm;
 use cortex_m_rt::entry;
 use f3::{
-    hal::{i2c::I2c, prelude::*, stm32f30x},
+    hal::{i2c::I2c, prelude::*, stm32},
     Lsm303dlhc,
 };
 
 #[entry]
 fn main() -> ! {
-    let p = stm32f30x::Peripherals::take().unwrap();
+    let p = stm32::Peripherals::take().unwrap();
 
     let mut flash = p.FLASH.constrain();
     let mut rcc = p.RCC.constrain();

@@ -8,14 +8,16 @@ extern crate panic_semihosting;
 
 use cortex_m::asm;
 use cortex_m_rt::entry;
+use embedded_hal::digital::v1_compat::OldOutputPin;
+use embedded_hal::digital::v2::OutputPin;
 use f3::{
-    hal::{prelude::*, spi::Spi, stm32f30x},
+    hal::{prelude::*, spi::Spi, stm32},
     l3gd20, L3gd20,
 };
 
 #[entry]
 fn main() -> ! {
-    let p = stm32f30x::Peripherals::take().unwrap();
+    let p = stm32::Peripherals::take().unwrap();
 
     let mut flash = p.FLASH.constrain();
     let mut rcc = p.RCC.constrain();
@@ -30,7 +32,7 @@ fn main() -> ! {
     let mut nss = gpioe
         .pe3
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
-    nss.set_high();
+    nss.set_high().unwrap();
 
     // The `L3gd20` abstraction exposed by the `f3` crate requires a specific pin configuration to
     // be used and won't accept any configuration other than the one used here. Trying to use a
@@ -48,7 +50,7 @@ fn main() -> ! {
         &mut rcc.apb2,
     );
 
-    let mut l3gd20 = L3gd20::new(spi, nss).unwrap();
+    let mut l3gd20 = L3gd20::new(spi, OldOutputPin::from(nss)).unwrap();
 
     // sanity check: the WHO_AM_I register always contains this value
     assert_eq!(l3gd20.who_am_i().unwrap(), 0xD4);
