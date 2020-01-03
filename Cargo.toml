@@ -16,8 +16,8 @@ l3gd20 = "0.2.0"
 lsm303dlhc = "0.2.0"
 
 [dependencies.stm32f3xx-hal]
-version = "0.3.0"
-features = ["stm32f303"]
+version = "0.4.0"
+features = ["stm32f303xc"]
 
 [dev-dependencies]
 aligned = "0.3.2"
