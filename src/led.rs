@@ -2,7 +2,7 @@
 
 use core::ops;
 
-use hal::prelude::*;
+use hal::hal::digital::v2::OutputPin;
 
 use hal::gpio::gpioe::{self, PEx, PE10, PE11, PE12, PE13, PE14, PE15, PE8, PE9};
 use hal::gpio::{Output, PushPull};
@@ -165,11 +165,11 @@ ctor!(LD3, LD4, LD5, LD6, LD7, LD8, LD9, LD10);
 impl Led {
     /// Turns the LED off
     pub fn off(&mut self) {
-        self.pex.set_low()
+        self.pex.set_low().unwrap()
     }
 
     /// Turns the LED on
     pub fn on(&mut self) {
-        self.pex.set_high()
+        self.pex.set_high().unwrap()
     }
 }

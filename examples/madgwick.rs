@@ -36,15 +36,18 @@
 
 extern crate panic_semihosting;
 
+use core::ops::DerefMut;
 use core::{f32::consts::PI, ptr};
 
-use aligned::Aligned;
+use aligned::{Aligned, A4};
 use byteorder::{ByteOrder, LE};
 use cast::{f32, i32};
 use cortex_m::itm;
 use cortex_m_rt::entry;
+use embedded_hal::digital::v1_compat::OldOutputPin;
+use embedded_hal::digital::v2::OutputPin;
 use f3::{
-    hal::{i2c::I2c, prelude::*, spi::Spi, stm32f30x, timer::Timer},
+    hal::{i2c::I2c, prelude::*, spi::Spi, stm32, timer::Timer},
     l3gd20::{self, Odr},
     lsm303dlhc::{AccelOdr, MagOdr},
     L3gd20, Lsm303dlhc,
@@ -79,7 +82,7 @@ const BETA: f32 = 1e-3;
 #[entry]
 fn main() -> ! {
     let mut cp = cortex_m::Peripherals::take().unwrap();
-    let dp = stm32f30x::Peripherals::take().unwrap();
+    let dp = stm32::Peripherals::take().unwrap();
 
     let mut flash = dp.FLASH.constrain();
     let mut rcc = dp.RCC.constrain();
@@ -130,7 +133,7 @@ fn main() -> ! {
     let mut nss = gpioe
         .pe3
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
-    nss.set_high();
+    nss.set_high().unwrap();
     let mut led = gpioe
         .pe9
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
@@ -148,7 +151,7 @@ fn main() -> ! {
         &mut rcc.apb2,
     );
 
-    let mut l3gd20 = L3gd20::new(spi, nss).unwrap();
+    let mut l3gd20 = L3gd20::new(spi, OldOutputPin::from(nss)).unwrap();
 
     l3gd20.set_odr(Odr::Hz380).unwrap();
 
@@ -182,12 +185,12 @@ fn main() -> ! {
     let ar_bias_z = (ar_bias_z / NSAMPLES) as i16;
 
     // Turn on the LED after calibrating the gyroscope
-    led.set_high();
+    led.set_high().unwrap();
 
     let mut marg = Marg::new(BETA, 1. / f32(SAMPLE_FREQ));
-    let mut timer = Timer::tim2(timer.free(), SAMPLE_FREQ.hz(), clocks, &mut rcc.apb1);
+    let mut timer = Timer::tim2(timer.release(), SAMPLE_FREQ.hz(), clocks, &mut rcc.apb1);
 
-    let mut tx_buf: Aligned<u32, [u8; 18]> = Aligned([0; 18]);
+    let mut tx_buf: Aligned<A4, [u8; 18]> = Aligned([0; 18]);
     loop {
         block!(timer.wait()).unwrap();
 
@@ -241,7 +244,7 @@ fn main() -> ! {
         // start += 4;
 
         // Log data
-        cobs::encode(&buf, &mut tx_buf.array);
+        cobs::encode(&buf, tx_buf.deref_mut());
 
         itm::write_aligned(&mut cp.ITM.stim[0], &tx_buf);
     }

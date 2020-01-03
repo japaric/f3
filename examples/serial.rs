@@ -10,12 +10,12 @@ extern crate panic_semihosting;
 
 use cortex_m::asm;
 use cortex_m_rt::entry;
-use f3::hal::{prelude::*, serial::Serial, stm32f30x};
+use f3::hal::{prelude::*, serial::Serial, stm32};
 use nb::block;
 
 #[entry]
 fn main() -> ! {
-    let p = stm32f30x::Peripherals::take().unwrap();
+    let p = stm32::Peripherals::take().unwrap();
 
     let mut flash = p.FLASH.constrain();
     let mut rcc = p.RCC.constrain();

@@ -35,14 +35,17 @@
 
 extern crate panic_semihosting;
 
+use core::ops::DerefMut;
 use core::ptr;
 
-use aligned::Aligned;
+use aligned::{Aligned, A4};
 use byteorder::{ByteOrder, LE};
 use cortex_m::{asm, itm};
 use cortex_m_rt::entry;
+use embedded_hal::digital::v1_compat::OldOutputPin;
+use embedded_hal::digital::v2::OutputPin;
 use f3::{
-    hal::{i2c::I2c, prelude::*, spi::Spi, stm32f30x, timer::Timer},
+    hal::{i2c::I2c, prelude::*, spi::Spi, stm32, timer::Timer},
     l3gd20::{self, Odr},
     lsm303dlhc::{AccelOdr, MagOdr},
     L3gd20, Lsm303dlhc,
@@ -57,7 +60,7 @@ const NSAMPLES: u32 = 32 * FREQUENCY; // = 32 seconds
 #[entry]
 fn main() -> ! {
     let mut cp = cortex_m::Peripherals::take().unwrap();
-    let dp = stm32f30x::Peripherals::take().unwrap();
+    let dp = stm32::Peripherals::take().unwrap();
 
     let mut flash = dp.FLASH.constrain();
     let mut rcc = dp.RCC.constrain();
@@ -120,7 +123,7 @@ fn main() -> ! {
     let mut nss = gpioe
         .pe3
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
-    nss.set_high();
+    nss.set_high().unwrap();
     let sck = gpioa.pa5.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
     let miso = gpioa.pa6.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
     let mosi = gpioa.pa7.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
@@ -135,7 +138,7 @@ fn main() -> ! {
     );
 
     // L3GD20
-    let mut l3gd20 = L3gd20::new(spi, nss).unwrap();
+    let mut l3gd20 = L3gd20::new(spi, OldOutputPin::from(nss)).unwrap();
     l3gd20.set_odr(Odr::Hz380).unwrap();
 
     // TIMER
@@ -145,7 +148,7 @@ fn main() -> ! {
     itm::write_all(&mut cp.ITM.stim[0], &[0]);
 
     // Capture N samples
-    let mut tx_buf: Aligned<u32, [u8; 20]> = Aligned([0; 20]);
+    let mut tx_buf: Aligned<A4, [u8; 20]> = Aligned([0; 20]);
     for _ in 0..NSAMPLES {
         block!(timer.wait()).unwrap();
 
@@ -179,7 +182,7 @@ fn main() -> ! {
         LE::write_i16(&mut buf[start..start + 2], g.z);
 
         // Log data
-        cobs::encode(&buf, &mut tx_buf);
+        cobs::encode(&buf, tx_buf.deref_mut());
 
         itm::write_aligned(&mut cp.ITM.stim[0], &tx_buf);
     }
