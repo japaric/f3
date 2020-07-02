@@ -130,7 +130,11 @@ fn main() -> ! {
     let mut nss = gpioe
         .pe3
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
-    nss.set_high();
+    {
+        #![allow(deprecated)]
+        nss.set_high();
+    }
+
     let mut led = gpioe
         .pe9
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
@@ -182,7 +186,10 @@ fn main() -> ! {
     let ar_bias_z = (ar_bias_z / NSAMPLES) as i16;
 
     // Turn on the LED after calibrating the gyroscope
-    led.set_high();
+    {
+        #![allow(deprecated)]
+        led.set_high();
+    }
 
     let mut marg = Marg::new(BETA, 1. / f32(SAMPLE_FREQ));
     let mut timer = Timer::tim2(timer.free(), SAMPLE_FREQ.hz(), clocks, &mut rcc.apb1);
