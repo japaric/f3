@@ -66,7 +66,7 @@ fn main() {
 fn parse(sender: &mut Sender<(f32, f32, f32, f32)>) {
     let stdin = io::stdin();
 
-    for mut frame in BufReader::new(stdin.lock()).split(0) {
+    for frame in BufReader::new(stdin.lock()).split(0) {
         let mut frame = frame.unwrap();
         if let Ok(n) = cobs::decode_in_place(&mut frame) {
             if n == 16 {
