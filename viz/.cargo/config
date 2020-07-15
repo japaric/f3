@@ -1,0 +1,9 @@
+[build]
+# Configure the build target to your host platform. See
+# https://forge.rust-lang.org/release/platform-support.html#tier-1 for details
+# and uncomment or add the appropriate line for your host below.
+#
+# target = "x86_64-apple-darwin"
+# target = "x86_64-pc-windows-gnu"
+# target = "x86_64-unknown-linux-gnu"
+
