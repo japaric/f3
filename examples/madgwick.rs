@@ -38,7 +38,8 @@ extern crate panic_semihosting;
 
 use core::{f32::consts::PI, ptr};
 
-use aligned::Aligned;
+use aligned::{Aligned, A4};
+use as_slice::AsMutSlice;
 use byteorder::{ByteOrder, LE};
 use cast::{f32, i32};
 use cortex_m::itm;
@@ -130,7 +131,11 @@ fn main() -> ! {
     let mut nss = gpioe
         .pe3
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
-    nss.set_high();
+    {
+        #![allow(deprecated)]
+        nss.set_high();
+    }
+
     let mut led = gpioe
         .pe9
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
@@ -182,12 +187,15 @@ fn main() -> ! {
     let ar_bias_z = (ar_bias_z / NSAMPLES) as i16;
 
     // Turn on the LED after calibrating the gyroscope
-    led.set_high();
+    {
+        #![allow(deprecated)]
+        led.set_high();
+    }
 
     let mut marg = Marg::new(BETA, 1. / f32(SAMPLE_FREQ));
     let mut timer = Timer::tim2(timer.free(), SAMPLE_FREQ.hz(), clocks, &mut rcc.apb1);
 
-    let mut tx_buf: Aligned<u32, [u8; 18]> = Aligned([0; 18]);
+    let mut tx_buf: Aligned<A4, [u8; 18]> = Aligned([0; 18]);
     loop {
         block!(timer.wait()).unwrap();
 
@@ -241,7 +249,7 @@ fn main() -> ! {
         // start += 4;
 
         // Log data
-        cobs::encode(&buf, &mut tx_buf.array);
+        cobs::encode(&buf, tx_buf.as_mut_slice());
 
         itm::write_aligned(&mut cp.ITM.stim[0], &tx_buf);
     }

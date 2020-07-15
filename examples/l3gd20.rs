@@ -30,7 +30,10 @@ fn main() -> ! {
     let mut nss = gpioe
         .pe3
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
-    nss.set_high();
+    {
+        #![allow(deprecated)]
+        nss.set_high();
+    }
 
     // The `L3gd20` abstraction exposed by the `f3` crate requires a specific pin configuration to
     // be used and won't accept any configuration other than the one used here. Trying to use a

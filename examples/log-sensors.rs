@@ -37,7 +37,8 @@ extern crate panic_semihosting;
 
 use core::ptr;
 
-use aligned::Aligned;
+use aligned::{Aligned, A4};
+use as_slice::AsMutSlice;
 use byteorder::{ByteOrder, LE};
 use cortex_m::{asm, itm};
 use cortex_m_rt::entry;
@@ -120,7 +121,10 @@ fn main() -> ! {
     let mut nss = gpioe
         .pe3
         .into_push_pull_output(&mut gpioe.moder, &mut gpioe.otyper);
-    nss.set_high();
+    {
+        #![allow(deprecated)]
+        nss.set_high();
+    }
     let sck = gpioa.pa5.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
     let miso = gpioa.pa6.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
     let mosi = gpioa.pa7.into_af5(&mut gpioa.moder, &mut gpioa.afrl);
@@ -145,7 +149,7 @@ fn main() -> ! {
     itm::write_all(&mut cp.ITM.stim[0], &[0]);
 
     // Capture N samples
-    let mut tx_buf: Aligned<u32, [u8; 20]> = Aligned([0; 20]);
+    let mut tx_buf: Aligned<A4, [u8; 20]> = Aligned([0; 20]);
     for _ in 0..NSAMPLES {
         block!(timer.wait()).unwrap();
 
@@ -179,7 +183,7 @@ fn main() -> ! {
         LE::write_i16(&mut buf[start..start + 2], g.z);
 
         // Log data
-        cobs::encode(&buf, &mut tx_buf);
+        cobs::encode(&buf, tx_buf.as_mut_slice());
 
         itm::write_aligned(&mut cp.ITM.stim[0], &tx_buf);
     }
